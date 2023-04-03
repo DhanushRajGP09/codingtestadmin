@@ -10,7 +10,7 @@ export default function HomePage() {
     <div className="adminHomePage">
       <Navbar />
       <Routes>
-        <Route path="/" element={<Library />}></Route>
+        <Route path="/*" element={<Library />}></Route>
         <Route path="/assesments" element={<Assesments />}></Route>
       </Routes>
     </div>
