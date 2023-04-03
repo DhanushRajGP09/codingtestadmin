@@ -1,0 +1,8 @@
+.loginPage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 99vh;
+  width: 100%;
+}

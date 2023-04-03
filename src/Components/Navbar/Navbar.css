@@ -1,0 +1,41 @@
+.homePageNavbar {
+  height: 60px;
+  width: 100%;
+  background-color: #041e42;
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  color: white;
+  justify-content: space-between;
+  font-family: "Cabin", sans-serif;
+}
+.homePageNavbarLogo {
+  margin-left: 2%;
+}
+.homePageNavbarControls {
+  width: 600px;
+  height: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-right: 2px solid whitesmoke;
+}
+.homePageNavbarProfile {
+  width: 100px;
+  height: 100%;
+  background-color: aliceblue;
+}
+.navbarAssesment {
+  width: 200px;
+  height: 100%;
+  background-color: #041e42;
+  border-left: 2px solid whitesmoke;
+  color: whitesmoke;
+  font-size: 20px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
