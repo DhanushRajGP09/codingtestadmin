@@ -1,4 +1,83 @@
 .description {
-  background-color: aliceblue;
-  height: 20vh;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.descriptionCreateLeftContainer,
+.descriptionCreateRightContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: auto;
+  margin-top: 5%;
+  padding-left: 1%;
+  margin-bottom: 10%;
+  width: 65%;
+}
+.descriptionCreateRightContainer {
+  width: 30%;
+  height: 40vh;
+}
+.problemNameText {
+  font-size: 20px;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+}
+.problemNameInput {
+  display: flex;
+  align-items: center;
+  margin-top: 2%;
+  border: none;
+  outline: none;
+  height: 30px;
+  font-size: 20px;
+  width: 92%;
+  border: 1px solid lightgray;
+  padding-left: 2%;
+}
+.richTextEditor {
+  width: 95%;
+  background-color: white;
+  height: 440px;
+  margin-top: 2%;
+  font-size: 20px;
+}
+.textEditor {
+  height: 400px;
+}
+
+.maxScoreDiv,
+.difficultyLevelDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 150px;
+  background-color: white;
+  width: 100%;
+}
+.maxScoreDiv {
+  height: 170px;
+}
+.maxScoreInput {
+  border: 1px solid lightgray;
+  height: 30px;
+  width: 60px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  background-color: rgba(211, 211, 211, 0.534);
+}
+.maxScoreDescription {
+  font-size: 17px;
+  font-weight: 400;
+  color: gray;
+}
+.ql-editor {
+  font-size: 20px;
 }

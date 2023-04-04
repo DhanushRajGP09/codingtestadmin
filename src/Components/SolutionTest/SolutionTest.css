@@ -1,0 +1,8 @@
+.Solutions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50vh;
+  width: 100%;
+  background-color: aliceblue;
+}

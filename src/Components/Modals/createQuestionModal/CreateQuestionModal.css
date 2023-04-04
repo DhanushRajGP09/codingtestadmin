@@ -86,10 +86,10 @@
   margin-right: 5%;
 }
 .createQuestionmodalHeaderSection {
-  height: 80%;
+  height: 60%;
   width: 200px;
   background-color: white;
-  border-radius: 20px;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,6 +97,8 @@
   font-size: 20px;
   border: 1px solid #0071c5;
   cursor: pointer;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   z-index: 1;
 }
 .createQuestionmodalHeaderIndicator {

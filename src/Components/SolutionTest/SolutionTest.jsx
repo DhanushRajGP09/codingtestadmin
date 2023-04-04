@@ -1,9 +1,6 @@
 import React from "react";
+import "./SolutionTest.css";
 
 export default function SolutionTest() {
-  return (
-    <div>
-      <h1>Solutions</h1>
-    </div>
-  );
+  return <div className="Solutions"></div>;
 }
