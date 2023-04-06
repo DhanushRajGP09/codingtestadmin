@@ -1,0 +1,183 @@
+.languages {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: auto;
+  width: 100%;
+  padding-left: 1%;
+  background-color: aliceblue;
+}
+.selectAllLang {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  height: 30px;
+  margin-top: 2%;
+}
+.languagesSelectContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 90%;
+  height: 200px;
+  background-color: white;
+  padding-left: 1%;
+  flex-wrap: wrap;
+  margin-top: 2%;
+}
+.languageSelectDiv {
+  width: 300px;
+  height: 40px;
+
+  margin-top: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.codeSnippetContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 90%;
+  height: 750px;
+  background-color: white;
+  border: 3px solid lightgray;
+  margin-bottom: 5%;
+  margin-top: 2%;
+}
+.codeSnippetContainerHeader {
+  width: 100%;
+  height: 60px;
+  background-color: #0071c5;
+  display: flex;
+  align-items: center;
+
+  justify-content: flex-end;
+}
+.fullscreenMode {
+  font-size: 20px;
+  font-family: sans-serif;
+  font-weight: 500;
+  margin-right: 2%;
+  cursor: pointer;
+  color: white;
+}
+.codeSnippetContainerBody {
+  height: 680px;
+  width: 100%;
+  border-top: 2px solid lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.codeSnippetSelectedLanguages {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  border-right: 2px solid lightgray;
+  height: 680px;
+  width: 210px;
+}
+.codeSnippetSelectedLanguage {
+  display: flex;
+
+  height: 50px;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 3%;
+  width: 200px;
+  background-color: white;
+  margin-top: 1%;
+  font-size: 20px;
+}
+.codeContainerDiv {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 750px;
+
+  height: 680px;
+}
+.codeContainerDivHeader,
+.codeContainerDivBody {
+  width: 99%;
+  height: 200px;
+  background-color: white;
+  margin-top: 5px;
+  margin-bottom: 2px;
+  border: 2px solid lightgray;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.codeContainerDivBody {
+  height: 250px;
+  justify-content: flex-start;
+  overflow-y: scroll;
+}
+.codeContainerDivBodyHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 30px;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 500;
+  background-color: #0071c5;
+}
+.codeContainerDivBodyBody {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: auto;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 500;
+  background-color: lightgray;
+}
+
+.codeContainerDivHeaderHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 50px;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 500;
+  background-color: #0071c5;
+}
+.codeContainerDivBodyBodyNumber {
+  display: flex;
+  height: auto;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 10%;
+}
+.bodyLineNumber {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex-direction: column;
+
+  height: 18px;
+  width: 90%;
+  padding-right: 1%;
+  margin-top: 9%;
+}
+.codeContainerDivBodyTextArea {
+  border: none;
+  outline: none;
+  width: 95%;
+  height: auto;
+  min-height: 500vh;
+  font-size: 20px;
+  border-top: 1px solid lightgray;
+  line-height: 24.1px;
+}
