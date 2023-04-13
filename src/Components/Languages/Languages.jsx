@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./Languages.css";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -8,6 +8,8 @@ import {
   addbodyLineNumber,
   getBodyLineNumber,
 } from "../../features/question/QuestionSlice";
+
+import AutogenerateModal from "../Modals/AutogenerateModal/AutogenerateModal";
 
 export default function Languages() {
   const getbodynumbers = useSelector(getBodyLineNumber);
@@ -35,10 +37,16 @@ export default function Languages() {
       document.removeEventListener("keydown", EnterFunction, false);
     };
   }, [EnterFunction]);
+  const [autogeneratemodal, setAutoGenerateModal] = useState(false);
 
   return (
     <div className="languages">
+      <AutogenerateModal
+        autogeneratemodal={autogeneratemodal}
+        setAutoGenerateModal={setAutoGenerateModal}
+      />
       <span className="problemNameText">Allowed languages</span>
+
       <span className="maxScoreDescription" style={{ marginTop: "2%" }}>
         Programming languages in which candidates can write their code.
       </span>
@@ -103,9 +111,25 @@ export default function Languages() {
           </FormGroup>
         </div>
       </div>
-      <span className="problemNameText" style={{ marginTop: "2%" }}>
-        Code snippets
-      </span>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginTop: "2%",
+        }}
+      >
+        <span className="problemNameText">Code snippets</span>
+        <span
+          className="autoGenerateText"
+          onClick={() => {
+            setAutoGenerateModal(true);
+          }}
+        >
+          Auto generate code
+        </span>
+      </div>
+
       <div className="codeSnippetContainer">
         <div className="codeSnippetContainerHeader">
           <span className="fullscreenMode">Fullscreen mode</span>

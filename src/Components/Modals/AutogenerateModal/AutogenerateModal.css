@@ -1,0 +1,110 @@
+.addtestcasemodal-inner-content {
+  border-radius: 0px 0px 10px 10px;
+  width: 800px;
+  height: 600px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  margin-top: 10%;
+
+  justify-content: space-between;
+  flex-direction: column;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+
+  z-index: 3;
+  position: relative;
+}
+.addtestcaseQuestionoverlay {
+  position: absolute;
+  top: 0rem;
+  left: 0rem;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 100vh;
+  z-index: 3;
+}
+.functionNameReturnDiv,
+.functionParameterDiv {
+  display: flex;
+  width: 95%;
+
+  height: 80px;
+  justify-content: space-between;
+}
+.functionParameterDiv {
+  display: flex;
+  width: 75%;
+
+  height: 80px;
+  justify-content: space-between;
+}
+.functionNameDiv {
+  height: 80px;
+
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.functionNameInput {
+  display: flex;
+  border-radius: 5px;
+  border: 1px solid #0071c5;
+  outline: none;
+  width: 98%;
+  height: 40px;
+  padding-left: 1%;
+  font-size: 20px;
+}
+.functionCommentInput {
+  display: flex;
+  border-radius: 5px;
+  border: 1px solid #0071c5;
+  outline: none;
+  width: 98%;
+  height: 150px;
+  padding-left: 1%;
+  font-size: 20px;
+}
+.functionCommentsReturnDiv {
+  display: flex;
+  width: 95%;
+
+  height: 200px;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.generateCodeDiv {
+  display: flex;
+  height: 50px;
+  width: 60%;
+  margin-bottom: 2%;
+  justify-content: space-between;
+  align-items: center;
+}
+.addParameterButton {
+  width: 200px;
+  height: 100%;
+  border: 1px solid #0071c5;
+  padding-left: 1%;
+  padding-right: 1%;
+  background-color: white;
+  cursor: pointer;
+  color: #0071c5;
+  border-radius: 10px;
+  font-size: 20px;
+}
+.closeautogenerateQuestionModal {
+  width: 30px;
+  height: 20px;
+  margin-top: 10%;
+  background-color: white;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  cursor: pointer;
+  z-index: 3;
+}

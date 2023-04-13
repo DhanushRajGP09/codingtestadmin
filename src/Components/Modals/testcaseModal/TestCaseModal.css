@@ -1,0 +1,84 @@
+.addTestCaseHeader {
+  height: 80px;
+  width: 90%;
+
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  justify-content: space-between;
+  margin-top: 5%;
+}
+.visibilityTestCaseDiv {
+  height: 80px;
+  width: 250px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 20px;
+}
+.testCaseAddInOutDiv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: lightblue;
+  height: 250px;
+  width: 90%;
+}
+.testCaseScoreDiv {
+  height: 80px;
+  width: 90%;
+
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 20px;
+}
+.individualTestCaseInput,
+.testCaseAddInInput {
+  border: none;
+  outline: none;
+  height: 80px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  width: 200px;
+  font-size: 20px;
+}
+
+.testCaseIndividualSave {
+  width: 90%;
+  height: 80px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.testCaseIndividualSaveButton {
+  background-color: #0071c5;
+  color: white;
+  height: 50px;
+  font-size: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  width: 100px;
+}
+.testCaseAddInDiv {
+  font-size: 20px;
+  height: 250px;
+  width: 50%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.testCaseAddInInput {
+  height: 200px;
+  display: flex;
+  width: 90%;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border: 1px solid gray;
+}

@@ -181,3 +181,10 @@
   border-top: 1px solid lightgray;
   line-height: 24.1px;
 }
+.autoGenerateText {
+  margin-right: 10%;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #0071c5;
+}

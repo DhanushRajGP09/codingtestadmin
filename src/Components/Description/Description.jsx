@@ -10,14 +10,17 @@ import FormLabel from "@mui/material/FormLabel";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addProblemDescription,
+  addProblemDifficulty,
   addProblemName,
   getProblemDescription,
+  getProblemDifficulty,
   getProblemName,
 } from "../../features/question/QuestionSlice";
 
 export default function Description() {
   const getproblemname = useSelector(getProblemName);
   const getproblemdescription = useSelector(getProblemDescription);
+  const getproblemdifficulty = useSelector(getProblemDifficulty);
   const [value, setValue] = useState(getproblemdescription);
 
   const dispatch = useDispatch();
@@ -57,16 +60,33 @@ export default function Description() {
           <FormControl>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="Easy"
+              defaultValue={getproblemdifficulty}
               name="radio-buttons-group"
             >
-              <FormControlLabel value="Easy" control={<Radio />} label="Easy" />
+              <FormControlLabel
+                value="Easy"
+                control={<Radio />}
+                label="Easy"
+                onClick={(e) => {
+                  dispatch(addProblemDifficulty(e.target.value));
+                }}
+              />
               <FormControlLabel
                 value="medium"
                 control={<Radio />}
                 label="Medium"
+                onClick={(e) => {
+                  dispatch(addProblemDifficulty(e.target.value));
+                }}
               />
-              <FormControlLabel value="Hard" control={<Radio />} label="Hard" />
+              <FormControlLabel
+                value="Hard"
+                control={<Radio />}
+                label="Hard"
+                onClick={(e) => {
+                  dispatch(addProblemDifficulty(e.target.value));
+                }}
+              />
             </RadioGroup>
           </FormControl>
         </div>

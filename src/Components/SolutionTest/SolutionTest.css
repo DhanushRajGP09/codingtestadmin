@@ -48,7 +48,7 @@
 }
 .Totalstudenttable {
   width: 840px;
-  height: 470px;
+  height: auto;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -64,7 +64,7 @@
   justify-content: space-between;
   color: white;
   height: 60px;
-  width: 840px;
+  width: 900px;
   background-color: #0071c5;
 }
 .outputFilesDiv {
@@ -96,7 +96,7 @@
   justify-content: space-between;
   color: white;
   height: 70px;
-  width: 840px;
+  width: 900px;
   background-color: lightblue;
 }
 .eachScoreInput {
@@ -112,4 +112,19 @@
 }
 .tableFooter {
   justify-content: center;
+}
+.editDiv {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 140px;
+  height: 60px;
+  font-size: 20px;
+
+  color: #0071c5;
+}
+.dividerLine {
+  width: 80px;
+  border: 1px solid #0071c5;
 }
