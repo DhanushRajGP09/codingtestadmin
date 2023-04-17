@@ -127,7 +127,7 @@
 }
 .createQuestionmodalFooterNextPrevDiv,
 .createQuestionmodalFooterSavePublishDiv {
-  width: 200px;
+  width: 250px;
   margin-left: 2%;
   height: 60%;
   background-color: white;
@@ -141,7 +141,8 @@
 }
 .saveAsDraftButton,
 .publishChangesButton,
-.nextButton {
+.nextButton,
+.prevButton {
   width: 250px;
   height: 100%;
   border: 1px solid #0071c5;
@@ -164,4 +165,7 @@
   background-color: #0071c5;
   color: white;
   border: 1px solid white;
+}
+.prevButton {
+  width: 100px;
 }

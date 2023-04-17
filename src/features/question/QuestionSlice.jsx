@@ -7,8 +7,9 @@ const QuestionSlice = createSlice({
     ProblemDescription: "",
     ProblemDifficulty: "",
     bodyLineNumber: [2],
-
+    totalScore: "",
     testCases: [],
+    selectedLanguages: [],
     libraryQuestions: [
       {
         questionName: "abc",
@@ -48,6 +49,9 @@ const QuestionSlice = createSlice({
     addProblemName: (state, { payload }) => {
       state.ProblemName = payload;
     },
+    addTotalScore: (state, { payload }) => {
+      state.totalScore = payload;
+    },
     addProblemDescription: (state, { payload }) => {
       state.ProblemDescription = payload;
     },
@@ -66,6 +70,34 @@ const QuestionSlice = createSlice({
     addTestCases: (state, { payload }) => {
       state.testCases.push(payload);
     },
+    filterTestCases: (state, action) => {
+      state.testCases = state.testCases.filter(
+        (data) => data.testcaseID !== action.payload
+      );
+    },
+    addToSelectedLanguages: (state, action) => {
+      let isPresent = false;
+      for (let item of state.selectedLanguages) {
+        if (item === action.payload) {
+          isPresent = true;
+        }
+      }
+      if (!isPresent) {
+        console.log("Got a hit");
+        state.selectedLanguages.unshift(action.payload);
+      }
+    },
+    filterSelectedLanguages: (state, action) => {
+      state.selectedLanguages = state.selectedLanguages.filter(
+        (data) => data !== action.payload
+      );
+    },
+    addAllLanguages: (state, action) => {
+      state.selectedLanguages = action.payload;
+    },
+    removeAllLanguages: (state, action) => {
+      state.selectedLanguages = [];
+    },
   },
 });
 
@@ -77,6 +109,12 @@ export const {
   addQuestionToLibrary,
   addProblemDifficulty,
   addTestCases,
+  filterTestCases,
+  addTotalScore,
+  addToSelectedLanguages,
+  filterSelectedLanguages,
+  addAllLanguages,
+  removeAllLanguages,
 } = QuestionSlice.actions;
 export const getProblemName = (state) => state.Problem.ProblemName;
 
@@ -86,5 +124,6 @@ export const getBodyLineNumber = (state) => state.Problem.bodyLineNumber;
 export const getLibraryQuestions = (state) => state.Problem.libraryQuestions;
 export const getProblemDifficulty = (state) => state.Problem.ProblemDifficulty;
 export const getTestCases = (state) => state.Problem.testCases;
-
+export const getTotalScore = (state) => state.Problem.totalScore;
+export const getSelectedLanguages = (state) => state.Problem.selectedLanguages;
 export default QuestionSlice.reducer;

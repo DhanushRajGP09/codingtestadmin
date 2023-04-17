@@ -11,6 +11,45 @@ export default function CreateQuestionModal(props) {
   const [active, setActive] = useState(true);
   const [solutionactive, setSolutionActive] = useState(false);
   const [languageActive, setLanguageActive] = useState(false);
+  const [prevbutton, setPrevButton] = useState(false);
+
+  useEffect(() => {
+    if (window.location.pathname === "/home/Solution") {
+      setPrevButton(true);
+    } else if (window.location.pathname === "/home/Languages") {
+      setPrevButton(true);
+    } else {
+      setPrevButton(false);
+    }
+  });
+
+  const handleNext = () => {
+    if (window.location.pathname === "/home") {
+      navigate("/home/Solution");
+      setSolutionActive(true);
+      setActive(false);
+      setLanguageActive(false);
+    } else if (window.location.pathname === "/home/Solution") {
+      navigate("/home/Languages");
+      setSolutionActive(false);
+      setActive(false);
+      setLanguageActive(true);
+    }
+  };
+
+  const handlePrev = () => {
+    if (window.location.pathname === "/home/Languages") {
+      navigate("/home/Solution");
+      setSolutionActive(true);
+      setActive(false);
+      setLanguageActive(false);
+    } else if (window.location.pathname === "/home/Solution") {
+      navigate("/home");
+      setSolutionActive(false);
+      setActive(true);
+      setLanguageActive(false);
+    }
+  };
 
   return (
     <div
@@ -89,7 +128,27 @@ export default function CreateQuestionModal(props) {
             </div>
             <div className="createQuestionmodalFooter">
               <div className="createQuestionmodalFooterNextPrevDiv">
-                <button className="nextButton">Next</button>
+                {prevbutton ? (
+                  <button
+                    className="prevButton"
+                    onClick={() => {
+                      handlePrev();
+                    }}
+                  >
+                    Prev
+                  </button>
+                ) : (
+                  ""
+                )}
+
+                <button
+                  className="nextButton"
+                  onClick={() => {
+                    handleNext();
+                  }}
+                >
+                  Next
+                </button>
               </div>
               <div className="createQuestionmodalFooterSavePublishDiv">
                 <button className="saveAsDraftButton">Save as draft</button>

@@ -15,6 +15,7 @@ import {
   getProblemDescription,
   getProblemDifficulty,
   getProblemName,
+  getTotalScore,
 } from "../../features/question/QuestionSlice";
 
 export default function Description() {
@@ -25,6 +26,9 @@ export default function Description() {
 
   const dispatch = useDispatch();
   console.log("hehe", value);
+
+  const totalscore = useSelector(getTotalScore);
+  console.log("totalscore", totalscore);
 
   useEffect(() => {
     dispatch(addProblemDescription(value));
@@ -92,7 +96,7 @@ export default function Description() {
         </div>
         <div className="maxScoreDiv">
           <span className="problemNameText">Maximum score</span>
-          <div className="maxScoreInput">5</div>
+          <div className="maxScoreInput">{totalscore}</div>
           <span className="maxScoreDescription">
             the total score is the sum of the score of all the test cases. this
             score can be modified with rescprect to each test case

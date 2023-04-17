@@ -8,6 +8,7 @@ import {
   addTestCases,
   getTestCases,
 } from "../../../features/question/QuestionSlice";
+import { nanoid } from "@reduxjs/toolkit";
 
 export default function TestCaseModal(props) {
   const [checked, setChecked] = React.useState(false);
@@ -16,10 +17,14 @@ export default function TestCaseModal(props) {
   const gettestcases = useSelector(getTestCases);
   console.log("gettestcasesmodal", gettestcases);
 
+  const id = nanoid();
+  console.log("id", id);
+
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [score, setScore] = useState("");
   const [visible, setVisible] = useState(false);
+
   const handleSave = () => {
     dispatch(
       addTestCases({
@@ -27,8 +32,10 @@ export default function TestCaseModal(props) {
         output: output,
         score: score,
         visible: visible,
+        testcaseID: id,
       })
     );
+    props.setAddTestCaseModal(false);
   };
 
   return (

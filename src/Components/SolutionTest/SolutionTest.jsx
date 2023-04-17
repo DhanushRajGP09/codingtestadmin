@@ -11,6 +11,8 @@ import switchon from "../../Assets/Icons/Switch on.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addTestCases,
+  addTotalScore,
+  filterTestCases,
   getTestCases,
 } from "../../features/question/QuestionSlice";
 import AddTestCaseModal from "../Modals/AutogenerateModal/AutogenerateModal";
@@ -161,6 +163,8 @@ export default function SolutionTest() {
   //   console.log(selectedRowsData);
   // };
 
+  const [inputField, setInputField] = useState(false);
+  const [outputField, setOutputField] = useState(false);
   const params = { value: true };
 
   var totalscore = 0;
@@ -178,6 +182,7 @@ export default function SolutionTest() {
     if (regex.test(parseInt(gettestcases[i].score))) {
       totalscore += parseInt(gettestcases[i].score);
     }
+    dispatch(addTotalScore(totalscore));
   }
 
   return (
@@ -223,7 +228,6 @@ export default function SolutionTest() {
           Add test cases
         </button>
         <button className="addTestCases">Upload file</button>
-        <button className="addTestCases">Upload zip file</button>
       </div>
       {gettestcases.length > 0 ? (
         <div className="Totalstudenttable">
@@ -238,8 +242,36 @@ export default function SolutionTest() {
           {gettestcases.map((data, index) => {
             return (
               <div className="tableFields">
-                <div className="inputFilesText">input {index + 1}</div>
-                <div className="inputFilesText">output {index + 1}</div>
+                <div
+                  className="inputFilesText"
+                  id={`input ${index}`}
+                  onClick={() => {
+                    document.getElementById(`input ${index}`).innerHTML =
+                      data.input;
+                    setTimeout(() => {
+                      document.getElementById(
+                        `input ${index}`
+                      ).innerHTML = `input ${index + 1}`;
+                    }, 3000);
+                  }}
+                >
+                  input {index + 1}
+                </div>
+                <div
+                  className="inputFilesText"
+                  id={`output ${index}`}
+                  onClick={() => {
+                    document.getElementById(`output ${index}`).innerHTML =
+                      data.output;
+                    setTimeout(() => {
+                      document.getElementById(
+                        `output ${index}`
+                      ).innerHTML = `output ${index + 1}`;
+                    }, 3000);
+                  }}
+                >
+                  output {index + 1}
+                </div>
                 <div className="scoreText">
                   <input
                     className="eachScoreInput"
@@ -300,9 +332,17 @@ export default function SolutionTest() {
                   )}
                 </div>
                 <div className="editDiv">
-                  <span>Edit</span>
+                  <span style={{ cursor: "pointer" }}>Edit</span>
                   <div className="dividerLine"></div>
-                  <span style={{ color: "red" }}>Delete</span>
+                  <span
+                    style={{ color: "red", cursor: "pointer" }}
+                    onClick={() => {
+                      console.log(data.input);
+                      dispatch(filterTestCases(data?.testcaseID));
+                    }}
+                  >
+                    Delete
+                  </span>
                 </div>
               </div>
             );
@@ -313,9 +353,7 @@ export default function SolutionTest() {
         </div>
       ) : (
         <div className="Totalstudenttable">
-          <span
-            style={{ fontSize: "20px", marginLeft: "40%", marginTop: "20%" }}
-          >
+          <span style={{ fontSize: "20px", marginLeft: "40%" }}>
             No Test Cases Added
           </span>
         </div>

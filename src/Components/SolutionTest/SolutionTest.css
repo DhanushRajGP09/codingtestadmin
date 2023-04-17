@@ -30,7 +30,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 600px;
+  width: 400px;
   height: 40px;
 }
 .addTestCases {
@@ -87,6 +87,11 @@
 .scoreText {
   width: 150px;
 }
+
+.inputFilesText {
+  cursor: pointer;
+}
+
 .visibleToCandidatesText {
   width: 250px;
 }

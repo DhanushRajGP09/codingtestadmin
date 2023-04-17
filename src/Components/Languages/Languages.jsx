@@ -5,8 +5,13 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addAllLanguages,
+  addToSelectedLanguages,
   addbodyLineNumber,
+  filterSelectedLanguages,
   getBodyLineNumber,
+  getSelectedLanguages,
+  removeAllLanguages,
 } from "../../features/question/QuestionSlice";
 
 import AutogenerateModal from "../Modals/AutogenerateModal/AutogenerateModal";
@@ -16,6 +21,8 @@ export default function Languages() {
   console.log("hi", getbodynumbers);
 
   const dispatch = useDispatch();
+
+  const [selectall, setSelectAll] = useState(false);
 
   var lineNumber = 2;
 
@@ -38,6 +45,20 @@ export default function Languages() {
     };
   }, [EnterFunction]);
   const [autogeneratemodal, setAutoGenerateModal] = useState(false);
+  const getselectedlanguages = useSelector(getSelectedLanguages);
+  console.log("selectedlanguage", getselectedlanguages);
+
+  const List = [
+    "C",
+    "C++",
+    "Java",
+    "Python",
+    "JavaScript",
+    "Go",
+    "R programming",
+    "C#",
+    "Dotnet",
+  ];
 
   return (
     <div className="languages">
@@ -52,65 +73,181 @@ export default function Languages() {
       </span>
       <div className="selectAllLang">
         <FormGroup>
-          <FormControlLabel control={<Checkbox />} label="Select all" />
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Select all"
+            onClick={() => {
+              setSelectAll(!selectall);
+              if (!selectall) {
+                dispatch(addAllLanguages(List));
+              } else {
+                dispatch(removeAllLanguages());
+              }
+            }}
+          />
         </FormGroup>
       </div>
+
       <div className="languagesSelectContainer">
         <div className="languageSelectDiv">
           {" "}
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label="Select all" />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="C"
+              onClick={() => {
+                if (!getselectedlanguages.includes("C")) {
+                  dispatch(addToSelectedLanguages("C"));
+                } else {
+                  dispatch(filterSelectedLanguages("C"));
+                }
+              }}
+              checked={getselectedlanguages.includes("C") ? true : false}
+            />
           </FormGroup>
         </div>
         <div className="languageSelectDiv">
           {" "}
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label="Select all" />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="C++"
+              onClick={() => {
+                if (!getselectedlanguages.includes("C++")) {
+                  dispatch(addToSelectedLanguages("C++"));
+                } else {
+                  dispatch(filterSelectedLanguages("C++"));
+                }
+              }}
+              checked={getselectedlanguages.includes("C++") ? true : false}
+            />
           </FormGroup>
         </div>
         <div className="languageSelectDiv">
           {" "}
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label="Select all" />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Java"
+              onClick={() => {
+                if (!getselectedlanguages.includes("Java")) {
+                  dispatch(addToSelectedLanguages("Java"));
+                } else {
+                  dispatch(filterSelectedLanguages("Java"));
+                }
+              }}
+              checked={getselectedlanguages.includes("Java") ? true : false}
+            />
           </FormGroup>
         </div>
         <div className="languageSelectDiv">
           {" "}
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label="Select all" />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Python"
+              onClick={() => {
+                if (!getselectedlanguages.includes("Python")) {
+                  dispatch(addToSelectedLanguages("Python"));
+                } else {
+                  dispatch(filterSelectedLanguages("Python"));
+                }
+              }}
+              checked={getselectedlanguages.includes("Python") ? true : false}
+            />
           </FormGroup>
         </div>
         <div className="languageSelectDiv">
           {" "}
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label="Select all" />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="JavaScript"
+              onClick={() => {
+                if (!getselectedlanguages.includes("JavaScript")) {
+                  dispatch(addToSelectedLanguages("JavaScript"));
+                } else {
+                  dispatch(filterSelectedLanguages("JavaScript"));
+                }
+              }}
+              checked={
+                getselectedlanguages.includes("JavaScript") ? true : false
+              }
+            />
           </FormGroup>
         </div>
         <div className="languageSelectDiv">
           {" "}
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label="Select all" />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Go"
+              onClick={() => {
+                if (!getselectedlanguages.includes("Go")) {
+                  dispatch(addToSelectedLanguages("Go"));
+                } else {
+                  dispatch(filterSelectedLanguages("Go"));
+                }
+              }}
+              checked={getselectedlanguages.includes("Go") ? true : false}
+            />
           </FormGroup>
         </div>
         <div className="languageSelectDiv">
           {" "}
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label="Select all" />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="R programming"
+              onClick={() => {
+                if (!getselectedlanguages.includes("R programming")) {
+                  dispatch(addToSelectedLanguages("R programming"));
+                } else {
+                  dispatch(filterSelectedLanguages("R programming"));
+                }
+              }}
+              checked={
+                getselectedlanguages.includes("R programming") ? true : false
+              }
+            />
           </FormGroup>
         </div>
         <div className="languageSelectDiv">
           {" "}
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label="Select all" />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="C#"
+              onClick={() => {
+                if (!getselectedlanguages.includes("C#")) {
+                  dispatch(addToSelectedLanguages("C#"));
+                } else {
+                  dispatch(filterSelectedLanguages("C#"));
+                }
+              }}
+              checked={getselectedlanguages.includes("C#") ? true : false}
+            />
           </FormGroup>
         </div>
         <div className="languageSelectDiv">
           {" "}
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label="Select all" />
+            <FormControlLabel
+              control={<Checkbox />}
+              label="Dotnet"
+              onClick={() => {
+                if (!getselectedlanguages.includes("Dotnet")) {
+                  dispatch(addToSelectedLanguages("Dotnet"));
+                } else {
+                  dispatch(filterSelectedLanguages("Dotnet"));
+                }
+              }}
+              checked={getselectedlanguages.includes("Dotnet") ? true : false}
+            />
           </FormGroup>
         </div>
       </div>
+
       <div
         style={{
           display: "flex",
@@ -136,11 +273,9 @@ export default function Languages() {
         </div>
         <div className="codeSnippetContainerBody">
           <div className="codeSnippetSelectedLanguages">
-            <div className="codeSnippetSelectedLanguage">C</div>
-            <div className="codeSnippetSelectedLanguage">C++</div>
-            <div className="codeSnippetSelectedLanguage">Java</div>
-            <div className="codeSnippetSelectedLanguage">Python</div>
-            <div className="codeSnippetSelectedLanguage">JavaScript</div>
+            {getselectedlanguages.map((data) => {
+              return <div className="codeSnippetSelectedLanguage">{data}</div>;
+            })}
           </div>
           <div className="codeContainerDiv">
             <div className="codeContainerDivHeader">
