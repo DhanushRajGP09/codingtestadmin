@@ -5,6 +5,7 @@ const QuestionSlice = createSlice({
   initialState: {
     ProblemName: "",
     ProblemDescription: "",
+    individualQuestion: {},
     questionId: "",
     ProblemDifficulty: "",
     bodyLineNumber: [2],
@@ -16,44 +17,14 @@ const QuestionSlice = createSlice({
     sampleOutput: "",
     sampleExplaination: "",
     selectedLanguages: [],
-    libraryQuestions: [
-      {
-        questionName: "abc",
-        questionDescription: "bcd",
-        questionLevel: "Easy",
-        score: "5",
-        recommendedTime: "20mins",
-        category: "programming",
-      },
-      {
-        questionName: "ab",
-        questionDescription: "bcd",
-        questionLevel: "Easy",
-        score: "5",
-        recommendedTime: "20mins",
-        category: "programming",
-      },
-      {
-        questionName: "bc",
-        questionDescription: "bc",
-        questionLevel: "Hard",
-        score: "5",
-        recommendedTime: "40mins",
-        category: "programming",
-      },
-      {
-        questionName: "c",
-        questionDescription: "c",
-        questionLevel: "medium",
-        score: "5",
-        recommendedTime: "20mins",
-        category: "programming",
-      },
-    ],
+    libraryQuestions: [],
   },
   reducers: {
     addProblemName: (state, { payload }) => {
       state.ProblemName = payload;
+    },
+    addIndividualQuestion: (state, { payload }) => {
+      state.individualQuestion = payload;
     },
     addLibraryQuestions: (state, { payload }) => {
       state.libraryQuestions = payload;
@@ -149,6 +120,7 @@ export const {
   addTestCaseId,
   addIndividualTestCase,
   addLibraryQuestions,
+  addIndividualQuestion,
 } = QuestionSlice.actions;
 export const getProblemName = (state) => state.Problem.ProblemName;
 
@@ -164,6 +136,8 @@ export const getQuestionID = (state) => state.Problem.questionId;
 export const getSampleInput = (state) => state.Problem.sampleInput;
 export const getSampleOutput = (state) => state.Problem.sampleOutput;
 export const getTestCaseId = (state) => state.Problem.testCaseId;
+export const getIndividualQuestion = (state) =>
+  state.Problem.individualQuestion;
 export const getIndividualTestCase = (state) =>
   state.Problem.individualTestCase;
 export const getSampleExplaination = (state) =>
