@@ -8,15 +8,23 @@ import CheckboxWrapper from "../Tablecheckbox/Checkbox";
 import { useNavigate } from "react-router";
 import switchoff from "../../Assets/Icons/Switch off.png";
 import switchon from "../../Assets/Icons/Switch on.png";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addIndividualTestCase,
+  addSampleExplaination,
+  addSampleInput,
+  addSampleOutput,
+  addTestCaseId,
   addTestCases,
   addTotalScore,
   filterTestCases,
+  getQuestionID,
   getTestCases,
 } from "../../features/question/QuestionSlice";
 import AddTestCaseModal from "../Modals/AutogenerateModal/AutogenerateModal";
 import TestCaseModal from "../Modals/testcaseModal/TestCaseModal";
+import EditTestCaseModal from "../Modals/testcaseModal/EditTestCaseModal";
 
 export default function SolutionTest() {
   const [value, setValue] = useState("");
@@ -156,12 +164,14 @@ export default function SolutionTest() {
   // console.log("rowsss", rows);
 
   const dispatch = useDispatch();
-  console.log("ttt", gettestcases);
+  console.log("tt", gettestcases);
 
   // const onRowsSelectionHandler = (ids) => {
   //   const selectedRowsData = ids.map((id) => rows.find((row) => row.id === id));
   //   console.log(selectedRowsData);
   // };
+
+  const token = JSON.parse(localStorage.getItem("token"));
 
   const [inputField, setInputField] = useState(false);
   const [outputField, setOutputField] = useState(false);
@@ -185,21 +195,131 @@ export default function SolutionTest() {
     dispatch(addTotalScore(totalscore));
   }
 
+  const [inputfileName, inputsetFileName] = useState("");
+  const [inputfileContent, inputsetFileContent] = useState("");
+  const [outputfileName, outputsetFileName] = useState("");
+  const [outputfileContent, outputsetFileContent] = useState("");
+
+  const handleChangeInput = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = () => {
+      inputsetFileName(file.name);
+      inputsetFileContent(reader.result);
+      dispatch(addSampleInput(reader.result));
+    };
+  };
+
+  const handleChangeOutput = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = () => {
+      outputsetFileName(file.name);
+      outputsetFileContent(reader.result);
+      dispatch(addSampleOutput(reader.result));
+    };
+  };
+
+  const getquestionid = useSelector(getQuestionID);
+  console.log("questionId", getquestionid);
+
+  dispatch(addSampleExplaination(value));
+
+  const handleDeleteTestCase = (id) => {
+    console.log("testcase", getquestionid);
+
+    axios
+      .delete(
+        "http://139.59.56.122:5000/api/question/delete-test-case",
+
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            questionId: getquestionid,
+            testCaseId: id,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("testcasedeleted", response);
+        dispatch(filterTestCases(id));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const [sampleInput, setSampleInput] = useState(true);
+  const [sampleOutput, setSampleOutput] = useState(true);
+
+  const getIndividualTestCase = (id) => {
+    axios
+      .get(
+        "http://139.59.56.122:5000/api/question/view-test-case-input-and-output",
+
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            questionId: getquestionid,
+            testCaseId: id,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("getindividualtestcase", response);
+        dispatch(addIndividualTestCase(response.data.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const [editTestCaseModal, setEditTestCaseModal] = useState(false);
+
   return (
     <div className="Solutions">
       <TestCaseModal
         addtestcasemodal={addtestcasemodal}
         setAddTestCaseModal={setAddTestCaseModal}
       />
+      <EditTestCaseModal
+        editTestCaseModal={editTestCaseModal}
+        setEditTestCaseModal={setEditTestCaseModal}
+      />
       <span className="problemNameText">Solution details</span>
-      <span className="maxScoreDescription">
+      <span className="maxScoreDescription" style={{ marginTop: "2%" }}>
         The sample input and output must be uploaded in the format of .txt files
         up to the size of 5MB
       </span>
       <div className="sampleInputOutputDiv">
-        <div className="sampleInputDiv">Sample input</div>
-        <div className="sampleInputDiv">Sample output</div>
+        {sampleInput ? (
+          <input
+            class="custom-file-input"
+            type="file"
+            onChange={(event) => {
+              handleChangeInput(event);
+            }}
+          ></input>
+        ) : (
+          <div className="sampleInputUploaded"></div>
+        )}
+
+        <input
+          class="custom-file-output"
+          type="file"
+          onChange={(event) => {
+            handleChangeOutput(event);
+          }}
+        ></input>
       </div>
+      <p>{inputfileContent}</p>
+
       <span className="problemNameText">Sample explanation</span>
       <div className="richTextEditor">
         <ReactQuill
@@ -209,15 +329,14 @@ export default function SolutionTest() {
           className="textEditor"
         />
       </div>
-      <span className="problemNameText">Test cases</span>
-      <span className="maxScoreDescription">
+      <span className="problemNameText" style={{ marginTop: "2%" }}>
+        Test cases
+      </span>
+      <span className="maxScoreDescription" style={{ marginTop: "2%" }}>
         The input and output files are used to evaluate the submissions. Assign
         scores to each of the input files and their corresponding output files.
-        Please upload the zip files containing input files as
-        in00.txtbin,in01.txtbin etc and output files named as out00.txtbin,
-        out01.txtbin etc
       </span>
-      <div className="testCaseAddDiv">
+      <div className="testCaseAddDiv" style={{ marginTop: "2%" }}>
         <button
           className="addTestCases"
           style={{ cursor: "pointer" }}
@@ -230,12 +349,13 @@ export default function SolutionTest() {
         <button className="addTestCases">Upload file</button>
       </div>
       {gettestcases.length > 0 ? (
-        <div className="Totalstudenttable">
+        <div className="Totalstudenttable" style={{ marginTop: "2%" }}>
           <div className="tableHeader">
             <div className="inputFilesText">Input files</div>
             <div className="inputFilesText">Output files</div>
             <div className="scoreText">Score</div>
             <div className="visibleToCandidatesText">Visible to candidates</div>
+            <div className="scoreText">Explanation</div>
             <div className="scoreText">Edit</div>
           </div>
 
@@ -280,65 +400,33 @@ export default function SolutionTest() {
                   ></input>
                 </div>
                 <div className="visibleToCandidatesText">
-                  {data.visible === true ? (
-                    <img
-                      src={switchon}
-                      id={`option${index}`}
-                      onClick={() => {
-                        if (
-                          document.getElementById(`option${index}`).src ===
-                          switchon
-                        ) {
-                          document.getElementById(`option${index}`).src =
-                            switchoff;
-                          setChecked(true);
-                          if (
-                            document.getElementById(`option${index}`).src ===
-                            switchoff
-                          ) {
-                            console.log("id", index);
-                          }
-                        } else {
-                          setChecked(false);
-                          document.getElementById(`option${index}`).src =
-                            switchon;
-                        }
-                      }}
-                    ></img>
+                  {data.visibility === "true" ? (
+                    <img src={switchon} id={`option${index}`}></img>
                   ) : (
-                    <img
-                      src={switchoff}
-                      id={`option${index}`}
-                      onClick={() => {
-                        if (
-                          document.getElementById(`option${index}`).src ===
-                          switchoff
-                        ) {
-                          document.getElementById(`option${index}`).src =
-                            switchon;
-                          setChecked(false);
-                          if (
-                            document.getElementById(`option${index}`).src ===
-                            switchon
-                          ) {
-                          }
-                        } else {
-                          setChecked(true);
-                          document.getElementById(`option${index}`).src =
-                            switchoff;
-                        }
-                      }}
-                    ></img>
+                    <img src={switchoff} id={`option${index}`}></img>
                   )}
                 </div>
+                <div className="scoreText">
+                  <span className="eachScoreInput">{data.explaination}</span>
+                </div>
                 <div className="editDiv">
-                  <span style={{ cursor: "pointer" }}>Edit</span>
+                  <span
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      getIndividualTestCase(data._id);
+                      setEditTestCaseModal(true);
+                      dispatch(addTestCaseId(data._id));
+                    }}
+                  >
+                    Edit
+                  </span>
                   <div className="dividerLine"></div>
                   <span
                     style={{ color: "red", cursor: "pointer" }}
                     onClick={() => {
                       console.log(data.input);
-                      dispatch(filterTestCases(data?.testcaseID));
+
+                      handleDeleteTestCase(data._id);
                     }}
                   >
                     Delete
@@ -348,11 +436,11 @@ export default function SolutionTest() {
             );
           })}
           <div className="tableFooter">
-            <span>Total score: {totalscore}</span>
+            <span style={{ marginLeft: "33%" }}>Total score: {totalscore}</span>
           </div>
         </div>
       ) : (
-        <div className="Totalstudenttable">
+        <div className="Totalstudenttable" style={{ marginTop: "2%" }}>
           <span style={{ fontSize: "20px", marginLeft: "40%" }}>
             No Test Cases Added
           </span>

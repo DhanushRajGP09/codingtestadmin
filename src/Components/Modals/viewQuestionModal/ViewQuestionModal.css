@@ -1,0 +1,93 @@
+.viewQuestionModalHeader {
+  height: 80px;
+  width: 90%;
+  background-color: lightblue;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.viewCategoryQuestionText,
+.viewQuestionModalDescriptionText {
+  font-size: 23px;
+  font-weight: 500;
+}
+
+.editQuestionButton {
+  width: 180px;
+  height: 40px;
+  border: 1px solid #0071c5;
+  padding-left: 1%;
+  padding-right: 1%;
+  background-color: white;
+  cursor: pointer;
+  color: #0071c5;
+  border-radius: 10px;
+  font-size: 20px;
+}
+.viewQuestionModalBody {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 80vh;
+  background-color: #0071c5;
+  width: 90%;
+}
+.viewQuestionModalDescription {
+  height: auto;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.viewQuestionModalDescriptionDetails {
+  display: flex;
+  align-items: flex-start;
+  height: auto;
+  justify-content: space-between;
+  width: 100%;
+}
+.viewrichTextEditor,
+.viewproblemName {
+  font-size: 18px;
+  color: gray;
+  font-weight: 400;
+}
+.viewdifficultyLevelDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 60px;
+  background-color: white;
+  width: 100%;
+}
+.viewquestionLevel {
+  font-size: 22px;
+}
+
+.descriptionViewLeftContainer,
+.descriptionViewRightContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: auto;
+  margin-top: 5%;
+  padding-left: 1%;
+  margin-bottom: 10%;
+  width: 65%;
+}
+.descriptionViewRightContainer {
+  width: 30%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.viewMaxScore {
+  font-size: 30px;
+  font-weight: 400;
+}

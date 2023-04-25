@@ -6,33 +6,38 @@ import switchon from "../../../Assets/Icons/Switch on.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addTestCases,
+  getIndividualTestCase,
   getQuestionID,
+  getTestCaseId,
   getTestCases,
 } from "../../../features/question/QuestionSlice";
 import { nanoid } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export default function TestCaseModal(props) {
+export default function EditTestCaseModal(props) {
   const [checked, setChecked] = React.useState(false);
 
   const dispatch = useDispatch();
 
   const gettestcases = useSelector(getTestCases);
-  console.log("gettestcasesmodal", gettestcases);
+  console.log("gettestcasesmo", gettestcases);
 
-  const id = nanoid();
-  console.log("id", id);
+  const individualtestcase = useSelector(getIndividualTestCase);
+  console.log("individualtestcaasdasddata", individualtestcase);
 
-  const [input, setInput] = useState("");
-  const [output, setOutput] = useState("");
-  const [score, setScore] = useState("");
-  const [visible, setVisible] = useState("false");
-  const [explanation, setExplanation] = useState("");
+  const [input, setInput] = useState(individualtestcase.input);
+  const [output, setOutput] = useState(individualtestcase.output);
+  const [score, setScore] = useState(individualtestcase.score);
+  const [visible, setVisible] = useState(individualtestcase.visibility);
+  const [explanation, setExplanation] = useState(
+    individualtestcase.explaination
+  );
+
   const [testcases, setTestCases] = useState([]);
 
   const handleSave = () => {
     getAllTestCases();
-    props.setAddTestCaseModal(false);
+    props.setEditTestCaseModal(false);
   };
 
   const getquestionid = useSelector(getQuestionID);
@@ -64,16 +69,14 @@ export default function TestCaseModal(props) {
       });
   };
 
-  useEffect(() => {
-    getAllTestCases();
-  }, []);
+  const testcaseid = useSelector(getTestCaseId);
 
   const handleSampleInput = () => {
     console.log("testcase", getquestionid);
 
     axios
-      .post(
-        "http://139.59.56.122:5000/api/question/add-testcase",
+      .patch(
+        "http://139.59.56.122:5000/api/question/add-solution-and-test-case",
         {
           input: input,
           output: output,
@@ -81,6 +84,7 @@ export default function TestCaseModal(props) {
           visibility: visible,
           explaination: explanation,
           questionId: getquestionid,
+          testCaseId: testcaseid,
         },
         {
           headers: {
@@ -89,7 +93,7 @@ export default function TestCaseModal(props) {
         }
       )
       .then(function (response) {
-        console.log("testcase", response);
+        console.log("testcasehe", response);
         handleSave();
       })
       .catch(function (error) {
@@ -100,7 +104,7 @@ export default function TestCaseModal(props) {
   return (
     <div
       className="createQuestionModal"
-      style={{ display: props.addtestcasemodal ? "flex" : "none" }}
+      style={{ display: props.editTestCaseModal ? "flex" : "none" }}
     >
       <div className="addtestcaseQuestionoverlay">
         <div className="createQuestionmodal-content">
@@ -108,13 +112,13 @@ export default function TestCaseModal(props) {
             src={close}
             className="closeautogenerateQuestionModal"
             onClick={() => {
-              props.setAddTestCaseModal(false);
+              props.setEditTestCaseModal(false);
             }}
           ></img>
           <div className="addtestcasemodal-inner-content">
             <div className="addTestCaseHeader">
               <span style={{ fontWeight: "500", fontSize: "25px" }}>
-                Add new test case
+                Edit test case
               </span>
               <div className="visibilityTestCaseDiv">
                 <span>Visible to candidates</span>
@@ -165,6 +169,7 @@ export default function TestCaseModal(props) {
                 <span>Add input</span>
                 <textarea
                   className="testCaseAddInInput"
+                  value={input}
                   onChange={(e) => {
                     setInput(e.target.value);
                   }}
@@ -174,6 +179,7 @@ export default function TestCaseModal(props) {
                 <span>Add output</span>
                 <textarea
                   className="testCaseAddInInput"
+                  value={output}
                   onChange={(e) => {
                     setOutput(e.target.value);
                   }}
@@ -184,6 +190,7 @@ export default function TestCaseModal(props) {
               <span>Maximum score</span>
               <input
                 className="individualTestCaseInput"
+                value={score}
                 onChange={(e) => {
                   setScore(e.target.value);
                 }}
@@ -193,6 +200,7 @@ export default function TestCaseModal(props) {
               <span>Explanation</span>
               <textarea
                 className="testCaseAddInInput"
+                value={explanation}
                 onChange={(e) => {
                   setExplanation(e.target.value);
                 }}

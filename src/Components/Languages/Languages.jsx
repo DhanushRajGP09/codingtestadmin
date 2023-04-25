@@ -267,9 +267,25 @@ export default function Languages() {
         </span>
       </div>
 
-      <div className="codeSnippetContainer">
+      <div className="codeSnippetContainer" id="code-Editor">
         <div className="codeSnippetContainerHeader">
-          <span className="fullscreenMode">Fullscreen mode</span>
+          <span
+            className="fullscreenMode"
+            onClick={() => {
+              var elem = document.getElementById("code-Editor");
+              if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+              } else if (elem.webkitRequestFullscreen) {
+                /* Safari */
+                elem.webkitRequestFullscreen();
+              } else if (elem.msRequestFullscreen) {
+                /* IE11 */
+                elem.msRequestFullscreen();
+              }
+            }}
+          >
+            Fullscreen mode
+          </span>
         </div>
         <div className="codeSnippetContainerBody">
           <div className="codeSnippetSelectedLanguages">

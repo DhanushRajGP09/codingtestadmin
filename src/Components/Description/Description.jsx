@@ -68,7 +68,7 @@ export default function Description() {
               name="radio-buttons-group"
             >
               <FormControlLabel
-                value="Easy"
+                value="easy"
                 control={<Radio />}
                 label="Easy"
                 onClick={(e) => {
@@ -84,7 +84,7 @@ export default function Description() {
                 }}
               />
               <FormControlLabel
-                value="Hard"
+                value="hard"
                 control={<Radio />}
                 label="Hard"
                 onClick={(e) => {

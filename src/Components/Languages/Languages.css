@@ -65,7 +65,7 @@
   color: white;
 }
 .codeSnippetContainerBody {
-  height: 680px;
+  height: 100%;
   width: 100%;
   border-top: 2px solid lightgray;
   display: flex;
@@ -78,8 +78,8 @@
   align-items: flex-start;
   justify-content: flex-start;
   border-right: 2px solid lightgray;
-  height: 680px;
-  width: 210px;
+  height: 100%;
+  width: 20%;
 }
 .codeSnippetSelectedLanguage {
   display: flex;
@@ -89,7 +89,7 @@
   justify-content: flex-start;
   padding-left: 3%;
   width: 200px;
-  background-color: white;
+
   margin-top: 1%;
   font-size: 20px;
 }
@@ -98,14 +98,14 @@
   align-items: center;
   flex-direction: column;
   justify-content: space-between;
-  width: 750px;
+  width: 90%;
 
-  height: 680px;
+  height: 100%;
 }
 .codeContainerDivHeader,
 .codeContainerDivBody {
-  width: 99%;
-  height: 200px;
+  width: 98%;
+  height: auto;
   background-color: white;
   margin-top: 5px;
   margin-bottom: 2px;

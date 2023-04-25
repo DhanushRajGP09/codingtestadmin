@@ -7,22 +7,26 @@ import search from "../../Assets/Icons/searchicon.png";
 import CreateQuestionModal from "../Modals/createQuestionModal/CreateQuestionModal";
 import { useSelector } from "react-redux";
 import { getLibraryQuestions } from "../../features/question/QuestionSlice";
+import ViewQuestionModal from "../Modals/viewQuestionModal/ViewQuestionModal";
 
 export default function Library() {
   const [modal, setModal] = useState(false);
 
   const getlibraryquestions = useSelector(getLibraryQuestions);
-  console.log("libQuestions", getlibraryquestions);
+  console.log("libQuestion", getlibraryquestions);
+  const [viewmodal, setViewModal] = useState(false);
 
   return (
     <div className="adminLibrary">
       <CreateQuestionModal modal={modal} setModal={setModal} />
+      <ViewQuestionModal viewmodal={viewmodal} setViewModal={setViewModal} />
       <div className="libraryHeader">
         <span className="sectionName">Library</span>
         <button
           className="createQuestionButton"
           onClick={() => {
             setModal(true);
+            localStorage.setItem("questionId", JSON.stringify(""));
           }}
         >
           Create a Question
@@ -88,9 +92,16 @@ export default function Library() {
           {getlibraryquestions.map((data, index) => {
             return (
               <div className="libraryQuestionDiv">
-                <span className="libraryQuestionName">{data.questionName}</span>
+                <span
+                  className="libraryQuestionName"
+                  onClick={() => {
+                    setViewModal(true);
+                  }}
+                >
+                  {data.questionName}
+                </span>
                 <span className="libraryQuestionDescription">
-                  {data.questionDescription}
+                  {data.questionStatement}
                 </span>
                 <div className="libraryQuestionDivSeperator"></div>
                 <div className="libraryQuestionDivFooter">
@@ -99,20 +110,20 @@ export default function Library() {
                       className="questionLevel"
                       style={{
                         color:
-                          data.questionLevel === "Hard"
+                          data.difficultyLevel === "hard"
                             ? "red"
-                            : data.questionLevel === "medium"
+                            : data.difficultyLevel === "medium"
                             ? "blue"
                             : "green",
                       }}
                     >
-                      {data.questionLevel}
+                      {data.difficultyLevel}
                     </span>
-                    <span>Score {data.score}</span>
+                    <span>Score {data.totalScoreForQuestion}</span>
                     <span>Recommended time: {data.recommendedTime}</span>
                   </div>
                   <span className="libraryQuestionDivFooter-QuestionType">
-                    {data.category}
+                    {data.questionType}
                   </span>
                 </div>
               </div>
