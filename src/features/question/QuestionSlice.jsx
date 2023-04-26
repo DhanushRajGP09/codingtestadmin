@@ -11,6 +11,7 @@ const QuestionSlice = createSlice({
     bodyLineNumber: [2],
     totalScore: "",
     testCases: [],
+    defaultCodes: {},
     testCaseId: "",
     individualTestCase: {},
     sampleInput: "",
@@ -18,10 +19,25 @@ const QuestionSlice = createSlice({
     sampleExplaination: "",
     selectedLanguages: [],
     libraryQuestions: [],
+    functionParameter: [
+      {
+        dataType: "int",
+        value: "a",
+      },
+    ],
   },
   reducers: {
     addProblemName: (state, { payload }) => {
       state.ProblemName = payload;
+    },
+    addfunctionParameter: (state, { payload }) => {
+      state.functionParameter = payload;
+    },
+    addTofunctionParameter: (state, { payload }) => {
+      state.functionParameter.push(payload);
+    },
+    addDefaultCodes: (state, { payload }) => {
+      state.defaultCodes = payload;
     },
     addIndividualQuestion: (state, { payload }) => {
       state.individualQuestion = payload;
@@ -106,23 +122,27 @@ export const {
   removebodyLineNumber,
   addQuestionToLibrary,
   addProblemDifficulty,
+  addTofunctionParameter,
   addTestCases,
   filterTestCases,
   addTotalScore,
   addToSelectedLanguages,
   filterSelectedLanguages,
+  addDefaultCodes,
   addAllLanguages,
   removeAllLanguages,
   addQuestionId,
   addSampleInput,
   addSampleOutput,
   addSampleExplaination,
+  addfunctionParameter,
   addTestCaseId,
   addIndividualTestCase,
   addLibraryQuestions,
   addIndividualQuestion,
 } = QuestionSlice.actions;
 export const getProblemName = (state) => state.Problem.ProblemName;
+export const getfunctionParameter = (state) => state.Problem.functionParameter;
 
 export const getProblemDescription = (state) =>
   state.Problem.ProblemDescription;
@@ -142,4 +162,5 @@ export const getIndividualTestCase = (state) =>
   state.Problem.individualTestCase;
 export const getSampleExplaination = (state) =>
   state.Problem.sampleExplaination;
+export const getDefaultCode = (state) => state.Problem.defaultCodes;
 export default QuestionSlice.reducer;

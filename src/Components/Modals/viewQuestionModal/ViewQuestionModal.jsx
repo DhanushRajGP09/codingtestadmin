@@ -9,6 +9,7 @@ import { Routes, Route, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
+import { getIndividualQuestion } from "../../../features/question/QuestionSlice";
 
 export default function ViewQuestionModal(props) {
   const [active, setActive] = useState(true);
@@ -18,15 +19,10 @@ export default function ViewQuestionModal(props) {
 
   const dispatch = useDispatch();
 
-  const gettestcases = [
-    {
-      input: "2",
-      output: "1",
-      visibility: "true",
-      score: "3",
-      explaination: "hihi",
-    },
-  ];
+  console.log("in view mod");
+
+  const getindividualquestiondata = useSelector(getIndividualQuestion);
+  console.log("individualquestiondatainmodal", getindividualquestiondata);
 
   return (
     <div
@@ -49,7 +45,7 @@ export default function ViewQuestionModal(props) {
             </div> */}
             <div className="viewQuestionModalHeader">
               <span className="viewCategoryQuestionText">
-                Programming Question
+                {getindividualquestiondata?.question?.questionType} Question
               </span>
 
               <button className="editQuestionButton">Edit Question</button>
@@ -114,7 +110,7 @@ export default function ViewQuestionModal(props) {
                   <div className="descriptionViewLeftContainer">
                     <span className="problemNameText">Problem Name</span>
                     <div className="viewproblemName" onChange={(e) => {}}>
-                      hehe
+                      {getindividualquestiondata?.question?.questionName}
                     </div>
                     <span
                       className="problemNameText"
@@ -123,12 +119,7 @@ export default function ViewQuestionModal(props) {
                       Problem statement
                     </span>
                     <div className="viewrichTextEditor">
-                      hhhhhhhhhhhhhhhhhhhhhhhhh egggggggggggggggggggg
-                      geeeeeeeeeeeeeeeeeeeeeeeeeeeeee hhhhhhhhhhhhhhhhhhhhhhhhh
-                      egggggggggggggggggggg geeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-                      hhhhhhhhhhhhhhhhhhhhhhhhh egggggggggggggggggggg
-                      geeeeeeeeeeeeeeeeeeeeeeeeeeeeee hhhhhhhhhhhhhhhhhhhhhhhhh
-                      egggggggggggggggggggg geeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+                      {getindividualquestiondata?.question?.questionStatement}
                     </div>
                   </div>
                   <div className="descriptionViewRightContainer">
@@ -145,7 +136,7 @@ export default function ViewQuestionModal(props) {
                         //       : "green",
                         // }}
                       >
-                        easy
+                        {getindividualquestiondata?.question?.difficultyLevel}
                       </span>
                     </div>
                     <div
@@ -153,7 +144,12 @@ export default function ViewQuestionModal(props) {
                       style={{ marginTop: "5%", height: "80px" }}
                     >
                       <span className="problemNameText">Maximum score</span>
-                      <span className="viewMaxScore">5</span>
+                      <span className="viewMaxScore">
+                        {
+                          getindividualquestiondata?.question
+                            ?.totalScoreForQuestion
+                        }
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -172,21 +168,31 @@ export default function ViewQuestionModal(props) {
                       Sample input
                     </span>
                     <div className="viewSampleInput">
-                      sadasdasdsadasdasdd dasd sadasdsadasdasd
+                      {getindividualquestiondata?.testCases?.length > 0
+                        ? getindividualquestiondata?.testCases[
+                            getindividualquestiondata?.testCases?.length - 1
+                          ]?.input
+                        : ""}
                     </div>
                     <span style={{ color: "#0071c5", marginTop: "3%" }}>
                       Sample Output
                     </span>
                     <div className="viewSampleInput">
-                      sadasdasdsadasdasdd dasd sadasdsadasdasdsd sasadsadasd
-                      sdasdas
+                      {getindividualquestiondata?.testCases?.length > 0
+                        ? getindividualquestiondata?.testCases[
+                            getindividualquestiondata?.testCases?.length - 1
+                          ]?.output
+                        : ""}
                     </div>
                   </div>
                   <div className="viewQuestionModalSolutionandTestCaseSampleRightContainer">
                     <span>Sample explanation</span>
                     <div className="viewSampleInput">
-                      sadasdasdsadasdasdd dasd sadasdsadasdasdsd sasadsadasd
-                      sdasdas
+                      {getindividualquestiondata?.testCases?.length > 0
+                        ? getindividualquestiondata?.testCases[
+                            getindividualquestiondata?.testCases?.length - 1
+                          ]?.explaination
+                        : ""}
                     </div>
                   </div>
                 </div>
@@ -196,7 +202,7 @@ export default function ViewQuestionModal(props) {
                 >
                   Test cases
                 </span>
-                {gettestcases.length > 0 ? (
+                {getindividualquestiondata?.testCases?.length > 0 ? (
                   <div
                     className="Totalstudenttable"
                     style={{ marginTop: "2%" }}
@@ -211,9 +217,12 @@ export default function ViewQuestionModal(props) {
                       <div className="scoreText">Explanation</div>
                     </div>
 
-                    {gettestcases.map((data, index) => {
+                    {getindividualquestiondata?.testCases.map((data, index) => {
                       return (
-                        <div className="tableFields">
+                        <div
+                          className="tableFields"
+                          style={{ height: "auto", marginTop: "0.5%" }}
+                        >
                           <div
                             className="inputFilesText"
                             id={`input ${index}`}
@@ -260,8 +269,11 @@ export default function ViewQuestionModal(props) {
                               <img src={switchoff} id={`option${index}`}></img>
                             )}
                           </div>
-                          <div className="scoreText">
-                            <span className="eachScoreInput">
+                          <div className="scoreText" style={{ height: "auto" }}>
+                            <span
+                              className="eachScoreInput"
+                              style={{ height: "auto" }}
+                            >
                               {data.explaination}
                             </span>
                           </div>

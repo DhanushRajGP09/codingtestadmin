@@ -15,6 +15,7 @@ import {
   getSelectedLanguages,
   getQuestionID,
   removeAllLanguages,
+  getDefaultCode,
 } from "../../features/question/QuestionSlice";
 import axios from "axios";
 
@@ -32,8 +33,10 @@ export default function Languages() {
 
   const [autogeneratemodal, setAutoGenerateModal] = useState(false);
   const getselectedlanguages = useSelector(getSelectedLanguages);
+  const getdefaultcodes = useSelector(getDefaultCode);
 
   console.log("selectedlanguage", getselectedlanguages);
+  console.log("getdefaultcodes", getdefaultcodes);
 
   const [code, setCode] = useState("");
   const [headcode, setHeadCode] = useState("");
@@ -181,6 +184,9 @@ export default function Languages() {
                 <div
                   className="codeSnippetSelectedLanguage"
                   id={`selectedLanguage${index}`}
+                  onClick={() => {
+                    setCode(getdefaultcodes[data]);
+                  }}
                 >
                   {data}
                 </div>

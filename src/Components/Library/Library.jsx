@@ -62,6 +62,8 @@ export default function Library() {
     getAllTestQuestions();
   }, []);
 
+  console.log("in libra");
+
   const handleQuestionClick = (id) => {
     axios
       .get(
@@ -81,6 +83,28 @@ export default function Library() {
       .then(function (response) {
         console.log("IndividualQuestionData", response);
         dispatch(addIndividualQuestion(response.data.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handleDeleteQuestion = (id) => {
+    axios
+      .delete(
+        "http://139.59.56.122:5000/api/question/language",
+
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            questionId: id,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("deleted", response);
       })
       .catch(function (error) {
         console.log(error);
@@ -153,6 +177,14 @@ export default function Library() {
                   <span className="libraryQuestionDivFooter-QuestionType">
                     {data.questionType}
                   </span>
+                  {/* <span
+                    onClick={() => {
+                      handleDeleteQuestion(data._id);
+                    }}
+                  >
+                    {" "}
+                    delete
+                  </span> */}
                 </div>
               </div>
             );

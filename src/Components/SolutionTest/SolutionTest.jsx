@@ -360,7 +360,10 @@ export default function SolutionTest() {
 
           {gettestcases.map((data, index) => {
             return (
-              <div className="tableFields">
+              <div
+                className="tableFields"
+                style={{ height: "auto", marginTop: "0.5%" }}
+              >
                 <div
                   className="inputFilesText"
                   id={`input ${index}`}
@@ -405,8 +408,10 @@ export default function SolutionTest() {
                     <img src={switchoff} id={`option${index}`}></img>
                   )}
                 </div>
-                <div className="scoreText">
-                  <span className="eachScoreInput">{data.explaination}</span>
+                <div className="scoreText" style={{ height: "auto" }}>
+                  <span className="eachScoreInput" style={{ height: "auto" }}>
+                    {data.explaination}
+                  </span>
                 </div>
                 <div className="editDiv">
                   <span

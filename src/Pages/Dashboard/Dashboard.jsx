@@ -15,7 +15,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   const getquestionid = useSelector(getQuestionID);
-  console.log("questionI", getquestionid);
+  console.log("questionID", getquestionid);
 
   const token = JSON.parse(localStorage.getItem("token"));
 

@@ -1,8 +1,89 @@
-import React from "react";
+import React, { useState } from "react";
 import "./AutogenerateModal.css";
 import close from "../../../Assets/Icons/closemodal2.png";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addDefaultCodes,
+  addTofunctionParameter,
+  addfunctionParameter,
+  getQuestionID,
+  getSelectedLanguages,
+  getfunctionParameter,
+} from "../../../features/question/QuestionSlice";
+import axios from "axios";
 
 export default function AutogenerateModal(props) {
+  const [functionName, setFunctionName] = useState("");
+  const [returntype, setReturnType] = useState("int");
+  const [comment, setComment] = useState("");
+
+  const dispatch = useDispatch();
+
+  const getfunctionparameter = useSelector(getfunctionParameter);
+  console.log("getfunctionparameter", getfunctionparameter);
+
+  const getselectedlanguages = useSelector(getSelectedLanguages);
+
+  const getquestionid = useSelector(getQuestionID);
+  console.log("questionI", getquestionid);
+
+  const handleDataType = (e, index) => {
+    const { name, value } = e.target;
+    const temp = [...list];
+    temp[index][name] = value;
+    setList(temp);
+  };
+
+  const [list, setList] = useState([
+    {
+      dataType: "int",
+      value: "",
+    },
+  ]);
+
+  console.log("lis", functionName, returntype, comment, list);
+
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  const handleDefaultCode = () => {
+    console.log("defaultcodeapi", {
+      functionName: functionName,
+      returnType: returntype,
+      comment: comment,
+      functionParameter: list,
+      languages: getselectedlanguages,
+      questionId: getquestionid,
+    });
+
+    axios
+      .post(
+        "http://139.59.56.122:5000/api/question/default-code",
+        {
+          functionName: functionName,
+          returnType: returntype,
+          comment: comment,
+          functionParameter: list,
+          languages: getselectedlanguages,
+          questionId: getquestionid,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("defaultcodes", response.data.data);
+        dispatch(addDefaultCodes(response.data.data));
+        props.setAutoGenerateModal(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const returntypeoptions = ["int", "char", "void"];
+
   return (
     <div
       className="createQuestionModal"
@@ -24,33 +105,93 @@ export default function AutogenerateModal(props) {
             <div className="functionNameReturnDiv">
               <div className="functionNameDiv">
                 <span className="problemNameText">Function name</span>
-                <input className="functionNameInput"></input>
+                <input
+                  className="functionNameInput"
+                  onChange={(e) => {
+                    setFunctionName(e.target.value);
+                  }}
+                ></input>
               </div>
               <div className="functionNameDiv">
                 <span className="problemNameText">Return type</span>
-                <select className="functionNameInput"></select>
+                <select
+                  className="functionNameInput"
+                  onChange={(e) => {
+                    setReturnType(e.target.value);
+                  }}
+                >
+                  {returntypeoptions.map((option, index) => {
+                    return <option key={index}>{option}</option>;
+                  })}
+                </select>
               </div>
             </div>
             <div className="functionCommentsReturnDiv">
               <span className="problemNameText">Comment to be displayed</span>
-              <textarea className="functionCommentInput"></textarea>
+              <input
+                className="functionCommentInput"
+                onChange={(e) => {
+                  setComment(e.target.value);
+                }}
+              ></input>
             </div>
-            <div className="functionNameReturnDiv">
-              <div className="functionNameDiv">
-                <span className="problemNameText">Function parameters</span>
-                <select className="functionNameInput"></select>
-              </div>
-              <div className="functionNameDiv">
-                <span className="problemNameText"></span>
-                <input
-                  className="functionNameInput"
-                  placeholder="Param name"
-                ></input>
-              </div>
-            </div>
+            <span className="problemNameText">Function parameters</span>
+            {list.map((data, index) => {
+              return (
+                <div className="functionNameParameterDiv">
+                  <div className="functionNameDiv">
+                    <select
+                      className="functionNameInput"
+                      name="dataType"
+                      onChange={(e) => {
+                        handleDataType(e, index);
+                      }}
+                    >
+                      {returntypeoptions.map((option, index) => {
+                        return <option key={index}>{option}</option>;
+                      })}
+                    </select>
+                  </div>
+                  <div className="functionNameDiv">
+                    <input
+                      name="value"
+                      className="functionNameInput"
+                      placeholder="Param name"
+                      onChange={(e) => {
+                        handleDataType(e, index);
+                      }}
+                    ></input>
+                  </div>
+                </div>
+              );
+            })}
+
             <div className="generateCodeDiv">
-              <button className="publishChangesButton">Generate code</button>
-              <button className="addParameterButton">Add parameter</button>
+              <button
+                className="publishChangesButton"
+                onClick={() => {
+                  handleDefaultCode();
+                }}
+              >
+                Generate code
+              </button>
+              <button
+                className="addParameterButton"
+                onClick={() => {
+                  dispatch(
+                    addTofunctionParameter({
+                      dataType: "int",
+                      value: "",
+                    })
+                  );
+                  list.push({
+                    dataType: "int",
+                    value: "",
+                  });
+                }}
+              >
+                Add parameter
+              </button>
             </div>
           </div>
         </div>

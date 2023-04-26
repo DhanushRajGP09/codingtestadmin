@@ -33,6 +33,7 @@ export default function CreateQuestionModal(props) {
   useEffect(() => {
     if (window.location.pathname === "/home/Solution") {
       setPrevButton(true);
+      setNextButton(true);
     } else if (window.location.pathname === "/home/Languages") {
       setPrevButton(true);
       setNextButton(false);
@@ -103,7 +104,7 @@ export default function CreateQuestionModal(props) {
   //   }
   // };
 
-  console.log("deschi");
+  console.log("desch");
   const handleCreateQuestion = async () => {
     console.log(
       "data",
@@ -164,6 +165,8 @@ export default function CreateQuestionModal(props) {
           output: getsampleoutput,
           explaination: getsampleexplaination,
           questionId: getquestionid,
+          score: "1",
+          visibility: "true",
         },
         {
           headers: {
