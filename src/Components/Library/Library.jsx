@@ -62,7 +62,7 @@ export default function Library() {
     getAllTestQuestions();
   }, []);
 
-  const handleQuestionClick = () => {
+  const handleQuestionClick = (id) => {
     axios
       .get(
         "http://139.59.56.122:5000/api/question/get-perticular-question",
@@ -72,8 +72,9 @@ export default function Library() {
             Authorization: `${token}`,
           },
           params: {
-            itemsPerPage: 20,
+            itemsPerPage: 1,
             page: 1,
+            questionId: id,
           },
         }
       )
@@ -103,50 +104,6 @@ export default function Library() {
         </button>
       </div>
       <div className="libraryBody">
-        <div className="libraryCategoryContainer">
-          <span>Question Type</span>
-          <div className="libraryCategoryDiv">
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Label" />
-            </FormGroup>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Label" />
-            </FormGroup>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Label" />
-            </FormGroup>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Label" />
-            </FormGroup>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Label" />
-            </FormGroup>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Label" />
-            </FormGroup>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Label" />
-            </FormGroup>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Label" />
-            </FormGroup>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Label" />
-            </FormGroup>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Label" />
-            </FormGroup>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Label" />
-            </FormGroup>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Label" />
-            </FormGroup>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Label" />
-            </FormGroup>
-          </div>
-        </div>
         <div className="libraryQuestionsContainer">
           <div className="libraryQuestionsContainerHeader">
             <span>Questions ({getlibraryquestions.length})</span>
@@ -166,6 +123,7 @@ export default function Library() {
                   className="libraryQuestionName"
                   onClick={() => {
                     setViewModal(true);
+                    handleQuestionClick(data._id);
                   }}
                 >
                   {data.questionName}

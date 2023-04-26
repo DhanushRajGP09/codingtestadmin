@@ -318,7 +318,6 @@ export default function SolutionTest() {
           }}
         ></input>
       </div>
-      <p>{inputfileContent}</p>
 
       <span className="problemNameText">Sample explanation</span>
       <div className="richTextEditor">

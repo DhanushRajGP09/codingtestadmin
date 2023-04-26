@@ -33,6 +33,7 @@
   background-color: #0071c5;
   width: 95%;
   overflow-y: scroll;
+  scroll-behavior: smooth;
 }
 .viewQuestionModalDescription {
   height: auto;

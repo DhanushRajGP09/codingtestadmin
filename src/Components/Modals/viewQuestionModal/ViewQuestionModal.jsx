@@ -56,7 +56,7 @@ export default function ViewQuestionModal(props) {
             </div>
             <div className="createQuestionmodalHeader">
               <div className="createQuestionmodalHeaderIndicator"></div>
-              <div
+              <a
                 className="createQuestionmodalHeaderSection"
                 onClick={() => {
                   setSolutionActive(false);
@@ -64,13 +64,15 @@ export default function ViewQuestionModal(props) {
                   setLanguageActive(false);
                 }}
                 style={{
+                  textDecoration: "none",
                   backgroundColor: active ? "#0071c5" : "white",
                   color: active ? "white" : "#0071c5",
                 }}
+                href="#description"
               >
                 Description
-              </div>
-              <div
+              </a>
+              <a
                 className="createQuestionmodalHeaderSection"
                 onClick={() => {
                   setSolutionActive(true);
@@ -78,13 +80,15 @@ export default function ViewQuestionModal(props) {
                   setLanguageActive(false);
                 }}
                 style={{
+                  textDecoration: "none",
                   backgroundColor: solutionactive ? "#0071c5" : "white",
                   color: solutionactive ? "white" : "#0071c5",
                 }}
+                href="#solutionandtestcase"
               >
                 Solution & test cases
-              </div>
-              <div
+              </a>
+              <a
                 className="createQuestionmodalHeaderSection"
                 onClick={() => {
                   setSolutionActive(false);
@@ -92,15 +96,17 @@ export default function ViewQuestionModal(props) {
                   setLanguageActive(true);
                 }}
                 style={{
+                  textDecoration: "none",
                   backgroundColor: languageActive ? "#0071c5" : "white",
                   color: languageActive ? "white" : "#0071c5",
                 }}
+                href="#languages"
               >
                 Languages
-              </div>
+              </a>
             </div>
             <div className="viewQuestionModalBody">
-              <div className="viewQuestionModalDescription">
+              <div className="viewQuestionModalDescription" id="description">
                 <span className="viewQuestionModalDescriptionText">
                   Description
                 </span>
@@ -152,7 +158,10 @@ export default function ViewQuestionModal(props) {
                   </div>
                 </div>
               </div>
-              <div className="viewQuestionModalSolutionandTestCase">
+              <div
+                className="viewQuestionModalSolutionandTestCase"
+                id="solutionandtestcase"
+              >
                 <span className="viewQuestionModalDescriptionText">
                   Solution and Test cases
                 </span>

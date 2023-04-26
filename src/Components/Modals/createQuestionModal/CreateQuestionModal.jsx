@@ -28,14 +28,17 @@ export default function CreateQuestionModal(props) {
   const [solutionactive, setSolutionActive] = useState(false);
   const [languageActive, setLanguageActive] = useState(false);
   const [prevbutton, setPrevButton] = useState(false);
+  const [nextbutton, setNextButton] = useState(true);
 
   useEffect(() => {
     if (window.location.pathname === "/home/Solution") {
       setPrevButton(true);
     } else if (window.location.pathname === "/home/Languages") {
       setPrevButton(true);
+      setNextButton(false);
     } else {
       setPrevButton(false);
+      setNextButton(true);
     }
   });
 
@@ -297,15 +300,18 @@ export default function CreateQuestionModal(props) {
                 ) : (
                   ""
                 )}
-
-                <button
-                  className="nextButton"
-                  onClick={() => {
-                    handleNext();
-                  }}
-                >
-                  Next
-                </button>
+                {nextbutton ? (
+                  <button
+                    className="nextButton"
+                    onClick={() => {
+                      handleNext();
+                    }}
+                  >
+                    Next
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
               <div className="createQuestionmodalFooterSavePublishDiv">
                 <button className="saveAsDraftButton">Save as draft</button>

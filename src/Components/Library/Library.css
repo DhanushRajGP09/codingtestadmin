@@ -40,8 +40,8 @@
 }
 .libraryBody {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   height: auto;
   width: 100%;
   background-color: aliceblue;
@@ -71,8 +71,7 @@
 }
 .libraryQuestionsContainer {
   height: auto;
-  width: 72%;
-
+  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
