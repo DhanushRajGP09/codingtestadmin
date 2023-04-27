@@ -59,14 +59,11 @@ export default function Library() {
       });
   };
 
-  const array = getlibraryquestions[7].questionStatement;
-  console.log("array", array);
-
   useEffect(() => {
     getAllTestQuestions();
   }, []);
 
-  console.log("in libra");
+  console.log("in library");
 
   const handleQuestionClick = (id) => {
     axios
@@ -118,7 +115,12 @@ export default function Library() {
   return (
     <div className="adminLibrary">
       <CreateQuestionModal modal={modal} setModal={setModal} />
-      <ViewQuestionModal viewmodal={viewmodal} setViewModal={setViewModal} />
+      <ViewQuestionModal
+        viewmodal={viewmodal}
+        setViewModal={setViewModal}
+        getAllTestQuestions={getAllTestQuestions}
+        handleQuestionClick={handleQuestionClick}
+      />
       <div className="libraryHeader">
         <span className="sectionName">Library</span>
         <button
@@ -147,15 +149,32 @@ export default function Library() {
           {getlibraryquestions.map((data, index) => {
             return (
               <div className="libraryQuestionDiv">
-                <span
-                  className="libraryQuestionName"
-                  onClick={() => {
-                    setViewModal(true);
-                    handleQuestionClick(data._id);
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: "98%",
                   }}
                 >
-                  {data.questionName}
-                </span>
+                  <span
+                    className="libraryQuestionName"
+                    onClick={() => {
+                      setViewModal(true);
+                      handleQuestionClick(data._id);
+                    }}
+                  >
+                    {data.questionName}
+                  </span>
+                  {data.questionPublished ? (
+                    <span style={{ color: "green" }}>published</span>
+                  ) : (
+                    <div>
+                      <span style={{ color: "red" }}>draft</span>
+                    </div>
+                  )}
+                </div>
+
                 <span className="libraryQuestionDescription">
                   {parse(data.questionStatement)}
                 </span>

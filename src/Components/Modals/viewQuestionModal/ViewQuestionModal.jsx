@@ -20,10 +20,36 @@ export default function ViewQuestionModal(props) {
 
   const dispatch = useDispatch();
 
-  console.log("in view mod");
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  const handlepublish = (id) => {
+    axios
+      .post(
+        "http://139.59.56.122:5000/api/question/publish-question",
+        {
+          questionId: id,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            questionId: id,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("published", response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  console.log("in view m");
 
   const getindividualquestiondata = useSelector(getIndividualQuestion);
-  console.log("individualquestiondatainmodal", getindividualquestiondata);
+  console.log("individualquestiondatainmod", getindividualquestiondata);
 
   return (
     <div
@@ -48,8 +74,31 @@ export default function ViewQuestionModal(props) {
               <span className="viewCategoryQuestionText">
                 {getindividualquestiondata?.question?.questionType} Question
               </span>
-
-              <button className="editQuestionButton">Edit Question</button>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <button className="editQuestionButton">Edit Question</button>
+                {getindividualquestiondata?.question?.questionPublished ? (
+                  ""
+                ) : (
+                  <button
+                    className="publishChangesButton"
+                    onClick={() => {
+                      handlepublish(getindividualquestiondata?.question?._id);
+                      props.getAllTestQuestions();
+                      props.handleQuestionClick(
+                        getindividualquestiondata?.question?._id
+                      );
+                    }}
+                  >
+                    Publish Question
+                  </button>
+                )}
+              </div>
             </div>
             <div className="createQuestionmodalHeader">
               <div className="createQuestionmodalHeaderIndicator"></div>
@@ -119,10 +168,14 @@ export default function ViewQuestionModal(props) {
                     >
                       Problem statement
                     </span>
+
                     <div className="viewrichTextEditor">
-                      {parse(
-                        getindividualquestiondata?.question?.questionStatement
-                      )}
+                      {getindividualquestiondata?.question &&
+                        getindividualquestiondata?.question
+                          ?.questionStatement &&
+                        parse(
+                          getindividualquestiondata?.question?.questionStatement
+                        )}
                     </div>
                   </div>
                   <div className="descriptionViewRightContainer">
@@ -192,7 +245,10 @@ export default function ViewQuestionModal(props) {
                     <span>Sample explanation</span>
                     <div className="viewSampleInput">
                       {getindividualquestiondata?.testCases?.length > 0
-                        ? parse(
+                        ? getindividualquestiondata?.testCases[
+                            getindividualquestiondata?.testCases?.length - 1
+                          ]?.explaination &&
+                          parse(
                             getindividualquestiondata?.testCases[
                               getindividualquestiondata?.testCases?.length - 1
                             ]?.explaination
@@ -279,7 +335,7 @@ export default function ViewQuestionModal(props) {
                               className="eachScoreInput"
                               style={{ height: "auto" }}
                             >
-                              {parse(data.explaination)}
+                              {data?.explaination && parse(data.explaination)}
                             </span>
                           </div>
                         </div>
