@@ -141,6 +141,10 @@
   font-size: 20px;
   font-weight: 400;
   color: gray;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  height: 80px;
 }
 .libraryQuestionDivSeperator {
   height: 2px;

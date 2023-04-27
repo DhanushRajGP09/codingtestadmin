@@ -7,6 +7,8 @@ import Switch from "@mui/material/Switch";
 import CheckboxWrapper from "../Tablecheckbox/Checkbox";
 import { useNavigate } from "react-router";
 import switchoff from "../../Assets/Icons/Switch off.png";
+import parse from "html-react-parser";
+
 import switchon from "../../Assets/Icons/Switch on.png";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -410,7 +412,7 @@ export default function SolutionTest() {
                 </div>
                 <div className="scoreText" style={{ height: "auto" }}>
                   <span className="eachScoreInput" style={{ height: "auto" }}>
-                    {data.explaination}
+                    {parse(data.explaination)}
                   </span>
                 </div>
                 <div className="editDiv">

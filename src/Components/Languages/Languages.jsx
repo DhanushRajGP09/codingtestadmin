@@ -5,6 +5,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import { languageOptions } from "../../constants/languageOptions";
+import parse from "html-react-parser";
 import Editor from "@monaco-editor/react";
 import {
   addAllLanguages,
@@ -16,6 +17,9 @@ import {
   getQuestionID,
   removeAllLanguages,
   getDefaultCode,
+  addToLanguagesForApi,
+  filterLanguagesForApi,
+  getLanguagesForApi,
 } from "../../features/question/QuestionSlice";
 import axios from "axios";
 
@@ -123,8 +127,30 @@ export default function Languages() {
                       onClick={() => {
                         if (!getselectedlanguages.includes(data)) {
                           dispatch(addToSelectedLanguages(data));
+                          dispatch(
+                            addToLanguagesForApi(
+                              data === "C++"
+                                ? "Cpp"
+                                : data === "Node.Js / Javascript"
+                                ? "Javascript"
+                                : data === "C#"
+                                ? "CS"
+                                : data
+                            )
+                          );
                         } else {
                           dispatch(filterSelectedLanguages(data));
+                          dispatch(
+                            filterLanguagesForApi(
+                              data === "C++"
+                                ? "Cpp"
+                                : data === "Node.Js / Javascript"
+                                ? "Javascript"
+                                : data === "C#"
+                                ? "CS"
+                                : data
+                            )
+                          );
                         }
                       }}
                       checked={
@@ -185,7 +211,17 @@ export default function Languages() {
                   className="codeSnippetSelectedLanguage"
                   id={`selectedLanguage${index}`}
                   onClick={() => {
-                    setCode(getdefaultcodes[data]);
+                    setCode(
+                      getdefaultcodes[
+                        data === "C++"
+                          ? "Cpp"
+                          : data === "Node.Js / Javascript"
+                          ? "Javascript"
+                          : data === "C#"
+                          ? "CS"
+                          : data
+                      ]
+                    );
                   }}
                 >
                   {data}

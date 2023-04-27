@@ -9,6 +9,7 @@ const QuestionSlice = createSlice({
     questionId: "",
     ProblemDifficulty: "",
     bodyLineNumber: [2],
+    languagesforApi: [],
     totalScore: "",
     testCases: [],
     defaultCodes: {},
@@ -101,8 +102,25 @@ const QuestionSlice = createSlice({
         state.selectedLanguages.unshift(action.payload);
       }
     },
+    addToLanguagesForApi: (state, action) => {
+      let isPresent = false;
+      for (let item of state.languagesforApi) {
+        if (item === action.payload) {
+          isPresent = true;
+        }
+      }
+      if (!isPresent) {
+        console.log("Got a hit");
+        state.languagesforApi.unshift(action.payload);
+      }
+    },
     filterSelectedLanguages: (state, action) => {
       state.selectedLanguages = state.selectedLanguages.filter(
+        (data) => data !== action.payload
+      );
+    },
+    filterLanguagesForApi: (state, action) => {
+      state.languagesforApi = state.languagesforApi.filter(
         (data) => data !== action.payload
       );
     },
@@ -140,6 +158,8 @@ export const {
   addIndividualTestCase,
   addLibraryQuestions,
   addIndividualQuestion,
+  addToLanguagesForApi,
+  filterLanguagesForApi,
 } = QuestionSlice.actions;
 export const getProblemName = (state) => state.Problem.ProblemName;
 export const getfunctionParameter = (state) => state.Problem.functionParameter;
@@ -163,4 +183,5 @@ export const getIndividualTestCase = (state) =>
 export const getSampleExplaination = (state) =>
   state.Problem.sampleExplaination;
 export const getDefaultCode = (state) => state.Problem.defaultCodes;
+export const getLanguagesForApi = (state) => state.Problem.languagesforApi;
 export default QuestionSlice.reducer;

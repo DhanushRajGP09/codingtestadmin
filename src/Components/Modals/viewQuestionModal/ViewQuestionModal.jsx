@@ -5,6 +5,7 @@ import switchoff from "../../../Assets/Icons/Switch off.png";
 import switchon from "../../../Assets/Icons/Switch on.png";
 
 import { Routes, Route, useNavigate } from "react-router";
+import parse from "html-react-parser";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -119,7 +120,9 @@ export default function ViewQuestionModal(props) {
                       Problem statement
                     </span>
                     <div className="viewrichTextEditor">
-                      {getindividualquestiondata?.question?.questionStatement}
+                      {parse(
+                        getindividualquestiondata?.question?.questionStatement
+                      )}
                     </div>
                   </div>
                   <div className="descriptionViewRightContainer">
@@ -189,9 +192,11 @@ export default function ViewQuestionModal(props) {
                     <span>Sample explanation</span>
                     <div className="viewSampleInput">
                       {getindividualquestiondata?.testCases?.length > 0
-                        ? getindividualquestiondata?.testCases[
-                            getindividualquestiondata?.testCases?.length - 1
-                          ]?.explaination
+                        ? parse(
+                            getindividualquestiondata?.testCases[
+                              getindividualquestiondata?.testCases?.length - 1
+                            ]?.explaination
+                          )
                         : ""}
                     </div>
                   </div>
@@ -274,14 +279,20 @@ export default function ViewQuestionModal(props) {
                               className="eachScoreInput"
                               style={{ height: "auto" }}
                             >
-                              {data.explaination}
+                              {parse(data.explaination)}
                             </span>
                           </div>
                         </div>
                       );
                     })}
                     <div className="tableFooter">
-                      <span style={{ marginLeft: "38%" }}>Total score:</span>
+                      <span style={{ marginLeft: "38%" }}>
+                        Total score:{" "}
+                        {
+                          getindividualquestiondata?.question
+                            ?.totalScoreForQuestion
+                        }
+                      </span>
                     </div>
                   </div>
                 ) : (

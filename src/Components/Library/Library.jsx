@@ -6,6 +6,7 @@ import Checkbox from "@mui/material/Checkbox";
 import search from "../../Assets/Icons/searchicon.png";
 import CreateQuestionModal from "../Modals/createQuestionModal/CreateQuestionModal";
 import { useSelector } from "react-redux";
+import parse from "html-react-parser";
 import {
   addIndividualQuestion,
   addLibraryQuestions,
@@ -57,6 +58,9 @@ export default function Library() {
         console.log(error);
       });
   };
+
+  const array = getlibraryquestions[7].questionStatement;
+  console.log("array", array);
 
   useEffect(() => {
     getAllTestQuestions();
@@ -153,7 +157,7 @@ export default function Library() {
                   {data.questionName}
                 </span>
                 <span className="libraryQuestionDescription">
-                  {data.questionStatement}
+                  {parse(data.questionStatement)}
                 </span>
                 <div className="libraryQuestionDivSeperator"></div>
                 <div className="libraryQuestionDivFooter">

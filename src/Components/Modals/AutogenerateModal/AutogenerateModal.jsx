@@ -6,6 +6,7 @@ import {
   addDefaultCodes,
   addTofunctionParameter,
   addfunctionParameter,
+  getLanguagesForApi,
   getQuestionID,
   getSelectedLanguages,
   getfunctionParameter,
@@ -22,7 +23,8 @@ export default function AutogenerateModal(props) {
   const getfunctionparameter = useSelector(getfunctionParameter);
   console.log("getfunctionparameter", getfunctionparameter);
 
-  const getselectedlanguages = useSelector(getSelectedLanguages);
+  const getlanguagesforapi = useSelector(getLanguagesForApi);
+  console.log("languagesforapi", getlanguagesforapi);
 
   const getquestionid = useSelector(getQuestionID);
   console.log("questionI", getquestionid);
@@ -51,7 +53,7 @@ export default function AutogenerateModal(props) {
       returnType: returntype,
       comment: comment,
       functionParameter: list,
-      languages: getselectedlanguages,
+      languages: getlanguagesforapi,
       questionId: getquestionid,
     });
 
@@ -63,7 +65,7 @@ export default function AutogenerateModal(props) {
           returnType: returntype,
           comment: comment,
           functionParameter: list,
-          languages: getselectedlanguages,
+          languages: getlanguagesforapi,
           questionId: getquestionid,
         },
         {
