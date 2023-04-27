@@ -30,7 +30,7 @@
   justify-content: space-between;
   flex-direction: column;
   height: 80vh;
-  background-color: #0071c5;
+
   width: 95%;
   overflow-y: scroll;
   scroll-behavior: smooth;
@@ -135,6 +135,11 @@
   font-size: 20px;
   font-weight: 500;
 }
+.viewLanguages {
+  background-color: white;
+  width: 100%;
+}
+
 .viewSampleInput {
   margin-top: 5%;
   font-weight: 400;

@@ -214,6 +214,31 @@ export default function CreateQuestionModal(props) {
       });
   };
 
+  const handlepublish = () => {
+    axios
+      .post(
+        "http://139.59.56.122:5000/api/question/publish-question",
+        {
+          questionId: initialid,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            questionId: initialid,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("published", response);
+        props.setModal(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <div
       className="createQuestionModal"
@@ -318,7 +343,13 @@ export default function CreateQuestionModal(props) {
               </div>
               <div className="createQuestionmodalFooterSavePublishDiv">
                 <button className="saveAsDraftButton">Save as draft</button>
-                <button className="publishChangesButton">
+                <button
+                  className="publishChangesButton"
+                  onClick={() => {
+                    handlepublish();
+                    props.getAllTestQuestions();
+                  }}
+                >
                   Publish changes
                 </button>
               </div>

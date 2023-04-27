@@ -3,6 +3,8 @@ import "./ViewQuestionModal.css";
 import close from "../../../Assets/Icons/closemodal2.png";
 import switchoff from "../../../Assets/Icons/Switch off.png";
 import switchon from "../../../Assets/Icons/Switch on.png";
+import Editor from "@monaco-editor/react";
+import { languageOptions } from "../../../constants/languageOptions";
 
 import { Routes, Route, useNavigate } from "react-router";
 import parse from "html-react-parser";
@@ -18,6 +20,7 @@ export default function ViewQuestionModal(props) {
   const [languageActive, setLanguageActive] = useState(false);
   const [prevbutton, setPrevButton] = useState(false);
 
+  const [language, setLanguage] = useState(languageOptions[6]);
   const dispatch = useDispatch();
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -47,6 +50,7 @@ export default function ViewQuestionModal(props) {
   };
 
   console.log("in view m");
+  const [indexnumber, setIndexNumber] = useState(0);
 
   const getindividualquestiondata = useSelector(getIndividualQuestion);
   console.log("individualquestiondatainmod", getindividualquestiondata);
@@ -361,6 +365,119 @@ export default function ViewQuestionModal(props) {
                     </span>
                   </div>
                 )}
+              </div>
+              <div className="viewLanguages" id="languages">
+                <span className="viewQuestionModalDescriptionText">
+                  Default codes
+                </span>
+                <div
+                  className="codeSnippetContainerBody"
+                  style={{ marginTop: "3%" }}
+                >
+                  <div className="codeSnippetSelectedLanguages">
+                    {getindividualquestiondata?.defaultCodes.length > 0
+                      ? getindividualquestiondata?.defaultCodes.map(
+                          (data, index) => {
+                            return (
+                              <div
+                                className="codeSnippetSelectedLanguage"
+                                id={`selectedLanguage${index}`}
+                                onClick={() => {
+                                  setIndexNumber(index);
+                                  setLanguage(
+                                    data.language === "C"
+                                      ? languageOptions[1]
+                                      : data.language === "CS"
+                                      ? languageOptions[3]
+                                      : data.language === "Cpp"
+                                      ? languageOptions[2]
+                                      : data.language === "Python"
+                                      ? languageOptions[6]
+                                      : data.language === "Javascript"
+                                      ? languageOptions[0]
+                                      : languageOptions[5]
+                                  );
+                                }}
+                              >
+                                {data.language}
+                              </div>
+                            );
+                          }
+                        )
+                      : ""}
+                  </div>
+                  <div className="codeContainerDiv">
+                    <div className="codeContainerDivHeader">
+                      <div className="codeContainerDivHeaderHeader">
+                        <span style={{ color: "white", marginLeft: "2%" }}>
+                          Head
+                        </span>
+                        <span
+                          className="maxScoreDescription"
+                          style={{ marginLeft: "2%", color: "white" }}
+                        >
+                          This cannot be edited by the candidate
+                        </span>
+                      </div>
+
+                      <Editor
+                        height="15vh"
+                        width={"100%"}
+                        language={language?.value || "Python"}
+                        value={"no code"}
+                        defaultValue="// some comment"
+                      />
+                      <div className="codeContainerDivBody">
+                        <div className="codeContainerDivBodyHeader">
+                          <span style={{ color: "white", marginLeft: "2%" }}>
+                            Body
+                          </span>
+                        </div>
+                        <div className="codeContainerDivBodyBody">
+                          {/* <div style={{ height: "23vh", width: "100%" }}>
+                            {getindividualquestiondata?.defaultCodes.length > 0
+                              ? getindividualquestiondata?.defaultCodes[0]
+                                  ?.defaultCode
+                              : "no default code"}
+                          </div> */}
+                          <Editor
+                            height="23vh"
+                            width={"100%"}
+                            language={language?.value || "Python"}
+                            value={
+                              getindividualquestiondata?.defaultCodes.length > 0
+                                ? getindividualquestiondata?.defaultCodes[
+                                    indexnumber
+                                  ]?.defaultCode
+                                : "no default code"
+                            }
+                            defaultValue="// some comment"
+                          />
+                        </div>
+                      </div>
+                      <div className="codeContainerDivHeader">
+                        <div className="codeContainerDivHeaderHeader">
+                          <span style={{ color: "white", marginLeft: "2%" }}>
+                            Tail
+                          </span>
+                          <span
+                            className="maxScoreDescription"
+                            style={{ marginLeft: "2%", color: "white" }}
+                          >
+                            This cannot be edited by the candidate
+                          </span>
+                        </div>
+                        <Editor
+                          height="15vh"
+                          width={"100%"}
+                          language={language?.value || "Python"}
+                          value={"no code"}
+                          defaultValue="// some comment"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

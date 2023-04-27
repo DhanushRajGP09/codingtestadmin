@@ -114,7 +114,11 @@ export default function Library() {
 
   return (
     <div className="adminLibrary">
-      <CreateQuestionModal modal={modal} setModal={setModal} />
+      <CreateQuestionModal
+        modal={modal}
+        setModal={setModal}
+        getAllTestQuestions={getAllTestQuestions}
+      />
       <ViewQuestionModal
         viewmodal={viewmodal}
         setViewModal={setViewModal}
