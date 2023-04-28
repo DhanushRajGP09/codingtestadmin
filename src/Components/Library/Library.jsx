@@ -3,7 +3,7 @@ import "./Library.css";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import search from "../../Assets/Icons/searchicon.png";
+import search from "../../Assets/Icons/search (1).png";
 import CreateQuestionModal from "../Modals/createQuestionModal/CreateQuestionModal";
 import { useSelector } from "react-redux";
 import parse from "html-react-parser";
@@ -112,6 +112,36 @@ export default function Library() {
       });
   };
 
+  const [search, setSearch] = useState("");
+  const [difficultylevel, setDifficultyLevel] = useState("");
+  const handleSearch = (val, filter) => {
+    console.log("search", search);
+
+    axios
+      .post(
+        "http://139.59.56.122:5000/api/question/search-questions",
+        {},
+
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            searchText: val,
+            sortBy: "",
+            filterBy: filter,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("searchapi", response);
+        dispatch(addLibraryQuestions(response.data.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="adminLibrary">
       <CreateQuestionModal
@@ -145,10 +175,34 @@ export default function Library() {
               <input
                 className="libraryQuestionsSearchInput"
                 placeholder="search for topics,problem title or problem description"
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  handleSearch(e.target.value, "");
+                }}
               ></input>
-              <img src={search} className="searchIcon"></img>
+              <div
+                className="searchIcon"
+                alt="search"
+                onClick={() => {
+                  handleSearch(search);
+                }}
+              >
+                Search
+              </div>
             </div>
-            <div className="libraryQuestionsSort"></div>
+            <div className="libraryQuestionsSort">
+              <select
+                className="functionNameInput"
+                onChange={(e) => {
+                  handleSearch(search, e.target.value);
+                }}
+              >
+                <option>Filter by</option>
+                <option>easy</option>
+                <option>medium</option>
+                <option>hard</option>
+              </select>
+            </div>
           </div>
           {getlibraryquestions.map((data, index) => {
             return (

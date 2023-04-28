@@ -228,7 +228,8 @@ export default function ViewQuestionModal(props) {
                       Sample input
                     </span>
                     <div className="viewSampleInput">
-                      {getindividualquestiondata?.testCases?.length > 0
+                      {getindividualquestiondata?.testCases &&
+                      getindividualquestiondata?.testCases?.length > 0
                         ? getindividualquestiondata?.testCases[
                             getindividualquestiondata?.testCases?.length - 1
                           ]?.input
@@ -375,7 +376,7 @@ export default function ViewQuestionModal(props) {
                   style={{ marginTop: "3%" }}
                 >
                   <div className="codeSnippetSelectedLanguages">
-                    {getindividualquestiondata?.defaultCodes.length > 0
+                    {getindividualquestiondata?.defaultCodes?.length > 0
                       ? getindividualquestiondata?.defaultCodes.map(
                           (data, index) => {
                             return (
@@ -445,7 +446,8 @@ export default function ViewQuestionModal(props) {
                             width={"100%"}
                             language={language?.value || "Python"}
                             value={
-                              getindividualquestiondata?.defaultCodes.length > 0
+                              getindividualquestiondata?.defaultCodes?.length >
+                              0
                                 ? getindividualquestiondata?.defaultCodes[
                                     indexnumber
                                   ]?.defaultCode
