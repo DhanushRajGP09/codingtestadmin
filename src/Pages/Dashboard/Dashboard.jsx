@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import {
   addLibraryQuestions,
+  getBaseURL,
   getQuestionID,
 } from "../../features/question/QuestionSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,11 +21,12 @@ export default function Dashboard() {
   const token = JSON.parse(localStorage.getItem("token"));
 
   const dispatch = useDispatch();
+  const getbaseurl = useSelector(getBaseURL);
 
   const getAllTestQuestions = () => {
     axios
       .get(
-        "http://139.59.56.122:5000/api/question",
+        `${getbaseurl}/question`,
 
         {
           headers: {

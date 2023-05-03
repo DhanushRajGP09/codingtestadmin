@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const QuestionSlice = createSlice({
   name: "Problem",
   initialState: {
+    baseURL: "http://167.71.238.232:5000/api",
     ProblemName: "",
     ProblemDescription: "",
     individualQuestion: {},
@@ -124,11 +125,18 @@ const QuestionSlice = createSlice({
         (data) => data !== action.payload
       );
     },
+    addAllLanguagesForApi: (state, action) => {
+      state.languagesforApi = action.payload;
+    },
+
     addAllLanguages: (state, action) => {
       state.selectedLanguages = action.payload;
     },
     removeAllLanguages: (state, action) => {
       state.selectedLanguages = [];
+    },
+    removeAllLanguagesForApi: (state, action) => {
+      state.languagesforApi = [];
     },
   },
 });
@@ -144,6 +152,8 @@ export const {
   addTestCases,
   filterTestCases,
   addTotalScore,
+  addAllLanguagesForApi,
+  removeAllLanguagesForApi,
   addToSelectedLanguages,
   filterSelectedLanguages,
   addDefaultCodes,
@@ -163,7 +173,7 @@ export const {
 } = QuestionSlice.actions;
 export const getProblemName = (state) => state.Problem.ProblemName;
 export const getfunctionParameter = (state) => state.Problem.functionParameter;
-
+export const getBaseURL = (state) => state.Problem.baseURL;
 export const getProblemDescription = (state) =>
   state.Problem.ProblemDescription;
 export const getBodyLineNumber = (state) => state.Problem.bodyLineNumber;

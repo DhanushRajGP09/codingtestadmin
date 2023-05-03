@@ -6,6 +6,7 @@ import switchon from "../../../Assets/Icons/Switch on.png";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addTestCases,
+  getBaseURL,
   getIndividualTestCase,
   getQuestionID,
   getTestCaseId,
@@ -39,6 +40,7 @@ export default function EditTestCaseModal(props) {
     getAllTestCases();
     props.setEditTestCaseModal(false);
   };
+  const getbaseurl = useSelector(getBaseURL);
 
   const getquestionid = useSelector(getQuestionID);
   console.log("questionID", getquestionid);
@@ -48,7 +50,7 @@ export default function EditTestCaseModal(props) {
   const getAllTestCases = () => {
     axios
       .get(
-        "http://139.59.56.122:5000/api/question/get-all-test-case",
+        `${getbaseurl}/question/get-all-test-case`,
 
         {
           headers: {
@@ -76,7 +78,7 @@ export default function EditTestCaseModal(props) {
 
     axios
       .patch(
-        "http://139.59.56.122:5000/api/question/add-solution-and-test-case",
+        `${getbaseurl}/question/add-solution-and-test-case`,
         {
           input: input,
           output: output,

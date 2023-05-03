@@ -12,7 +12,10 @@ import parse from "html-react-parser";
 import { useDispatch, useSelector } from "react-redux";
 
 import axios from "axios";
-import { getIndividualQuestion } from "../../../features/question/QuestionSlice";
+import {
+  getBaseURL,
+  getIndividualQuestion,
+} from "../../../features/question/QuestionSlice";
 
 export default function ViewQuestionModal(props) {
   const [active, setActive] = useState(true);
@@ -25,10 +28,12 @@ export default function ViewQuestionModal(props) {
 
   const token = JSON.parse(localStorage.getItem("token"));
 
+  const getbaseurl = useSelector(getBaseURL);
+
   const handlepublish = (id) => {
     axios
       .post(
-        "http://139.59.56.122:5000/api/question/publish-question",
+        `${getbaseurl}/question/publish-question`,
         {
           questionId: id,
         },
@@ -43,6 +48,7 @@ export default function ViewQuestionModal(props) {
       )
       .then(function (response) {
         console.log("published", response);
+        props.setViewModal(false);
       })
       .catch(function (error) {
         console.log(error);

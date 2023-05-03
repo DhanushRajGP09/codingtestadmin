@@ -10,6 +10,7 @@ import parse from "html-react-parser";
 import {
   addIndividualQuestion,
   addLibraryQuestions,
+  getBaseURL,
   getLibraryQuestions,
   getQuestionID,
 } from "../../features/question/QuestionSlice";
@@ -34,11 +35,12 @@ export default function Library() {
   const token = JSON.parse(localStorage.getItem("token"));
 
   const dispatch = useDispatch();
+  const getbaseurl = useSelector(getBaseURL);
 
   const getAllTestQuestions = () => {
     axios
       .get(
-        "http://139.59.56.122:5000/api/question",
+        `${getbaseurl}/question`,
 
         {
           headers: {
@@ -68,7 +70,7 @@ export default function Library() {
   const handleQuestionClick = (id) => {
     axios
       .get(
-        "http://139.59.56.122:5000/api/question/get-perticular-question",
+        `${getbaseurl}/question/get-perticular-question`,
 
         {
           headers: {
@@ -93,7 +95,7 @@ export default function Library() {
   const handleDeleteQuestion = (id) => {
     axios
       .delete(
-        "http://139.59.56.122:5000/api/question/language",
+        `${getbaseurl}/question/language`,
 
         {
           headers: {
@@ -106,6 +108,7 @@ export default function Library() {
       )
       .then(function (response) {
         console.log("deleted", response);
+        getAllTestQuestions();
       })
       .catch(function (error) {
         console.log(error);
@@ -119,7 +122,7 @@ export default function Library() {
 
     axios
       .post(
-        "http://139.59.56.122:5000/api/question/search-questions",
+        `${getbaseurl}/question/search-questions`,
         {},
 
         {
@@ -262,6 +265,7 @@ export default function Library() {
                     onClick={() => {
                       handleDeleteQuestion(data._id);
                     }}
+                    style={{ cursor: "pointer" }}
                   >
                     {" "}
                     delete

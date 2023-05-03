@@ -11,6 +11,7 @@ import {
   addProblemDifficulty,
   addProblemName,
   addQuestionId,
+  getBaseURL,
   getProblemDescription,
   getProblemDifficulty,
   getProblemName,
@@ -79,6 +80,8 @@ export default function CreateQuestionModal(props) {
 
   const token = JSON.parse(localStorage.getItem("token"));
 
+  const getbaseurl = useSelector(getBaseURL);
+
   // const handleCreateQuestion = async () => {
   //   let result = await fetch(
   //     "http://139.59.56.122:5000/api/question/description",
@@ -114,7 +117,7 @@ export default function CreateQuestionModal(props) {
     );
     axios
       .post(
-        "http://139.59.56.122:5000/api/question/description",
+        `${getbaseurl}/question/description`,
         {
           questionName: getproblemname,
           questionStatement: getproblemdescription,
@@ -159,7 +162,7 @@ export default function CreateQuestionModal(props) {
 
     axios
       .post(
-        "http://139.59.56.122:5000/api/question/add-testcase",
+        `${getbaseurl}/question/add-testcase`,
         {
           input: getsampleinput,
           output: getsampleoutput,
@@ -189,7 +192,7 @@ export default function CreateQuestionModal(props) {
   const handleEditDescription = () => {
     axios
       .patch(
-        "http://139.59.56.122:5000/api/question/description",
+        `${getbaseurl}/question/description`,
         {
           questionName: getproblemname,
           questionStatement: getproblemdescription,
@@ -217,7 +220,7 @@ export default function CreateQuestionModal(props) {
   const handlepublish = () => {
     axios
       .post(
-        "http://139.59.56.122:5000/api/question/publish-question",
+        `${getbaseurl}/question/publish-question`,
         {
           questionId: initialid,
         },
@@ -342,7 +345,15 @@ export default function CreateQuestionModal(props) {
                 )}
               </div>
               <div className="createQuestionmodalFooterSavePublishDiv">
-                <button className="saveAsDraftButton">Save as draft</button>
+                <button
+                  className="saveAsDraftButton"
+                  onClick={() => {
+                    props.setModal(false);
+                    props.getAllTestQuestions();
+                  }}
+                >
+                  Save as draft
+                </button>
                 <button
                   className="publishChangesButton"
                   onClick={() => {

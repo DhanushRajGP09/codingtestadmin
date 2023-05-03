@@ -20,6 +20,9 @@ import {
   addToLanguagesForApi,
   filterLanguagesForApi,
   getLanguagesForApi,
+  getBaseURL,
+  addAllLanguagesForApi,
+  removeAllLanguagesForApi,
 } from "../../features/question/QuestionSlice";
 import axios from "axios";
 
@@ -46,10 +49,12 @@ export default function Languages() {
   const [headcode, setHeadCode] = useState("");
   const [tailcode, setTailCode] = useState("");
 
+  const getbaseurl = useSelector(getBaseURL);
+
   const getLanguageFromAPI = () => {
     axios
       .get(
-        "http://139.59.56.122:5000/api/user/get-all-languages",
+        `${getbaseurl}/user/get-all-languages`,
 
         {
           headers: {
@@ -75,6 +80,7 @@ export default function Languages() {
   }, []);
 
   const List = ["C", "C++", "Python", "Node.Js / Javascript", "GoLang", "C#"];
+  const selectallList = ["Cpp", "Javascript", "CS", "Python", "GoLang", "C"];
 
   const handleEditorChange = (value) => {
     setCode(value);
@@ -107,8 +113,10 @@ export default function Languages() {
               setSelectAll(!selectall);
               if (!selectall) {
                 dispatch(addAllLanguages(List));
+                dispatch(addAllLanguagesForApi(selectallList));
               } else {
                 dispatch(removeAllLanguages());
+                dispatch(removeAllLanguagesForApi());
               }
             }}
           />

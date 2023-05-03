@@ -6,6 +6,7 @@ import {
   addDefaultCodes,
   addTofunctionParameter,
   addfunctionParameter,
+  getBaseURL,
   getLanguagesForApi,
   getQuestionID,
   getSelectedLanguages,
@@ -44,6 +45,7 @@ export default function AutogenerateModal(props) {
   ]);
 
   console.log("lis", functionName, returntype, comment, list);
+  const getbaseurl = useSelector(getBaseURL);
 
   const token = JSON.parse(localStorage.getItem("token"));
 
@@ -59,7 +61,7 @@ export default function AutogenerateModal(props) {
 
     axios
       .post(
-        "http://139.59.56.122:5000/api/question/default-code",
+        `${getbaseurl}/question/default-code`,
         {
           functionName: functionName,
           returnType: returntype,

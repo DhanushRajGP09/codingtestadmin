@@ -21,6 +21,7 @@ import {
   addTestCases,
   addTotalScore,
   filterTestCases,
+  getBaseURL,
   getQuestionID,
   getTestCases,
 } from "../../features/question/QuestionSlice";
@@ -228,13 +229,14 @@ export default function SolutionTest() {
   console.log("questionId", getquestionid);
 
   dispatch(addSampleExplaination(value));
+  const getbaseurl = useSelector(getBaseURL);
 
   const handleDeleteTestCase = (id) => {
     console.log("testcase", getquestionid);
 
     axios
       .delete(
-        "http://139.59.56.122:5000/api/question/delete-test-case",
+        `${getbaseurl}/question/delete-test-case`,
 
         {
           headers: {
@@ -261,7 +263,7 @@ export default function SolutionTest() {
   const getIndividualTestCase = (id) => {
     axios
       .get(
-        "http://139.59.56.122:5000/api/question/view-test-case-input-and-output",
+        `${getbaseurl}/question/view-test-case-input-and-output`,
 
         {
           headers: {
