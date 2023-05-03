@@ -23,6 +23,8 @@ import {
   getBaseURL,
   addAllLanguagesForApi,
   removeAllLanguagesForApi,
+  addEditLanguage,
+  getEditLanguage,
 } from "../../features/question/QuestionSlice";
 import axios from "axios";
 
@@ -82,9 +84,35 @@ export default function Languages() {
   const List = ["C", "C++", "Python", "Node.Js / Javascript", "GoLang", "C#"];
   const selectallList = ["Cpp", "Javascript", "CS", "Python", "GoLang", "C"];
 
+  const geteditlanguage = useSelector(getEditLanguage);
+
+  const editCode = (value) => {
+    axios
+      .patch(
+        `${getbaseurl}/question/edit-default-code`,
+        {
+          language: geteditlanguage,
+          questionId: getquestionid,
+          editedCode: value,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("editcode", response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   const handleEditorChange = (value) => {
     setCode(value);
     console.log("value", value);
+    editCode(value);
   };
   const handleHeadEditorChange = (value) => {
     setHeadCode(value);
@@ -229,6 +257,17 @@ export default function Languages() {
                           ? "CS"
                           : data
                       ]
+                    );
+                    dispatch(
+                      addEditLanguage(
+                        data === "C++"
+                          ? "Cpp"
+                          : data === "Node.Js / Javascript"
+                          ? "Javascript"
+                          : data === "C#"
+                          ? "CS"
+                          : data
+                      )
                     );
                   }}
                 >

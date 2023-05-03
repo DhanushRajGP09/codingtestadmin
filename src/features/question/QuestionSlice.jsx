@@ -8,6 +8,7 @@ const QuestionSlice = createSlice({
     ProblemDescription: "",
     individualQuestion: {},
     questionId: "",
+    editlanguage: "",
     ProblemDifficulty: "",
     bodyLineNumber: [2],
     languagesforApi: [],
@@ -31,6 +32,9 @@ const QuestionSlice = createSlice({
   reducers: {
     addProblemName: (state, { payload }) => {
       state.ProblemName = payload;
+    },
+    addEditLanguage: (state, { payload }) => {
+      state.editlanguage = payload;
     },
     addfunctionParameter: (state, { payload }) => {
       state.functionParameter = payload;
@@ -155,6 +159,7 @@ export const {
   addAllLanguagesForApi,
   removeAllLanguagesForApi,
   addToSelectedLanguages,
+  addEditLanguage,
   filterSelectedLanguages,
   addDefaultCodes,
   addAllLanguages,
@@ -186,6 +191,7 @@ export const getQuestionID = (state) => state.Problem.questionId;
 export const getSampleInput = (state) => state.Problem.sampleInput;
 export const getSampleOutput = (state) => state.Problem.sampleOutput;
 export const getTestCaseId = (state) => state.Problem.testCaseId;
+export const getEditLanguage = (state) => state.Problem.editlanguage;
 export const getIndividualQuestion = (state) =>
   state.Problem.individualQuestion;
 export const getIndividualTestCase = (state) =>
