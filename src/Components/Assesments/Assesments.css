@@ -6,6 +6,7 @@
   height: 80px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  z-index: 2;
 }
 .adminAssesment {
   display: flex;
@@ -13,4 +14,147 @@
   justify-content: space-between;
   flex-direction: column;
   width: 100%;
+}
+.assesmentBody {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  background-color: aliceblue;
+  height: auto;
+}
+.assesmentBodyLeftContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 20%;
+  background-color: white;
+  padding-bottom: 1%;
+  height: 100%;
+}
+.testStatusContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 20vh;
+  width: 80%;
+  background-color: white;
+  font-size: 20px;
+  font-weight: 500;
+  margin-top: 5%;
+}
+.testStatusRadioContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 80%;
+  width: 100%;
+}
+.testStatusSeperator {
+  border: 1px solid lightgray;
+  width: 80%;
+
+  margin-bottom: 3%;
+}
+.testCreatedByContainer,
+.testTypeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 10vh;
+  width: 80%;
+  font-size: 20px;
+  font-weight: 500;
+  background-color: white;
+}
+.testTypeContainer {
+  height: 12vh;
+}
+.assesmentBodyRightContainer {
+  width: 77%;
+  background-color: lightblue;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.assesmentBodyRightContainerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  width: 100%;
+  background-color: white;
+}
+.testHeaderSearchContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: black;
+  height: 50px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  width: 40%;
+}
+.testSearch {
+  width: 100%;
+  height: 100%;
+  outline: none;
+  border: none;
+  font-size: 20px;
+  padding-left: 1%;
+}
+.testSearchIcon {
+  cursor: pointer;
+  background-color: #004792;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  width: 100px;
+  color: white;
+  font-size: 20px;
+
+  border-radius: 5px;
+}
+.testsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 70vh;
+  background-color: #004792;
+  width: 100%;
+}
+.testContainer {
+  width: 100%;
+  border-radius: 10px;
+  height: 20vh;
+  background-color: white;
+  margin-top: 1%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.testContainerHeader,
+.testContainerBody,
+.testContainerFooter {
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 95%;
+  height: 40px;
+
+  background-color: lightcoral;
 }
