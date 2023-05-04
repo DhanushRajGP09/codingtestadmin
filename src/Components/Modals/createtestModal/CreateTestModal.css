@@ -1,0 +1,46 @@
+.CreateTestModal-inner-content {
+  border-radius: 0px 0px 10px 10px;
+  width: 1000px;
+  height: 600px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  margin-top: 10%;
+  padding: 1%;
+  justify-content: space-between;
+
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+
+  z-index: 3;
+  position: relative;
+  gap: 20px;
+}
+.createTestmodal-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 3.5%;
+}
+.testImg {
+  height: 300px;
+  width: 300px;
+}
+.createTestJobRoleDiv {
+  height: 400px;
+  width: 50%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1%;
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: 500;
+}
+.createTestJobRoleSelect {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 20%;
+  width: 400px;
+}
