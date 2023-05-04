@@ -108,8 +108,33 @@ export default function Assesments() {
                 <span> 02-Mar-2023 -</span>
                 <span>Batch 2</span>
               </div>
-              <div className="testContainerBody"></div>
-              <div className="testContainerFooter"></div>
+              <div className="testContainerBody">
+                <div className="testContainerBodyTestType">Invite only </div>
+                <div className="testContainerBodyTestTime">1 hrs 30 mins</div>
+                <div className="testContainerBodyTestDate">
+                  Mar 02, 2023 12:46 PM IST -
+                </div>
+                <div className="testContainerBodyTestEndTime">
+                  No end date specified
+                </div>
+              </div>
+              <div className="testContainerFooter">
+                <span>
+                  31 candidates have been invited and have taken the test
+                </span>
+                <span className="viewCandidateReportButton">
+                  View candidate report
+                </span>
+                <div className="testContainerFooterFunctions">
+                  <span className="viewCandidateReportButton">
+                    Preview test
+                  </span>
+                  <span className="viewCandidateReportButton">
+                    Invite candidates
+                  </span>
+                  <span className="viewCandidateReportButton">Archive</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

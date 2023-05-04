@@ -128,14 +128,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 70vh;
-  background-color: #004792;
+  height: 90vh;
   width: 100%;
 }
 .testContainer {
   width: 100%;
   border-radius: 10px;
-  height: 20vh;
+  height: 18vh;
   background-color: white;
   margin-top: 1%;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
@@ -155,6 +154,39 @@
   justify-content: flex-start;
   width: 95%;
   height: 40px;
+}
+.testContainerBodyTestType,
+.testContainerBodyTestTime,
+.testContainerBodyTestEndTime,
+.testContainerBodyTestDate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-right: 2px solid gray;
+  padding-right: 1%;
+  color: gray;
+}
+.testContainerBodyTestTime {
+  padding-left: 1%;
+}
+.testContainerBodyTestEndTime {
+  border: none;
+}
+.testContainerBodyTestDate {
+  border: none;
+  padding-left: 1%;
+}
+.viewCandidateReportButton {
+  margin-left: 1%;
+  color: #004792;
+  cursor: pointer;
+}
+.testContainerFooterFunctions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 500px;
 
-  background-color: lightcoral;
+  margin-left: 10%;
 }
