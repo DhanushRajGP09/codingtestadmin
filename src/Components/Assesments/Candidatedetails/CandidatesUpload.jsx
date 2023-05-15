@@ -1,15 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "./CandidatesUpload.css";
 import switchoff from "../../../Assets/Icons/Switch off.png";
 import switchon from "../../../Assets/Icons/Switch on.png";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { useDispatch } from "react-redux";
+import InviteEmailsModal from "../../Modals/AddEmailIdsModal/InviteEmailsModal";
 
 export default function CandidatesUpload() {
   const navigate = useNavigate();
 
   const [visible, setVisible] = useState("true");
+  const [value, setValue] = useState("");
+  const fromvalue = "Robosoft Technologies";
+  const [showEmailDetails, setShowEmailDetails] = useState(false);
+  const [inviteemailsmodal, setInviteEmailsModal] = useState(false);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("hii");
+  }, [value]);
+
   return (
     <>
+      <InviteEmailsModal
+        inviteemailsmodal={inviteemailsmodal}
+        setInviteEmailsModal={setInviteEmailsModal}
+      />
       <div className="inviteCandidateHeader">
         <span
           className="testHeaderBackButton"
@@ -54,6 +73,9 @@ export default function CandidatesUpload() {
               <button
                 className="publishChangesButton"
                 style={{ marginRight: "2%" }}
+                onClick={() => {
+                  setInviteEmailsModal(true);
+                }}
               >
                 Add
               </button>
@@ -128,11 +150,44 @@ export default function CandidatesUpload() {
           </div>
           <span style={{ fontSize: "20px", fontWeight: "500" }}>Email</span>
           <span style={{ fontSize: "18px" }}>
-            Review subject and body View details
+            Review subject and body{" "}
+            <span
+              style={{ color: "blue", cursor: "pointer" }}
+              onClick={() => {
+                setShowEmailDetails(!showEmailDetails);
+              }}
+            >
+              {" "}
+              {showEmailDetails ? "Hide details" : "View details"}
+            </span>
           </span>
+          {showEmailDetails ? (
+            <>
+              <span style={{ fontSize: "20px", fontWeight: "500" }}>From</span>
+              <div className="emailFromInput">Robosoft Technologies</div>
+              <span style={{ fontSize: "20px", fontWeight: "500" }}>
+                Subject
+              </span>
+              <input
+                className="emailSubjectInput"
+                placeholder="Invitation for {@TestName@} by Robosoft Technologies"
+              ></input>
+              <span style={{ fontSize: "20px", fontWeight: "500" }}>
+                Mail template
+              </span>
+              <ReactQuill
+                theme="snow"
+                value={value}
+                onChange={setValue}
+                className="EmailtextEditor"
+              />
+            </>
+          ) : (
+            ""
+          )}
         </div>
       </div>
-      <div className="inviteCandidateHeader" style={{ marginTop: "4%" }}>
+      <div className="inviteCandidateFooter">
         <button className="inviteCandidateGray">Invite candidates</button>
       </div>
     </>

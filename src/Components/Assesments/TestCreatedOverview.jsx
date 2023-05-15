@@ -27,7 +27,13 @@ export default function TestCreatedOverview() {
         </div>
         <div className="viewQuestionsContainer">
           <span>No questions are added to this test</span>
-          <button className="publishChangesButton" style={{ marginTop: "2%" }}>
+          <button
+            className="publishChangesButton"
+            style={{ marginTop: "2%" }}
+            onClick={() => {
+              navigate("/home");
+            }}
+          >
             Add questions
           </button>
         </div>

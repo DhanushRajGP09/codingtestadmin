@@ -19,6 +19,11 @@ import { useNavigate } from "react-router";
 
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import {
+  addSelectedQuestionId,
+  getSelectedQuestionId,
+  removeFromSelectedQuestionId,
+} from "../../features/Test/TestSlice";
 
 export default function Library() {
   const [modal, setModal] = useState(false);
@@ -31,6 +36,9 @@ export default function Library() {
 
   const getquestionid = useSelector(getQuestionID);
   console.log("questionI", getquestionid);
+
+  const getselectedquestionid = useSelector(getSelectedQuestionId);
+  console.log("selectedquestios", getselectedquestionid);
 
   const token = JSON.parse(localStorage.getItem("token"));
 
@@ -228,7 +236,25 @@ export default function Library() {
                     {data.questionName}
                   </span>
                   {data.questionPublished ? (
-                    <span style={{ color: "green" }}>published</span>
+                    getselectedquestionid.includes(data._id) ? (
+                      <span
+                        style={{ color: "red", cursor: "pointer" }}
+                        onClick={() => {
+                          dispatch(removeFromSelectedQuestionId(data._id));
+                        }}
+                      >
+                        Remove from test
+                      </span>
+                    ) : (
+                      <span
+                        style={{ color: "blue", cursor: "pointer" }}
+                        onClick={() => {
+                          dispatch(addSelectedQuestionId(data._id));
+                        }}
+                      >
+                        Add to test
+                      </span>
+                    )
                   ) : (
                     <div>
                       <span style={{ color: "red" }}>draft</span>

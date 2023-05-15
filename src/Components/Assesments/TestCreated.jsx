@@ -62,7 +62,12 @@ export default function TestCreated() {
           <div className="testHeaderFunctionCopy">Copy link</div>
           <div className="testHeaderFunctionCopy">Preview</div>
           {published ? (
-            <button className="publishChangesButton">
+            <button
+              className="publishChangesButton"
+              onClick={() => {
+                navigate("/home/Invitecandidates");
+              }}
+            >
               Invite candidates +
             </button>
           ) : (
