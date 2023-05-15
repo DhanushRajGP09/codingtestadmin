@@ -9,6 +9,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 
 import FormControl from "@mui/material/FormControl";
+import { useNavigate } from "react-router";
 
 export default function CreateTestModal(props) {
   const [value, setValue] = React.useState("manually");
@@ -16,6 +17,8 @@ export default function CreateTestModal(props) {
   const handleChange = (event) => {
     setValue(event.target.value);
   };
+
+  const navigate = useNavigate();
   return (
     <div
       className="createQuestionModal"
@@ -70,7 +73,10 @@ export default function CreateTestModal(props) {
               <button
                 className="publishChangesButton"
                 style={{ marginTop: "10%" }}
-                onClick={() => {}}
+                onClick={() => {
+                  props.setCreateTestModal(false);
+                  navigate("/home/assesments/testcreated");
+                }}
               >
                 Create test
               </button>

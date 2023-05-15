@@ -10,11 +10,17 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import CreateTestModal from "../Modals/createtestModal/CreateTestModal";
 import AssesmentHome from "./AssesmentHome";
+import { Route, Routes } from "react-router";
+
+import TestCreated from "./TestCreated";
 
 export default function Assesments() {
   return (
     <div className="adminAssesment">
-      <AssesmentHome />
+      <Routes>
+        <Route path="/*" element={<AssesmentHome />}></Route>
+        <Route path="/testcreated/*" element={<TestCreated />}></Route>
+      </Routes>
     </div>
   );
 }

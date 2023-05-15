@@ -254,6 +254,7 @@ export default function CreateQuestionModal(props) {
             className="closeCreateQuestionModal"
             onClick={() => {
               props.setModal(false);
+              navigate("/home");
             }}
           ></img>
           <div className="createQuestionmodal-inner-content">
