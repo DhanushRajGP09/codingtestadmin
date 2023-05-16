@@ -1,13 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./TestCreatedQuestions.css";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addSelectedQuestionData,
+  clearSelectedQuestionData,
+  getSelectedQuestionData,
+  getSelectedQuestionId,
+} from "../../features/Test/TestSlice";
+import axios from "axios";
+import {
+  getBaseURL,
+  getLibraryQuestions,
+} from "../../features/question/QuestionSlice";
 
 export default function TestCreatedQuestions() {
   const [length, setLength] = useState(true);
   const navigate = useNavigate();
+  const getlibraryquestions = useSelector(getLibraryQuestions);
+  console.log("libQuestio", getlibraryquestions);
+
+  const dispatch = useDispatch();
+
+  const getselectedquestionsdata = useSelector(getSelectedQuestionData);
+  console.log("selectedquestionsdata", getselectedquestionsdata);
+  const getselectedquestionid = useSelector(getSelectedQuestionId);
+  console.log("selectedquestionid", getselectedquestionid);
+
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  const getbaseurl = useSelector(getBaseURL);
 
   return (
     <>

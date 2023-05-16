@@ -20,7 +20,9 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import {
+  addSelectedQuestionData,
   addSelectedQuestionId,
+  clearSelectedQuestionData,
   getSelectedQuestionId,
   removeFromSelectedQuestionId,
 } from "../../features/Test/TestSlice";
@@ -38,7 +40,7 @@ export default function Library() {
   console.log("questionI", getquestionid);
 
   const getselectedquestionid = useSelector(getSelectedQuestionId);
-  console.log("selectedquestios", getselectedquestionid);
+  console.log("selectedquesti", getselectedquestionid);
 
   const token = JSON.parse(localStorage.getItem("token"));
 
@@ -153,6 +155,40 @@ export default function Library() {
       });
   };
 
+  const handleData = (id) => {
+    axios
+      .get(
+        `${getbaseurl}/question/get-perticular-question`,
+
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            itemsPerPage: 1,
+            page: 1,
+            questionId: id,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("data added", response);
+        dispatch(addSelectedQuestionData(response.data.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const removeHandleQuestionsData = (id) => {
+    dispatch(clearSelectedQuestionData());
+    for (let item of getselectedquestionid) {
+      if (item !== id) {
+        handleData(item);
+      }
+    }
+  };
+
   return (
     <div className="adminLibrary">
       <CreateQuestionModal
@@ -241,6 +277,7 @@ export default function Library() {
                         style={{ color: "red", cursor: "pointer" }}
                         onClick={() => {
                           dispatch(removeFromSelectedQuestionId(data._id));
+                          removeHandleQuestionsData(data._id);
                         }}
                       >
                         Remove from test
@@ -250,6 +287,7 @@ export default function Library() {
                         style={{ color: "blue", cursor: "pointer" }}
                         onClick={() => {
                           dispatch(addSelectedQuestionId(data._id));
+                          handleData(data._id);
                         }}
                       >
                         Add to test

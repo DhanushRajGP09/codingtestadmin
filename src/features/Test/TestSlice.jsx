@@ -5,7 +5,9 @@ const TestSlice = createSlice({
   initialState: {
     Candidates: [],
     SelectedQuestionId: [],
+    SelectedQuestionsData: [],
   },
+
   reducers: {
     addCandidates: (state, { payload }) => {
       let isPresent = false;
@@ -40,6 +42,15 @@ const TestSlice = createSlice({
         (data) => data !== action.payload
       );
     },
+    clearSelectedQuestionId: (state, action) => {
+      state.SelectedQuestionId = [];
+    },
+    addSelectedQuestionData: (state, { payload }) => {
+      state.SelectedQuestionsData.unshift(payload);
+    },
+    clearSelectedQuestionData: (state, action) => {
+      state.SelectedQuestionsData = [];
+    },
   },
 });
 
@@ -48,9 +59,14 @@ export const {
   removeFromCandidates,
   addSelectedQuestionId,
   removeFromSelectedQuestionId,
+  clearSelectedQuestionId,
+  addSelectedQuestionData,
+  clearSelectedQuestionData,
 } = TestSlice.actions;
 
 export const getCandidates = (state) => state.Test.Candidates;
 export const getSelectedQuestionId = (state) => state.Test.SelectedQuestionId;
+export const getSelectedQuestionData = (state) =>
+  state.Test.SelectedQuestionsData;
 
 export default TestSlice.reducer;
