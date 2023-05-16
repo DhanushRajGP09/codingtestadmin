@@ -12,6 +12,10 @@ import TestCreatedQuestions from "./TestCreatedQuestions";
 import PublishTestModal from "../Modals/PublishTestModal/PublishTestModal";
 import { Link, NavLink } from "react-router-dom";
 import TestCreatedTestTaken from "./TestCreatedTestTaken";
+import {
+  addIndividualQuestion,
+  getBaseURL,
+} from "../../features/question/QuestionSlice";
 import TestCreatedReviewPending from "./TestCreatedReviewPending";
 import TestCreatedShortlisted from "./TestCreatedShortlisted";
 import TestCreatedArchived from "./TestCreatedArchived";
@@ -19,6 +23,9 @@ import TestCreatedInvited from "./TestCreatedInvited";
 import TestAnalytics from "./TestAnalytics";
 import QuestionAnalytics from "./QuestionAnalytics";
 import CandidatesFeedback from "./CandidatesFeedback";
+import axios from "axios";
+import ViewQuestionModal from "../Modals/viewQuestionModal/ViewQuestionModal";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function TestCreated() {
   const navigate = useNavigate();
@@ -37,6 +44,38 @@ export default function TestCreated() {
   });
 
   const [published, setPublished] = useState(true);
+  const [viewmodal, setViewModal] = useState(false);
+  const dispatch = useDispatch();
+
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  const getbaseurl = useSelector(getBaseURL);
+
+  const handleQuestionClick = (id) => {
+    axios
+      .get(
+        `${getbaseurl}/question/get-perticular-question`,
+
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            itemsPerPage: 1,
+            page: 1,
+            questionId: id,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("IndividualQuestionData", response);
+        dispatch(addIndividualQuestion(response.data.data));
+        setViewModal(true);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -44,6 +83,11 @@ export default function TestCreated() {
         publishtestmodal={publishtestmodal}
         setPublishTestModal={setPublishTestModal}
         setPublished={setPublished}
+      />
+      <ViewQuestionModal
+        viewmodal={viewmodal}
+        setViewModal={setViewModal}
+        handleQuestionClick={handleQuestionClick}
       />
       <div className="testCreatedHeader">
         <span
@@ -173,7 +217,15 @@ export default function TestCreated() {
         </div>
         <Routes>
           <Route path="/" element={<TestCreatedOverview />}></Route>
-          <Route path="/questions" element={<TestCreatedQuestions />}></Route>
+          <Route
+            path="/questions"
+            element={
+              <TestCreatedQuestions
+                setViewModal={setViewModal}
+                handleQuestionClick={handleQuestionClick}
+              />
+            }
+          ></Route>
           <Route path="/testtaken" element={<TestCreatedTestTaken />}></Route>
           <Route
             path="/reviewpending"

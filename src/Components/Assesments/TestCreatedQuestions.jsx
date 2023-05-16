@@ -11,17 +11,18 @@ import {
   getSelectedQuestionData,
   getSelectedQuestionId,
 } from "../../features/Test/TestSlice";
+import parse from "html-react-parser";
 import axios from "axios";
 import {
   getBaseURL,
   getLibraryQuestions,
 } from "../../features/question/QuestionSlice";
 
-export default function TestCreatedQuestions() {
+export default function TestCreatedQuestions(props) {
   const [length, setLength] = useState(true);
   const navigate = useNavigate();
   const getlibraryquestions = useSelector(getLibraryQuestions);
-  console.log("libQuestio", getlibraryquestions);
+  console.log("libQuesti", getlibraryquestions);
 
   const dispatch = useDispatch();
 
@@ -34,12 +35,25 @@ export default function TestCreatedQuestions() {
 
   const getbaseurl = useSelector(getBaseURL);
 
+  const [totalscore, setTotalScore] = useState(0);
+
+  useEffect(() => {
+    let score = 0;
+    for (let item of getselectedquestionsdata) {
+      score += item.question.totalScoreForQuestion;
+    }
+
+    setTotalScore(score);
+  }, []);
+
+  console.log(totalscore);
+
   return (
     <>
       <div className="testCreatedQuestionsContainer ">
         <div className="testCreatedQuestionsContainerHeader">
           <span className="testCreatedSelectedQuestionsText">Questions</span>
-          {length ? (
+          {getselectedquestionsdata.length > 0 ? (
             <>
               <div className="testCreatedQuestionsContainerHeaderTotal">
                 <span>Total score: 4</span>
@@ -65,7 +79,7 @@ export default function TestCreatedQuestions() {
           )}
         </div>
         <div className="testCreatedQuestionsContainerBody">
-          {length ? (
+          {getselectedquestionsdata.length > 0 ? (
             <div className="testCreatedQuestionsBodyQuestionsDiv">
               <div className="testCreatedQuestionsBodyQuestionsDivHeader">
                 <div
@@ -78,64 +92,62 @@ export default function TestCreatedQuestions() {
                   <FormGroup>
                     <FormControlLabel
                       control={<Checkbox />}
-                      label="Programming Question (2)"
+                      label={`Programming Question (${getselectedquestionsdata.length})`}
                     />
                   </FormGroup>
                   <span style={{ color: "gray", fontWeight: "400" }}>
-                    total score 4
+                    total score: {totalscore}
                   </span>
                 </div>
                 <span style={{ marginRight: "3%" }}>+</span>
               </div>
               <div className="testCreatedQuestionsBodyQuestionsDivBody">
-                <div className="testCreatedQuestionsBodyQuestionContainer">
-                  {" "}
-                  <span className="testCreatedQuestionsBodyQuestionContainerNumber">
-                    01.
-                  </span>
-                  <div className="testCreatedQuestionsBodyQuestionContainerDetails">
-                    <span>Add 2 numbers</span>
-                    <span>
-                      Find the sum of 2 integers and display the result
-                    </span>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        height: "50px",
-                        width: "100%",
-                      }}
-                    >
-                      <span>Easy</span>
-                      <span>Score: 2</span>
+                {getselectedquestionsdata.map((data, index) => {
+                  return (
+                    <div className="testCreatedQuestionsBodyQuestionContainer">
+                      {" "}
+                      <span className="testCreatedQuestionsBodyQuestionContainerNumber">
+                        {index + 1}.
+                      </span>
+                      <div className="testCreatedQuestionsBodyQuestionContainerDetails">
+                        <span
+                          onClick={() => {
+                            props.handleQuestionClick(data.question._id);
+                          }}
+                          style={{ cursor: "pointer" }}
+                        >
+                          {data.question.questionName}
+                        </span>
+                        <span>{parse(data.question.questionStatement)}</span>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            height: "50px",
+                            width: "100%",
+                          }}
+                        >
+                          <span
+                            style={{
+                              color:
+                                data.question.difficultyLevel === "hard"
+                                  ? "red"
+                                  : data.question.difficultyLevel === "medium"
+                                  ? "blue"
+                                  : "green",
+                            }}
+                          >
+                            {data.question.difficultyLevel}
+                          </span>
+                          <span>
+                            Score: {data.question.totalScoreForQuestion}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="testCreatedQuestionsBodyQuestionContainer">
-                  {" "}
-                  <span className="testCreatedQuestionsBodyQuestionContainerNumber">
-                    02.
-                  </span>
-                  <div className="testCreatedQuestionsBodyQuestionContainerDetails">
-                    <span>Add 2 numbers</span>
-                    <span>
-                      Find the sum of 2 integers and display the result
-                    </span>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        height: "50px",
-                        width: "100%",
-                      }}
-                    >
-                      <span>Easy</span>
-                      <span>Score: 2</span>
-                    </div>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
             </div>
           ) : (

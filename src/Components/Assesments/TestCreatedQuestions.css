@@ -99,12 +99,13 @@
   align-items: flex-start;
   justify-content: space-between;
   height: 150px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   padding-top: 1%;
   padding-bottom: 1%;
   width: 93%;
   padding-left: 1%;
   padding-right: 1%;
-  border: 2px solid gray;
+
   background-color: white;
   border-radius: 10px;
   font-size: 22px;
