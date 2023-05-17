@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 import FormGroup from "@mui/material/FormGroup";
@@ -6,14 +6,42 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import switchoff from "../../Assets/Icons/Switch off.png";
 import switchon from "../../Assets/Icons/Switch on.png";
+import {
+  getSelectedQuestionData,
+  getTestHour,
+  getTestMinutes,
+} from "../../features/Test/TestSlice";
+import { useSelector } from "react-redux";
+import EditTestDurationModal from "../Modals/EditTestDuration/EditTestDurationModal";
 
 export default function TestCreatedOverview() {
   const [visible, setVisible] = useState("true");
   const [testStatus, setTestStatus] = useState("ON");
   const navigate = useNavigate();
+
+  const getselectedquestionsdata = useSelector(getSelectedQuestionData);
+  console.log("selectedquestionsdata", getselectedquestionsdata);
+
+  const [totalscore, setTotalScore] = useState(0);
+
+  useEffect(() => {
+    let score = 0;
+    for (let item of getselectedquestionsdata) {
+      score += item.question.totalScoreForQuestion;
+    }
+    setTotalScore(score);
+  }, []);
+
+  const gettesthour = useSelector(getTestHour);
+  const gettestminutes = useSelector(getTestMinutes);
+  const [edittestmodal, setEditTestModal] = useState(false);
   return (
     <>
       <div className="testCreatedRightContainer">
+        <EditTestDurationModal
+          edittestmodal={edittestmodal}
+          setEditTestModal={setEditTestModal}
+        />
         <div className="testCreatedRightContainerHeading">
           <span>Overview</span>
           <span
@@ -25,18 +53,93 @@ export default function TestCreatedOverview() {
             View questions
           </span>
         </div>
-        <div className="viewQuestionsContainer">
-          <span>No questions are added to this test</span>
-          <button
-            className="publishChangesButton"
-            style={{ marginTop: "2%" }}
-            onClick={() => {
-              navigate("/home");
-            }}
-          >
-            Add questions
-          </button>
-        </div>
+        {getselectedquestionsdata.length > 0 ? (
+          <div className="viewQuestionsPresentContainer">
+            <div className="viewQuestionsPresentContainerHeader">
+              <span className="viewQuestionsPresentContainerHeaderQuestionType">
+                Question type
+              </span>
+              <span className="viewQuestionsPresentContainerHeaderDifficultyLevel">
+                Difficulty level
+              </span>
+              <span className="viewQuestionsPresentContainerHeaderDifficultyLevel">
+                Questions
+              </span>
+              <span className="viewQuestionsPresentContainerHeaderDifficultyLevel">
+                Score
+              </span>
+            </div>
+            <div className="viewQuestionsPresentContainerBody">
+              {" "}
+              <span className="viewQuestionsPresentContainerHeaderQuestionType">
+                Programming
+              </span>
+              <span className="viewQuestionsPresentContainerHeaderDifficultyLevel">
+                {/* {easy > 0 ? `Easy(${})` : ""}
+                {medium > 0 ? `,Medium(${})` : ""}
+                {hard > 0 ? `,Hard(${})` : ""} */}
+              </span>
+              <span className="viewQuestionsPresentContainerHeaderDifficultyLevel">
+                {getselectedquestionsdata.length}
+              </span>
+              <span className="viewQuestionsPresentContainerHeaderDifficultyLevel">
+                {totalscore}
+              </span>
+            </div>
+            <div className="viewQuestionsPresentContainerFooter">
+              <div className="viewQuestiontestDurationDiv">
+                <span style={{ fontSize: "23px", fontWeight: "500" }}>
+                  Test duration
+                </span>
+                <div>
+                  {parseInt(gettesthour) > 0 ? (
+                    <span style={{ fontSize: "30px" }}>
+                      {gettesthour}{" "}
+                      <span style={{ fontSize: "23px", fontWeight: "500" }}>
+                        hour{" "}
+                      </span>
+                    </span>
+                  ) : (
+                    ""
+                  )}
+                  {parseInt(gettestminutes) > 0 ? (
+                    <span style={{ fontSize: "30px" }}>
+                      {gettestminutes}{" "}
+                      <span style={{ fontSize: "23px", fontWeight: "500" }}>
+                        minutes{" "}
+                      </span>
+                    </span>
+                  ) : (
+                    ""
+                  )}
+
+                  <span
+                    style={{ color: "blue", cursor: "pointer" }}
+                    onClick={() => {
+                      setEditTestModal(true);
+                    }}
+                  >
+                    Edit
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="viewQuestionsContainer">
+            <span>No questions are added to this test</span>
+            <button
+              className="publishChangesButton"
+              style={{ marginTop: "2%" }}
+              onClick={() => {
+                navigate("/home");
+              }}
+            >
+              Add questions
+            </button>
+          </div>
+        )}
+
         <div className="testCreatedSettingsContainer">
           <div className="testCreatedSettingsLeftContainer">
             <div className="testCreatedSettingsLeftContainerHeader">

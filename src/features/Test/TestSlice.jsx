@@ -6,6 +6,8 @@ const TestSlice = createSlice({
     Candidates: [],
     SelectedQuestionId: [],
     SelectedQuestionsData: [],
+    TestDurationHour: "01",
+    TestDurationMinutes: "50",
   },
 
   reducers: {
@@ -51,6 +53,12 @@ const TestSlice = createSlice({
     clearSelectedQuestionData: (state, action) => {
       state.SelectedQuestionsData = [];
     },
+    addTestDurationHour: (state, action) => {
+      state.TestDurationHour = action.payload;
+    },
+    addTestDurationMinutes: (state, action) => {
+      state.TestDurationMinutes = action.payload;
+    },
   },
 });
 
@@ -62,11 +70,15 @@ export const {
   clearSelectedQuestionId,
   addSelectedQuestionData,
   clearSelectedQuestionData,
+  addTestDurationHour,
+  addTestDurationMinutes,
 } = TestSlice.actions;
 
 export const getCandidates = (state) => state.Test.Candidates;
 export const getSelectedQuestionId = (state) => state.Test.SelectedQuestionId;
 export const getSelectedQuestionData = (state) =>
   state.Test.SelectedQuestionsData;
+export const getTestHour = (state) => state.Test.TestDurationHour;
+export const getTestMinutes = (state) => state.Test.TestDurationMinutes;
 
 export default TestSlice.reducer;

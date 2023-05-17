@@ -10,6 +10,8 @@ import {
   clearSelectedQuestionData,
   getSelectedQuestionData,
   getSelectedQuestionId,
+  getTestHour,
+  getTestMinutes,
 } from "../../features/Test/TestSlice";
 import parse from "html-react-parser";
 import axios from "axios";
@@ -48,6 +50,9 @@ export default function TestCreatedQuestions(props) {
 
   console.log(totalscore);
 
+  const gettesthour = useSelector(getTestHour);
+  const gettestminutes = useSelector(getTestMinutes);
+
   return (
     <>
       <div className="testCreatedQuestionsContainer ">
@@ -57,7 +62,9 @@ export default function TestCreatedQuestions(props) {
             <>
               <div className="testCreatedQuestionsContainerHeaderTotal">
                 <span>Total score: 4</span>
-                <span>Total duration: 1hr 30min</span>
+                <span>
+                  Total duration: {gettesthour}hr {gettestminutes}min
+                </span>
               </div>
               <div className="testCreatedQuestionsContainerHeaderButtons">
                 <button className="createANewQuestionButton">

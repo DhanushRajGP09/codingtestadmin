@@ -1,0 +1,88 @@
+.EditTestModal-inner-content {
+  border-radius: 0px 0px 10px 10px;
+  width: 500px;
+  height: 300px;
+  background-color: white;
+  display: flex;
+  align-items: flex-start;
+  margin-top: 10%;
+  padding: 1%;
+  padding-left: 5%;
+  justify-content: space-between;
+  flex-direction: column;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+  font-size: 20px;
+  font-weight: 500;
+  z-index: 3;
+  position: relative;
+  gap: 20px;
+}
+.EditDurationModal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  left: 0;
+  top: 0;
+  z-index: 9999; /* Sit on top */
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  justify-content: flex-end;
+  align-items: flex-end;
+  overflow: auto; /* Enable scroll if needed */
+}
+.EditDurationmodal-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 16.5%;
+  margin-left: 7%;
+}
+.hourminInputDiv {
+  height: 100px;
+  width: 80%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.hourInputDiv {
+  height: 100%;
+  width: 40%;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.testHourInput {
+  width: 120px;
+  height: 40px;
+  border: 1px solid lavender;
+  font-size: 20px;
+  padding-left: 5px;
+}
+.saveDurationButtonDiv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  width: auto;
+  gap: 15px;
+}
+.saveTestDurationButton,
+.cancelTestDurationButton {
+  height: 100%;
+  font-size: 20px;
+  padding-left: 10%;
+  padding-right: 10%;
+  width: 100px;
+  background-color: #0071c5;
+  border: none;
+  outline: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.cancelTestDurationButton {
+  background-color: white;
+  color: #0071c5;
+}
