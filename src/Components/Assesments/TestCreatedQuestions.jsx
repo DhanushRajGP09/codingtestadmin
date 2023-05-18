@@ -67,7 +67,12 @@ export default function TestCreatedQuestions(props) {
                 </span>
               </div>
               <div className="testCreatedQuestionsContainerHeaderButtons">
-                <button className="createANewQuestionButton">
+                <button
+                  className="createANewQuestionButton"
+                  onClick={() => {
+                    props.setModal(true);
+                  }}
+                >
                   Create a new question
                 </button>
                 <button

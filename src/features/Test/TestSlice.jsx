@@ -6,6 +6,7 @@ const TestSlice = createSlice({
     Candidates: [],
     SelectedQuestionId: [],
     SelectedQuestionsData: [],
+    SelectedMultipleQuestionId: [],
     TestDurationHour: "01",
     TestDurationMinutes: "50",
   },
@@ -44,9 +45,30 @@ const TestSlice = createSlice({
         (data) => data !== action.payload
       );
     },
+    addSelectedMultipleQuestionId: (state, { payload }) => {
+      let isPresent = false;
+      for (let item of state.SelectedMultipleQuestionId) {
+        if (item === payload) {
+          isPresent = true;
+        }
+      }
+      if (!isPresent) {
+        state.SelectedMultipleQuestionId.unshift(payload);
+      }
+    },
+    removeFromSelectedMultipleQuestionId: (state, action) => {
+      state.SelectedMultipleQuestionId =
+        state.SelectedMultipleQuestionId.filter(
+          (data) => data !== action.payload
+        );
+    },
     clearSelectedQuestionId: (state, action) => {
       state.SelectedQuestionId = [];
     },
+    clearSelectedMultipleQuestionId: (state, action) => {
+      state.SelectedMultipleQuestionId = [];
+    },
+
     addSelectedQuestionData: (state, { payload }) => {
       state.SelectedQuestionsData.unshift(payload);
     },
@@ -72,6 +94,9 @@ export const {
   clearSelectedQuestionData,
   addTestDurationHour,
   addTestDurationMinutes,
+  addSelectedMultipleQuestionId,
+  removeFromSelectedMultipleQuestionId,
+  clearSelectedMultipleQuestionId,
 } = TestSlice.actions;
 
 export const getCandidates = (state) => state.Test.Candidates;
@@ -80,5 +105,7 @@ export const getSelectedQuestionData = (state) =>
   state.Test.SelectedQuestionsData;
 export const getTestHour = (state) => state.Test.TestDurationHour;
 export const getTestMinutes = (state) => state.Test.TestDurationMinutes;
+export const getSelectedMultipleQuestions = (state) =>
+  state.Test.SelectedMultipleQuestionId;
 
 export default TestSlice.reducer;

@@ -6,6 +6,9 @@ import Checkbox from "@mui/material/Checkbox";
 import search from "../../Assets/Icons/search (1).png";
 import CreateQuestionModal from "../Modals/createQuestionModal/CreateQuestionModal";
 import { useSelector } from "react-redux";
+
+import blankcheckbox from "../../Assets/Icons/blank-check-box.png";
+import checkbox from "../../Assets/Icons/check (1).png";
 import parse from "html-react-parser";
 import {
   addIndividualQuestion,
@@ -20,10 +23,13 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import {
+  addSelectedMultipleQuestionId,
   addSelectedQuestionData,
   addSelectedQuestionId,
   clearSelectedQuestionData,
+  getSelectedMultipleQuestions,
   getSelectedQuestionId,
+  removeFromSelectedMultipleQuestionId,
   removeFromSelectedQuestionId,
 } from "../../features/Test/TestSlice";
 
@@ -41,6 +47,17 @@ export default function Library() {
 
   const getselectedquestionid = useSelector(getSelectedQuestionId);
   console.log("selectedquesti", getselectedquestionid);
+
+  const [checked, setChecked] = React.useState(false);
+  const [visible, setVisible] = useState(false);
+
+  const handleChange = (index) => {
+    if (document.getElementById(`question${index}`).checked === false) {
+      document.getElementById(`question${index}`).checked = true;
+    } else {
+      document.getElementById(`question${index}`).checked = false;
+    }
+  };
 
   const token = JSON.parse(localStorage.getItem("token"));
 
@@ -189,6 +206,9 @@ export default function Library() {
     }
   };
 
+  const getselectedmultiplequestion = useSelector(getSelectedMultipleQuestions);
+  console.log("gegegegeg", getselectedmultiplequestion);
+
   return (
     <div className="adminLibrary">
       <CreateQuestionModal
@@ -253,79 +273,123 @@ export default function Library() {
           </div>
           {getlibraryquestions.map((data, index) => {
             return (
-              <div className="libraryQuestionDiv">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    width: "98%",
-                  }}
-                >
-                  <span
-                    className="libraryQuestionName"
+              <div className="libraryQuestionContainer">
+                {getselectedmultiplequestion.includes(data._id) ? (
+                  <img
+                    className="checkboxImage"
+                    src={checkbox}
+                    style={{ cursor: "pointer" }}
+                    id={`option${index}`}
                     onClick={() => {
-                      setViewModal(true);
-                      handleQuestionClick(data._id);
+                      dispatch(removeFromSelectedMultipleQuestionId(data._id));
+                      document.getElementById(`option${index}`).src =
+                        blankcheckbox;
+                    }}
+                  ></img>
+                ) : (
+                  <img
+                    className="checkboxImage"
+                    src={blankcheckbox}
+                    style={{ cursor: "pointer" }}
+                    id={`option${index}`}
+                    onClick={() => {
+                      if (
+                        document.getElementById(`option${index}`).src ===
+                        blankcheckbox
+                      ) {
+                        document.getElementById(`option${index}`).src =
+                          checkbox;
+                        dispatch(addSelectedMultipleQuestionId(data._id));
+
+                        if (
+                          document.getElementById(`option${index}`).src ===
+                          checkbox
+                        ) {
+                        }
+                      } else {
+                        setVisible("false");
+                        document.getElementById(`option${index}`).src =
+                          blankcheckbox;
+                        dispatch(
+                          removeFromSelectedMultipleQuestionId(data._id)
+                        );
+                      }
+                    }}
+                  ></img>
+                )}
+                <div className="libraryQuestionDiv">
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      width: "98%",
                     }}
                   >
-                    {data.questionName}
-                  </span>
-                  {data.questionPublished ? (
-                    getselectedquestionid.includes(data._id) ? (
-                      <span
-                        style={{ color: "red", cursor: "pointer" }}
-                        onClick={() => {
-                          dispatch(removeFromSelectedQuestionId(data._id));
-                          removeHandleQuestionsData(data._id);
-                        }}
-                      >
-                        Remove from test
-                      </span>
-                    ) : (
-                      <span
-                        style={{ color: "blue", cursor: "pointer" }}
-                        onClick={() => {
-                          dispatch(addSelectedQuestionId(data._id));
-                          handleData(data._id);
-                        }}
-                      >
-                        Add to test
-                      </span>
-                    )
-                  ) : (
-                    <div>
-                      <span style={{ color: "red" }}>draft</span>
-                    </div>
-                  )}
-                </div>
-
-                <span className="libraryQuestionDescription">
-                  {parse(data.questionStatement)}
-                </span>
-                <div className="libraryQuestionDivSeperator"></div>
-                <div className="libraryQuestionDivFooter">
-                  <div className="libraryQuestionDivFooter-levelDiv">
                     <span
-                      className="questionLevel"
-                      style={{
-                        color:
-                          data.difficultyLevel === "hard"
-                            ? "red"
-                            : data.difficultyLevel === "medium"
-                            ? "blue"
-                            : "green",
+                      className="libraryQuestionName"
+                      onClick={() => {
+                        setViewModal(true);
+                        handleQuestionClick(data._id);
                       }}
                     >
-                      {data.difficultyLevel}
+                      {data.questionName}
                     </span>
-                    <span>Score {data.totalScoreForQuestion}</span>
-                    <span>Recommended time: {data.recommendedTime}</span>
+                    {data.questionPublished ? (
+                      getselectedquestionid.includes(data._id) ? (
+                        <span
+                          style={{ color: "red", cursor: "pointer" }}
+                          onClick={() => {
+                            dispatch(removeFromSelectedQuestionId(data._id));
+                            removeHandleQuestionsData(data._id);
+                          }}
+                        >
+                          Remove from test
+                        </span>
+                      ) : (
+                        <span
+                          style={{ color: "blue", cursor: "pointer" }}
+                          onClick={() => {
+                            dispatch(addSelectedQuestionId(data._id));
+                            handleData(data._id);
+                          }}
+                        >
+                          Add to test
+                        </span>
+                      )
+                    ) : (
+                      <div>
+                        <span style={{ color: "red" }}>draft</span>
+                      </div>
+                    )}
                   </div>
-                  <span className="libraryQuestionDivFooter-QuestionType">
-                    {data.questionType}
+
+                  <span className="libraryQuestionDescription">
+                    {parse(data.questionStatement)}
                   </span>
-                  {/* <span
+                  <div className="libraryQuestionDivSeperator"></div>
+                  <div className="libraryQuestionDivFooter">
+                    <div className="libraryQuestionDivFooter-levelDiv">
+                      <span
+                        className="questionLevel"
+                        style={{
+                          color:
+                            data.difficultyLevel === "hard"
+                              ? "red"
+                              : data.difficultyLevel === "medium"
+                              ? "blue"
+                              : "green",
+                        }}
+                      >
+                        {data.difficultyLevel}
+                      </span>
+                      <span>Score {data.totalScoreForQuestion}</span>
+                      <span>Recommended time: {data.recommendedTime}</span>
+                    </div>
+                    <span className="libraryQuestionDivFooter-QuestionType">
+                      {data.questionType}
+                    </span>
+                    {/* <span
                     onClick={() => {
                       handleDeleteQuestion(data._id);
                     }}
@@ -334,6 +398,7 @@ export default function Library() {
                     {" "}
                     delete
                   </span> */}
+                  </div>
                 </div>
               </div>
             );

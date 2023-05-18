@@ -26,6 +26,7 @@ import CandidatesFeedback from "./CandidatesFeedback";
 import axios from "axios";
 import ViewQuestionModal from "../Modals/viewQuestionModal/ViewQuestionModal";
 import { useDispatch, useSelector } from "react-redux";
+import CreateQuestionModal from "../Modals/createQuestionModal/CreateQuestionModal";
 
 export default function TestCreated() {
   const navigate = useNavigate();
@@ -77,6 +78,8 @@ export default function TestCreated() {
       });
   };
 
+  const [modal, setModal] = useState(false);
+
   return (
     <>
       <PublishTestModal
@@ -89,6 +92,7 @@ export default function TestCreated() {
         setViewModal={setViewModal}
         handleQuestionClick={handleQuestionClick}
       />
+      <CreateQuestionModal modal={modal} setModal={setModal} />
       <div className="testCreatedHeader">
         <span
           className="testHeaderBackButton"
@@ -223,6 +227,7 @@ export default function TestCreated() {
               <TestCreatedQuestions
                 setViewModal={setViewModal}
                 handleQuestionClick={handleQuestionClick}
+                setModal={setModal}
               />
             }
           ></Route>
