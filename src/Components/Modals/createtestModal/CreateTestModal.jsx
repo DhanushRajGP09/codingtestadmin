@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./CreateTestModal.css";
 import close from "../../../Assets/Icons/closemodal2.png";
 import test from "../../../Assets/Icons/test.png";
@@ -10,6 +10,9 @@ import RadioGroup from "@mui/material/RadioGroup";
 
 import FormControl from "@mui/material/FormControl";
 import { useNavigate } from "react-router";
+import axios from "axios";
+import { getBaseURL } from "../../../features/question/QuestionSlice";
+import { useSelector } from "react-redux";
 
 export default function CreateTestModal(props) {
   const [value, setValue] = React.useState("manually");
@@ -17,8 +20,32 @@ export default function CreateTestModal(props) {
   const handleChange = (event) => {
     setValue(event.target.value);
   };
+  const [testName, setTestName] = useState("Trainee software test");
 
   const navigate = useNavigate();
+  const token = JSON.parse(localStorage.getItem("token"));
+  console.log("increatetest");
+
+  const getbaseurl = useSelector(getBaseURL);
+  const handleCreateTest = async () => {
+    axios
+      .post(
+        `${getbaseurl}/test/test-creation`,
+        { testName: testName },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("createTest", response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <div
       className="createQuestionModal"
@@ -47,14 +74,18 @@ export default function CreateTestModal(props) {
                 The role you select is used to create a relevant test
               </span>
               <div className="createTestJobRoleSelect">
-                <select className="functionNameInput">
+                <select
+                  className="functionNameInput"
+                  onChange={(e) => {
+                    setTestName(e.target.value);
+                  }}
+                >
                   <option>trainee software engineer</option>
                   <option>a</option>
                   <option>b</option>
                   <option>c</option>
                 </select>
               </div>
-              <button className="editQuestionButton">Create new role</button>
               <span style={{ marginTop: "3%" }}>Add questions</span>
               <FormControl>
                 <RadioGroup
@@ -76,6 +107,7 @@ export default function CreateTestModal(props) {
                 onClick={() => {
                   props.setCreateTestModal(false);
                   navigate("/home/assesments/testcreated");
+                  handleCreateTest();
                 }}
               >
                 Create test

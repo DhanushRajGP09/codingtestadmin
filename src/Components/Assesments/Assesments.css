@@ -38,7 +38,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  height: 20vh;
+  height: auto;
   width: 80%;
   background-color: white;
   font-size: 20px;
@@ -50,7 +50,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  height: 80%;
+  height: 90%;
   width: 100%;
 }
 .testStatusSeperator {
@@ -127,7 +127,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 90vh;
+  height: auto;
   width: 100%;
 }
 .testContainer {
@@ -188,4 +188,11 @@
   width: 500px;
 
   margin-left: 10%;
+}
+.testCreatedBySort {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
 }

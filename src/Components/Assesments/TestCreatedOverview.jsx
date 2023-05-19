@@ -7,6 +7,7 @@ import Checkbox from "@mui/material/Checkbox";
 import switchoff from "../../Assets/Icons/Switch off.png";
 import switchon from "../../Assets/Icons/Switch on.png";
 import {
+  getParticularTestData,
   getSelectedQuestionData,
   getTestHour,
   getTestMinutes,
@@ -23,6 +24,8 @@ export default function TestCreatedOverview() {
   console.log("selectedquestionsdata", getselectedquestionsdata);
 
   const [totalscore, setTotalScore] = useState(0);
+
+  const getparticulartestdata = useSelector(getParticularTestData);
 
   useEffect(() => {
     let score = 0;
@@ -368,7 +371,7 @@ export default function TestCreatedOverview() {
               <div className="testNameDiv">
                 <span>Test access</span>
                 <div className="testAccessDiv">
-                  {visible === "true" ? (
+                  {getparticulartestdata.testAccess ? (
                     <img
                       src={switchon}
                       style={{ cursor: "pointer" }}
@@ -416,7 +419,7 @@ export default function TestCreatedOverview() {
                       }}
                     ></img>
                   )}
-                  <span>{testStatus}</span>
+                  <span>{getparticulartestdata.testAccess ? "ON" : "OFF"}</span>
                 </div>
               </div>
               <div className="testNameDiv">

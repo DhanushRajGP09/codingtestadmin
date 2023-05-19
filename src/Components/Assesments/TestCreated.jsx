@@ -27,6 +27,7 @@ import axios from "axios";
 import ViewQuestionModal from "../Modals/viewQuestionModal/ViewQuestionModal";
 import { useDispatch, useSelector } from "react-redux";
 import CreateQuestionModal from "../Modals/createQuestionModal/CreateQuestionModal";
+import { getParticularTestData } from "../../features/Test/TestSlice";
 
 export default function TestCreated() {
   const navigate = useNavigate();
@@ -78,7 +79,11 @@ export default function TestCreated() {
       });
   };
 
+  const getparticulartestdata = useSelector(getParticularTestData);
+
   const [modal, setModal] = useState(false);
+
+  console.log("particularda", getparticulartestdata);
 
   return (
     <>
@@ -104,12 +109,12 @@ export default function TestCreated() {
           {"<"} Back{" "}
         </span>
         <span className="testCreatedSectionName">
-          Trainee software engineer test
+          {getparticulartestdata?.testName} test
         </span>
         <div className="testHeaderFunctionsDiv">
           <div className="testHeaderFunctionCopy">Copy link</div>
           <div className="testHeaderFunctionCopy">Preview</div>
-          {published ? (
+          {getparticulartestdata?.testPublished ? (
             <button
               className="publishChangesButton"
               onClick={() => {
@@ -132,7 +137,7 @@ export default function TestCreated() {
       </div>
       <div className="testCreatedBody">
         <div className="testCreatedLeftContainer">
-          {published ? (
+          {getparticulartestdata?.testPublished ? (
             <>
               <div className="testCreatedLeftContainerDetails">
                 <span className="testDetialsText">Candidates</span>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -8,14 +8,90 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import CreateTestModal from "../Modals/createtestModal/CreateTestModal";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { getBaseURL } from "../../features/question/QuestionSlice";
+import {
+  addAllTestData,
+  addParticularTestData,
+  addTestId,
+  getAllTestData,
+  getTestId,
+} from "../../features/Test/TestSlice";
+import { useNavigate } from "react-router";
 
 export default function AssesmentHome() {
-  const [value, setValue] = React.useState("ongoing");
+  const [value, setValue] = React.useState("yet to start");
   const [createtestmodal, setCreateTestModal] = useState(false);
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
+  const navigate = useNavigate();
+
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  console.log("AssesmentHo");
+
+  const dispatch = useDispatch();
+  const getbaseurl = useSelector(getBaseURL);
+
+  const getalltestdata = useSelector(getAllTestData);
+  console.log("getalltestdata", getalltestdata);
+
+  const getAllTest = () => {
+    axios
+      .get(
+        `${getbaseurl}/test`,
+
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            testStatus: value,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("allTest", response);
+        dispatch(addAllTestData(response.data.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getAllTest();
+  }, []);
+
+  const gettestid = useSelector(getTestId);
+
+  const getParticularTest = (id) => {
+    dispatch(addTestId(id));
+    axios
+      .get(
+        `${getbaseurl}/test/view-test`,
+
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            testId: id,
+          },
+        }
+      )
+      .then(function (response) {
+        navigate("/home/assesments/testcreated");
+        dispatch(addParticularTestData(response.data.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <>
       <CreateTestModal
@@ -38,6 +114,11 @@ export default function AssesmentHome() {
                   onChange={handleChange}
                 >
                   <FormControlLabel
+                    value="yet to start"
+                    control={<Radio />}
+                    label={`yet to start (${getalltestdata.length})`}
+                  />
+                  <FormControlLabel
                     value="ongoing"
                     control={<Radio />}
                     label="Ongoing (22)"
@@ -59,7 +140,7 @@ export default function AssesmentHome() {
           <div className="testStatusSeperator"></div>
           <div className="testCreatedByContainer">
             <span>Created by</span>
-            <div className="libraryQuestionsSort">
+            <div className="testCreatedBySort">
               <select className="functionNameInput">
                 <option>All</option>
                 <option>Admin</option>
@@ -70,7 +151,7 @@ export default function AssesmentHome() {
           </div>
           <div className="testCreatedByContainer">
             <span>Creation date</span>
-            <div className="libraryQuestionsSort">
+            <div className="testCreatedBySort">
               <select className="functionNameInput">
                 <option>Any time</option>
                 <option>a</option>
@@ -110,41 +191,57 @@ export default function AssesmentHome() {
             </button>
           </div>
           <div className="testsContainer">
-            <div className="testContainer">
-              <div className="testContainerHeader">
-                <span>Campus drive - </span>
-                <span> Programming test - </span>
-                <span> 02-Mar-2023 -</span>
-                <span>Batch 2</span>
-              </div>
-              <div className="testContainerBody">
-                <div className="testContainerBodyTestType">Invite only </div>
-                <div className="testContainerBodyTestTime">1 hrs 30 mins</div>
-                <div className="testContainerBodyTestDate">
-                  Mar 02, 2023 12:46 PM IST -
-                </div>
-                <div className="testContainerBodyTestEndTime">
-                  No end date specified
-                </div>
-              </div>
-              <div className="testContainerFooter">
-                <span>
-                  31 candidates have been invited and have taken the test
-                </span>
-                <span className="viewCandidateReportButton">
-                  View candidate report
-                </span>
-                <div className="testContainerFooterFunctions">
-                  <span className="viewCandidateReportButton">
-                    Preview test
-                  </span>
-                  <span className="viewCandidateReportButton">
-                    Invite candidates
-                  </span>
-                  <span className="viewCandidateReportButton">Archive</span>
-                </div>
-              </div>
-            </div>
+            {getalltestdata?.map((data, index) => {
+              return (
+                <>
+                  <div className="testContainer">
+                    <div className="testContainerHeader">
+                      <span
+                        onClick={() => {
+                          getParticularTest(data._id);
+                        }}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {data?.testName}
+                      </span>
+                    </div>
+                    <div className="testContainerBody">
+                      <div className="testContainerBodyTestType">
+                        Invite only{" "}
+                      </div>
+                      <div className="testContainerBodyTestTime">
+                        1 hrs 30 mins
+                      </div>
+                      <div className="testContainerBodyTestDate">
+                        Mar 02, 2023 12:46 PM IST -
+                      </div>
+                      <div className="testContainerBodyTestEndTime">
+                        No end date specified
+                      </div>
+                    </div>
+                    <div className="testContainerFooter">
+                      <span>
+                        31 candidates have been invited and have taken the test
+                      </span>
+                      <span className="viewCandidateReportButton">
+                        View candidate report
+                      </span>
+                      <div className="testContainerFooterFunctions">
+                        <span className="viewCandidateReportButton">
+                          Preview test
+                        </span>
+                        <span className="viewCandidateReportButton">
+                          Invite candidates
+                        </span>
+                        <span className="viewCandidateReportButton">
+                          Archive
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              );
+            })}
           </div>
         </div>
       </div>

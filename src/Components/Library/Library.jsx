@@ -27,6 +27,7 @@ import {
   addSelectedQuestionData,
   addSelectedQuestionId,
   clearSelectedQuestionData,
+  concateSelectedQuestionID,
   getSelectedMultipleQuestions,
   getSelectedQuestionId,
   removeFromSelectedMultipleQuestionId,
@@ -206,8 +207,15 @@ export default function Library() {
     }
   };
 
+  const handleMultipleSelection = () => {
+    console.log("finalselectedquestions", getselectedquestionid);
+    for (let item of getselectedquestionid) {
+      handleData(item);
+    }
+  };
+
   const getselectedmultiplequestion = useSelector(getSelectedMultipleQuestions);
-  console.log("gegegegeg", getselectedmultiplequestion);
+  console.log("gegegeg", getselectedmultiplequestion);
 
   return (
     <div className="adminLibrary">
@@ -224,6 +232,18 @@ export default function Library() {
       />
       <div className="libraryHeader">
         <span className="sectionName">Library</span>
+        {getselectedmultiplequestion.length > 0 ? (
+          <button
+            className="createQuestionButton"
+            onClick={() => {
+              handleMultipleSelection();
+            }}
+          >
+            Add selected {getselectedmultiplequestion.length} question to test
+          </button>
+        ) : (
+          ""
+        )}
         <button
           className="createQuestionButton"
           onClick={() => {
@@ -281,7 +301,7 @@ export default function Library() {
                     style={{ cursor: "pointer" }}
                     id={`option${index}`}
                     onClick={() => {
-                      dispatch(removeFromSelectedMultipleQuestionId(data._id));
+                      dispatch(removeFromSelectedQuestionId(data._id));
                       document.getElementById(`option${index}`).src =
                         blankcheckbox;
                     }}
@@ -299,7 +319,7 @@ export default function Library() {
                       ) {
                         document.getElementById(`option${index}`).src =
                           checkbox;
-                        dispatch(addSelectedMultipleQuestionId(data._id));
+                        dispatch(addSelectedQuestionId(data._id));
 
                         if (
                           document.getElementById(`option${index}`).src ===
@@ -310,9 +330,7 @@ export default function Library() {
                         setVisible("false");
                         document.getElementById(`option${index}`).src =
                           blankcheckbox;
-                        dispatch(
-                          removeFromSelectedMultipleQuestionId(data._id)
-                        );
+                        dispatch(removeFromSelectedQuestionId(data._id));
                       }
                     }}
                   ></img>

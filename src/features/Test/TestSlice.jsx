@@ -9,6 +9,9 @@ const TestSlice = createSlice({
     SelectedMultipleQuestionId: [],
     TestDurationHour: "01",
     TestDurationMinutes: "50",
+    TestId: "",
+    AllTestData: [],
+    particularTestData: {},
   },
 
   reducers: {
@@ -72,6 +75,12 @@ const TestSlice = createSlice({
     addSelectedQuestionData: (state, { payload }) => {
       state.SelectedQuestionsData.unshift(payload);
     },
+    addAllTestData: (state, { payload }) => {
+      state.AllTestData = payload;
+    },
+    addParticularTestData: (state, { payload }) => {
+      state.particularTestData = payload;
+    },
     clearSelectedQuestionData: (state, action) => {
       state.SelectedQuestionsData = [];
     },
@@ -80,6 +89,15 @@ const TestSlice = createSlice({
     },
     addTestDurationMinutes: (state, action) => {
       state.TestDurationMinutes = action.payload;
+    },
+    addTestId: (state, action) => {
+      state.TestId = action.payload;
+    },
+
+    concateSelectedQuestionID: (state, action) => {
+      state.SelectedQuestionId = state.SelectedQuestionId.concat(
+        state.SelectedMultipleQuestionId
+      );
     },
   },
 });
@@ -97,13 +115,20 @@ export const {
   addSelectedMultipleQuestionId,
   removeFromSelectedMultipleQuestionId,
   clearSelectedMultipleQuestionId,
+  concateSelectedQuestionID,
+  addAllTestData,
+  addTestId,
+  addParticularTestData,
 } = TestSlice.actions;
 
+export const getAllTestData = (state) => state.Test.AllTestData;
+export const getParticularTestData = (state) => state.Test.particularTestData;
 export const getCandidates = (state) => state.Test.Candidates;
 export const getSelectedQuestionId = (state) => state.Test.SelectedQuestionId;
 export const getSelectedQuestionData = (state) =>
   state.Test.SelectedQuestionsData;
 export const getTestHour = (state) => state.Test.TestDurationHour;
+export const getTestId = (state) => state.Test.TestId;
 export const getTestMinutes = (state) => state.Test.TestDurationMinutes;
 export const getSelectedMultipleQuestions = (state) =>
   state.Test.SelectedMultipleQuestionId;

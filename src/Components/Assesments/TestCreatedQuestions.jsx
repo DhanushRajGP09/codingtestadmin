@@ -61,7 +61,7 @@ export default function TestCreatedQuestions(props) {
           {getselectedquestionsdata.length > 0 ? (
             <>
               <div className="testCreatedQuestionsContainerHeaderTotal">
-                <span>Total score: 4</span>
+                <span>Total score: {totalscore}</span>
                 <span>
                   Total duration: {gettesthour}hr {gettestminutes}min
                 </span>
