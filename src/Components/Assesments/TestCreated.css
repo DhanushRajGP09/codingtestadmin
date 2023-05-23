@@ -397,3 +397,12 @@
   font-weight: 400;
   margin-bottom: 2%;
 }
+.testNameEditInput {
+  border-color: #0071c5;
+  box-shadow: none;
+  outline: none;
+  height: 25px;
+  font-size: 18px;
+  width: 200px;
+  border: none;
+}

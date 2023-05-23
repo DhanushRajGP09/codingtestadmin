@@ -10,8 +10,11 @@ const TestSlice = createSlice({
     TestDurationHour: "01",
     TestDurationMinutes: "50",
     TestId: "",
+    TestName: "",
     AllTestData: [],
     particularTestData: {},
+    TestStartTime: new Date(),
+    TestEndTime: new Date(),
   },
 
   reducers: {
@@ -78,6 +81,15 @@ const TestSlice = createSlice({
     addAllTestData: (state, { payload }) => {
       state.AllTestData = payload;
     },
+    addTestStartTime: (state, { payload }) => {
+      state.TestStartTime = payload;
+    },
+    addTestEndTime: (state, { payload }) => {
+      state.TestEndTime = payload;
+    },
+    addTestName: (state, { payload }) => {
+      state.TestName = payload;
+    },
     addParticularTestData: (state, { payload }) => {
       state.particularTestData = payload;
     },
@@ -119,9 +131,13 @@ export const {
   addAllTestData,
   addTestId,
   addParticularTestData,
+  addTestStartTime,
+  addTestEndTime,
+  addTestName,
 } = TestSlice.actions;
 
 export const getAllTestData = (state) => state.Test.AllTestData;
+export const getTestStartTime = (state) => state.Test.TestStartTime;
 export const getParticularTestData = (state) => state.Test.particularTestData;
 export const getCandidates = (state) => state.Test.Candidates;
 export const getSelectedQuestionId = (state) => state.Test.SelectedQuestionId;
@@ -132,5 +148,7 @@ export const getTestId = (state) => state.Test.TestId;
 export const getTestMinutes = (state) => state.Test.TestDurationMinutes;
 export const getSelectedMultipleQuestions = (state) =>
   state.Test.SelectedMultipleQuestionId;
+export const getTestEndTime = (state) => state.Test.TestEndTime;
+export const getTestName = (state) => state.Test.TestName;
 
 export default TestSlice.reducer;

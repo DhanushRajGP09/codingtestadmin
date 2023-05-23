@@ -1,0 +1,38 @@
+.DateTimeModal-inner-content {
+  border-radius: 0px 0px 10px 10px;
+  width: 500px;
+  height: 360px;
+  background-color: white;
+  display: flex;
+  align-items: flex-start;
+  margin-top: 10%;
+  padding: 1%;
+  padding-left: 5%;
+  justify-content: flex-start;
+  flex-direction: column;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+  font-size: 20px;
+  font-weight: 500;
+  z-index: 3;
+  position: relative;
+  gap: 20px;
+}
+.DateTimeModal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  left: 0;
+  top: 0;
+  z-index: 9999; /* Sit on top */
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  justify-content: flex-end;
+  align-items: flex-end;
+  overflow: auto; /* Enable scroll if needed */
+}
+.DateTimemodal-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 20.5%;
+  margin-left: 25%;
+}

@@ -7,25 +7,33 @@ import Checkbox from "@mui/material/Checkbox";
 import switchoff from "../../Assets/Icons/Switch off.png";
 import switchon from "../../Assets/Icons/Switch on.png";
 import {
+  addTestName,
   getParticularTestData,
   getSelectedQuestionData,
+  getTestEndTime,
   getTestHour,
   getTestMinutes,
+  getTestName,
+  getTestStartTime,
 } from "../../features/Test/TestSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import EditTestDurationModal from "../Modals/EditTestDuration/EditTestDurationModal";
+import DateTimeModal from "../Modals/DataTimeModal/DateTimeModal";
+import TestEndTimeModal from "../Modals/DataTimeModal/TestEndTimeModal";
 
 export default function TestCreatedOverview() {
   const [visible, setVisible] = useState("true");
   const [testStatus, setTestStatus] = useState("ON");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const getselectedquestionsdata = useSelector(getSelectedQuestionData);
-  console.log("selectedquestionsdata", getselectedquestionsdata);
+  console.log("selectedquestion", getselectedquestionsdata);
 
   const [totalscore, setTotalScore] = useState(0);
 
   const getparticulartestdata = useSelector(getParticularTestData);
+  console.log("particulardata", getparticulartestdata);
 
   useEffect(() => {
     let score = 0;
@@ -35,15 +43,64 @@ export default function TestCreatedOverview() {
     setTotalScore(score);
   }, []);
 
+  useEffect(() => {
+    dispatch(addTestName(getparticulartestdata.testName));
+  }, []);
+
   const gettesthour = useSelector(getTestHour);
   const gettestminutes = useSelector(getTestMinutes);
   const [edittestmodal, setEditTestModal] = useState(false);
+
+  const [datetimemodal, setDateTimeModal] = useState(false);
+
+  const getteststarttime = useSelector(getTestStartTime);
+  console.log("getteststartti", typeof getteststarttime);
+
+  const date = new Date();
+
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const monthname = months[getteststarttime?.getMonth()];
+
+  const timezone = getteststarttime?.getHours() > 12 ? "PM" : "AM";
+
+  const gettestendtime = useSelector(getTestEndTime);
+  const endMonthName = months[gettestendtime?.getMonth()];
+  const EndTimeZone = gettestendtime?.getHours() > 12 ? "PM" : "AM";
+
+  const [endtimemodal, setEndTimeModal] = useState(false);
+
+  const [testnameedit, setTestNameEdit] = useState(false);
+
+  const gettestname = useSelector(getTestName);
+
   return (
     <>
       <div className="testCreatedRightContainer">
         <EditTestDurationModal
           edittestmodal={edittestmodal}
           setEditTestModal={setEditTestModal}
+        />
+        <DateTimeModal
+          datetimemodal={datetimemodal}
+          setDateTimeModal={setDateTimeModal}
+        />
+        <TestEndTimeModal
+          endtimemodal={endtimemodal}
+          setEndTimeModal={setEndTimeModal}
         />
         <div className="testCreatedRightContainerHeading">
           <span>Overview</span>
@@ -153,7 +210,15 @@ export default function TestCreatedOverview() {
             </div>
             <div className="testCreatedSettingsLeftContainerCutOffDiv">
               <div className="testCreatedSettingsLeftContainerBodyheadersDiv">
-                <span>Cut-off settings</span>
+                <span>
+                  Cut-off settings{" "}
+                  <span
+                    style={{ color: "blue", cursor: "pointer" }}
+                    onClick={() => {}}
+                  >
+                    edit
+                  </span>
+                </span>
               </div>
               <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
                 <FormGroup>
@@ -176,7 +241,15 @@ export default function TestCreatedOverview() {
             </div>
             <div className="testCreatedSettingsLeftContainerProctoringDiv">
               <div className="testCreatedSettingsLeftContainerBodyheadersDiv">
-                <span>Proctoring settings</span>
+                <span>
+                  Proctoring settings{" "}
+                  <span
+                    style={{ color: "blue", cursor: "pointer" }}
+                    onClick={() => {}}
+                  >
+                    edit
+                  </span>
+                </span>
               </div>
               <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
                 <FormGroup>
@@ -292,7 +365,15 @@ export default function TestCreatedOverview() {
             </div>
             <div className="testCreatedSettingsLeftContainerCutOffDiv">
               <div className="testCreatedSettingsLeftContainerBodyheadersDiv">
-                <span>Candidate settings</span>
+                <span>
+                  Candidate settings{" "}
+                  <span
+                    style={{ color: "blue", cursor: "pointer" }}
+                    onClick={() => {}}
+                  >
+                    edit
+                  </span>
+                </span>
               </div>
               <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
                 <FormGroup>
@@ -315,7 +396,15 @@ export default function TestCreatedOverview() {
             </div>
             <div className="testCreatedSettingsLeftContainerEmailDiv">
               <div className="testCreatedSettingsLeftContainerBodyheadersDiv">
-                <span>Email and Report settings</span>
+                <span>
+                  Email and Report settings{" "}
+                  <span
+                    style={{ color: "blue", cursor: "pointer" }}
+                    onClick={() => {}}
+                  >
+                    edit
+                  </span>
+                </span>
               </div>
               <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
                 <FormGroup>
@@ -364,8 +453,37 @@ export default function TestCreatedOverview() {
               <div className="testNameDiv">
                 <span>Test name</span>
                 <div className="testNameInputDiv">
-                  <span>Trainee Software engineer test</span>
-                  <span style={{ color: "blue" }}>edit</span>
+                  {testnameedit ? (
+                    <>
+                      <input
+                        placeholder="Enter New Name"
+                        className="testNameEditInput"
+                        onChange={(e) => {
+                          dispatch(addTestName(e.target.value));
+                        }}
+                      ></input>
+                      <span
+                        style={{ color: "blue", cursor: "pointer" }}
+                        onClick={() => {
+                          setTestNameEdit(false);
+                        }}
+                      >
+                        Done
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span>{gettestname}</span>
+                      <span
+                        style={{ color: "blue", cursor: "pointer" }}
+                        onClick={() => {
+                          setTestNameEdit(true);
+                        }}
+                      >
+                        edit
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="testNameDiv">
@@ -425,15 +543,30 @@ export default function TestCreatedOverview() {
               <div className="testNameDiv">
                 <span>Starts on</span>
                 <div className="testNameInputDiv">
-                  <span>Mar 31,2023 03:59PM IST</span>
-                  <span style={{ color: "blue" }}>edit</span>
+                  <span>{`${monthname} ${getteststarttime?.getDate()}, ${getteststarttime?.getFullYear()} ${getteststarttime?.getHours()}:${getteststarttime?.getMinutes()} ${timezone} IST`}</span>
+
+                  <span
+                    style={{ color: "blue" }}
+                    onClick={() => {
+                      setDateTimeModal(true);
+                    }}
+                  >
+                    edit
+                  </span>
                 </div>
               </div>
               <div className="testNameDiv">
                 <span>Ends on</span>
                 <div className="testNameInputDiv">
-                  <span>Set end date</span>
-                  <span style={{ color: "blue" }}>edit</span>
+                  <span>{`${endMonthName} ${gettestendtime?.getDate()}, ${gettestendtime?.getFullYear()} ${gettestendtime?.getHours()}:${gettestendtime?.getMinutes()} ${EndTimeZone} IST`}</span>
+                  <span
+                    style={{ color: "blue" }}
+                    onClick={() => {
+                      setEndTimeModal(true);
+                    }}
+                  >
+                    edit
+                  </span>
                 </div>
               </div>
               <div className="testNameDiv">
