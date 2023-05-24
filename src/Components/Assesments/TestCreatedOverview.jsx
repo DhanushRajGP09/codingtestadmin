@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-
+import check from "../../Assets/Icons/check (2).png";
+import grayclose from "../../Assets/Icons/close (2).png";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import switchoff from "../../Assets/Icons/Switch off.png";
 import switchon from "../../Assets/Icons/Switch on.png";
+import axios from "axios";
 import {
+  addParticularTestData,
+  addTestId,
   addTestName,
   getParticularTestData,
   getSelectedQuestionData,
@@ -20,6 +24,9 @@ import { useDispatch, useSelector } from "react-redux";
 import EditTestDurationModal from "../Modals/EditTestDuration/EditTestDurationModal";
 import DateTimeModal from "../Modals/DataTimeModal/DateTimeModal";
 import TestEndTimeModal from "../Modals/DataTimeModal/TestEndTimeModal";
+import ProctoringSettingsModal from "../Modals/Proctoringsettingmodal/ProctoringSettingsModal";
+import EmailAndReportSettings from "../Modals/EmailAndRemoteSettings/EmailAndReportSettings";
+import { getBaseURL } from "../../features/question/QuestionSlice";
 
 export default function TestCreatedOverview() {
   const [visible, setVisible] = useState("true");
@@ -32,8 +39,41 @@ export default function TestCreatedOverview() {
 
   const [totalscore, setTotalScore] = useState(0);
 
+  const getParticularTest = () => {
+    dispatch(addTestId(testID));
+    axios
+      .get(
+        `${getbaseurl}/test/view-test`,
+
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            testId: testID,
+          },
+        }
+      )
+      .then(function (response) {
+        dispatch(addParticularTestData(response.data.data));
+        dispatch(addTestName(getparticulartestdata.testName));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getParticularTest();
+  }, []);
+
   const getparticulartestdata = useSelector(getParticularTestData);
-  console.log("particulardata", getparticulartestdata);
+  console.log("particulardat", getparticulartestdata);
+  const testID = JSON.parse(localStorage.getItem("testID"));
+
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  const getbaseurl = useSelector(getBaseURL);
 
   useEffect(() => {
     let score = 0;
@@ -41,10 +81,6 @@ export default function TestCreatedOverview() {
       score += item.question.totalScoreForQuestion;
     }
     setTotalScore(score);
-  }, []);
-
-  useEffect(() => {
-    dispatch(addTestName(getparticulartestdata.testName));
   }, []);
 
   const gettesthour = useSelector(getTestHour);
@@ -86,6 +122,8 @@ export default function TestCreatedOverview() {
   const [testnameedit, setTestNameEdit] = useState(false);
 
   const gettestname = useSelector(getTestName);
+  const [proctoringmodal, setProctoringModal] = useState(false);
+  const [emailreportmodal, setEmailReportModal] = useState(false);
 
   return (
     <>
@@ -94,6 +132,7 @@ export default function TestCreatedOverview() {
           edittestmodal={edittestmodal}
           setEditTestModal={setEditTestModal}
         />
+
         <DateTimeModal
           datetimemodal={datetimemodal}
           setDateTimeModal={setDateTimeModal}
@@ -101,6 +140,14 @@ export default function TestCreatedOverview() {
         <TestEndTimeModal
           endtimemodal={endtimemodal}
           setEndTimeModal={setEndTimeModal}
+        />
+        <ProctoringSettingsModal
+          proctoringmodal={proctoringmodal}
+          setProctoringModal={setProctoringModal}
+        />
+        <EmailAndReportSettings
+          emailreportmodal={emailreportmodal}
+          setEmailReportModal={setEmailReportModal}
         />
         <div className="testCreatedRightContainerHeading">
           <span>Overview</span>
@@ -208,56 +255,40 @@ export default function TestCreatedOverview() {
                 These are recommended settings that you can enable for the test
               </span>
             </div>
-            <div className="testCreatedSettingsLeftContainerCutOffDiv">
-              <div className="testCreatedSettingsLeftContainerBodyheadersDiv">
-                <span>
-                  Cut-off settings{" "}
-                  <span
-                    style={{ color: "blue", cursor: "pointer" }}
-                    onClick={() => {}}
-                  >
-                    edit
-                  </span>
-                </span>
-              </div>
-              <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Cut-off score has not been set."
-                  />
-                </FormGroup>
-                <span
-                  style={{
-                    color: "gray",
-                    fontWeight: "400",
-                    fontSize: "16px",
-                    marginLeft: "4%",
-                  }}
-                >
-                  All Cut-off settings are disabled
-                </span>
-              </div>
-            </div>
+
             <div className="testCreatedSettingsLeftContainerProctoringDiv">
               <div className="testCreatedSettingsLeftContainerBodyheadersDiv">
                 <span>
                   Proctoring settings{" "}
                   <span
                     style={{ color: "blue", cursor: "pointer" }}
-                    onClick={() => {}}
+                    onClick={() => {
+                      setProctoringModal(true);
+                    }}
                   >
                     edit
                   </span>
                 </span>
               </div>
               <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Enable random question shuffling"
-                  />
-                </FormGroup>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                  }}
+                >
+                  {getparticulartestdata?.questionShuffling ? (
+                    <img src={check} className="proctoringTrueIcon"></img>
+                  ) : (
+                    <img src={grayclose} className="proctoringTrueIcon"></img>
+                  )}
+
+                  <span style={{ marginLeft: "1%" }}>
+                    Enable random question shuffling
+                  </span>
+                </div>
                 <span
                   style={{
                     color: "gray",
@@ -270,12 +301,25 @@ export default function TestCreatedOverview() {
                 </span>
               </div>
               <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Disable copy and paste in the code editor from external sources"
-                  />
-                </FormGroup>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                  }}
+                >
+                  {getparticulartestdata?.allowCopyPaste ? (
+                    <img src={check} className="proctoringTrueIcon"></img>
+                  ) : (
+                    <img src={grayclose} className="proctoringTrueIcon"></img>
+                  )}
+
+                  <span style={{ marginLeft: "1%" }}>
+                    Disable copy and paste in the code editor from external
+                    sources
+                  </span>
+                </div>
                 <span
                   style={{
                     color: "gray",
@@ -289,12 +333,24 @@ export default function TestCreatedOverview() {
                 </span>
               </div>
               <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Take candidate's snapshots during the test"
-                  />
-                </FormGroup>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                  }}
+                >
+                  {getparticulartestdata?.takeCandidatesSnapshot ? (
+                    <img src={check} className="proctoringTrueIcon"></img>
+                  ) : (
+                    <img src={grayclose} className="proctoringTrueIcon"></img>
+                  )}
+
+                  <span style={{ marginLeft: "1%" }}>
+                    Take candidate's snapshots during the test
+                  </span>
+                </div>
                 <span
                   style={{
                     color: "gray",
@@ -307,12 +363,24 @@ export default function TestCreatedOverview() {
                 </span>
               </div>
               <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Restrict candidates to the fullscreen mode during the test"
-                  />
-                </FormGroup>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                  }}
+                >
+                  {getparticulartestdata?.takeCandidatesSnapshot ? (
+                    <img src={check} className="proctoringTrueIcon"></img>
+                  ) : (
+                    <img src={grayclose} className="proctoringTrueIcon"></img>
+                  )}
+
+                  <span style={{ marginLeft: "1%" }}>
+                    Restrict candidates to the fullscreen mode during the test
+                  </span>
+                </div>
                 <span
                   style={{
                     color: "gray",
@@ -326,12 +394,24 @@ export default function TestCreatedOverview() {
                 </span>
               </div>
               <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Logout on leaving the test interface"
-                  />
-                </FormGroup>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                  }}
+                >
+                  {getparticulartestdata?.logoutOnLeavingTestInterface ? (
+                    <img src={check} className="proctoringTrueIcon"></img>
+                  ) : (
+                    <img src={grayclose} className="proctoringTrueIcon"></img>
+                  )}
+
+                  <span style={{ marginLeft: "1%" }}>
+                    Logout on leaving the test interface
+                  </span>
+                </div>
                 <span
                   style={{
                     color: "gray",
@@ -344,12 +424,24 @@ export default function TestCreatedOverview() {
                 </span>
               </div>
               <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Restrict test access for certain IP addresses"
-                  />
-                </FormGroup>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                  }}
+                >
+                  {getparticulartestdata?.restrictTestAccessForIp ? (
+                    <img src={check} className="proctoringTrueIcon"></img>
+                  ) : (
+                    <img src={grayclose} className="proctoringTrueIcon"></img>
+                  )}
+
+                  <span style={{ marginLeft: "1%" }}>
+                    Restrict test access for certain IP addresses
+                  </span>
+                </div>
                 <span
                   style={{
                     color: "gray",
@@ -376,12 +468,24 @@ export default function TestCreatedOverview() {
                 </span>
               </div>
               <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Full name, Personal email ID"
-                  />
-                </FormGroup>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                  }}
+                >
+                  {getparticulartestdata?.restrictTestAccessForIp ? (
+                    <img src={check} className="proctoringTrueIcon"></img>
+                  ) : (
+                    <img src={grayclose} className="proctoringTrueIcon"></img>
+                  )}
+
+                  <span style={{ marginLeft: "1%" }}>
+                    Full name, Personal email ID
+                  </span>
+                </div>
                 <span
                   style={{
                     color: "gray",
@@ -400,19 +504,33 @@ export default function TestCreatedOverview() {
                   Email and Report settings{" "}
                   <span
                     style={{ color: "blue", cursor: "pointer" }}
-                    onClick={() => {}}
+                    onClick={() => {
+                      setEmailReportModal(true);
+                    }}
                   >
                     edit
                   </span>
                 </span>
               </div>
               <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Receive a report after a candidate completes the test"
-                  />
-                </FormGroup>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                  }}
+                >
+                  {getparticulartestdata?.restrictTestAccessForIp ? (
+                    <img src={check} className="proctoringTrueIcon"></img>
+                  ) : (
+                    <img src={grayclose} className="proctoringTrueIcon"></img>
+                  )}
+
+                  <span style={{ marginLeft: "1%" }}>
+                    Receive a report after a candidate completes the test
+                  </span>
+                </div>
                 <span
                   style={{
                     color: "gray",
@@ -426,12 +544,20 @@ export default function TestCreatedOverview() {
                 </span>
               </div>
               <div className="testCreatedSettingsLeftContainerBodyCutOffDiv">
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Candidate's self assessment report"
-                  />
-                </FormGroup>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                  }}
+                >
+                  {<img src={grayclose} className="proctoringTrueIcon"></img>}
+
+                  <span style={{ marginLeft: "1%" }}>
+                    Candidate's self assessment report
+                  </span>
+                </div>
                 <span
                   style={{
                     color: "gray",
@@ -546,7 +672,7 @@ export default function TestCreatedOverview() {
                   <span>{`${monthname} ${getteststarttime?.getDate()}, ${getteststarttime?.getFullYear()} ${getteststarttime?.getHours()}:${getteststarttime?.getMinutes()} ${timezone} IST`}</span>
 
                   <span
-                    style={{ color: "blue" }}
+                    style={{ color: "blue", cursor: "pointer" }}
                     onClick={() => {
                       setDateTimeModal(true);
                     }}
@@ -560,42 +686,13 @@ export default function TestCreatedOverview() {
                 <div className="testNameInputDiv">
                   <span>{`${endMonthName} ${gettestendtime?.getDate()}, ${gettestendtime?.getFullYear()} ${gettestendtime?.getHours()}:${gettestendtime?.getMinutes()} ${EndTimeZone} IST`}</span>
                   <span
-                    style={{ color: "blue" }}
+                    style={{ color: "blue", cursor: "pointer" }}
                     onClick={() => {
                       setEndTimeModal(true);
                     }}
                   >
                     edit
                   </span>
-                </div>
-              </div>
-              <div className="testNameDiv">
-                <span>Test Link</span>
-                <div className="testNameInputDiv">
-                  <span style={{ width: "80%" }}>
-                    http://roboearth.com/TraineeSoftware engineer test
-                  </span>
-                  <span style={{ color: "blue" }}>edit</span>
-                </div>
-              </div>
-              <div className="testNameDiv">
-                <span>Test type</span>
-                <div className="testNameInputDiv">
-                  <span style={{ width: "80%" }}>Invite-only</span>
-                  <span style={{ color: "blue" }}>edit</span>
-                </div>
-              </div>
-              <div className="testNameDiv">
-                <span>Recruiter API ID</span>
-                <div className="testNameInputDiv">
-                  <span style={{ width: "80%" }}>185511</span>
-                </div>
-              </div>
-              <div className="testNameDiv">
-                <span>Tags</span>
-                <div className="testNameInputDiv">
-                  <span style={{ width: "80%" }}></span>
-                  <span style={{ color: "blue" }}>edit</span>
                 </div>
               </div>
             </div>

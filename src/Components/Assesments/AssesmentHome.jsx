@@ -199,6 +199,10 @@ export default function AssesmentHome() {
                       <span
                         onClick={() => {
                           getParticularTest(data._id);
+                          localStorage.setItem(
+                            "testID",
+                            JSON.stringify(data._id)
+                          );
                         }}
                         style={{ cursor: "pointer" }}
                       >

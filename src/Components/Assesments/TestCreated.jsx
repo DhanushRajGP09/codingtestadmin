@@ -112,7 +112,7 @@ export default function TestCreated() {
           {getparticulartestdata?.testName} test
         </span>
         <div className="testHeaderFunctionsDiv">
-          <div className="testHeaderFunctionCopy">Copy link</div>
+          <div className="testHeaderFunctionCopy"></div>
           <div className="testHeaderFunctionCopy">Preview</div>
           {getparticulartestdata?.testPublished ? (
             <button
