@@ -15,6 +15,43 @@ const TestSlice = createSlice({
     particularTestData: {},
     TestStartTime: new Date(),
     TestEndTime: new Date(),
+    adminsData: [],
+    AdminDetails: {},
+    testInstructions: `<p style={{ marginTop: "1%" }}>
+              1. Ensure that you are attempting the test using the correct email
+              ID.
+            </p>
+            <p style={{ marginTop: "1%" }}>
+              2. You must click submit after you answer each question
+            </p>
+            <p style={{ marginTop: "1%" }}>
+              3. If you need assistance during the test, click the question
+              mark(?) in the lower-right corner of the page to raise a ticket.
+            </p>
+
+            <p>
+       
+              4. Once the test has started, the timer cannot be paused. You have
+              to complete the test in one attempt.
+            </p>
+            <p style={{ marginTop: "1%" }}>
+          
+              5. Do not close the browser window or tab of the test interface
+              before you submit your final answers.
+            </p>
+            <p style={{ marginTop: "1%" }}>
+              6. It is recommended that you ensure that your system meets and
+              check your Internet connection before starting the test.
+            </p>
+            <p style={{ marginTop: "1%" }}>
+              7. It is recommended that you attempt the test in an incognito or
+              private window so that any extensions installed do not interfere
+              with the test environment.
+            </p>
+            <p style={{ marginTop: "1%" }}>
+              8. We recommend that you close all other windows and tabs to
+              ensure that there are no distractions.
+            </p>`,
   },
 
   reducers: {
@@ -29,7 +66,12 @@ const TestSlice = createSlice({
         state.Candidates.unshift(payload);
       }
     },
-
+    AddadminsData: (state, { payload }) => {
+      state.adminsData = payload;
+    },
+    AddadminDetails: (state, { payload }) => {
+      state.AdminDetails = payload;
+    },
     removeFromCandidates: (state, action) => {
       state.Candidates = state.Candidates.filter(
         (data) => data !== action.payload
@@ -105,6 +147,9 @@ const TestSlice = createSlice({
     addTestId: (state, action) => {
       state.TestId = action.payload;
     },
+    addTestInstructions: (state, action) => {
+      state.testInstructions = action.payload;
+    },
 
     concateSelectedQuestionID: (state, action) => {
       state.SelectedQuestionId = state.SelectedQuestionId.concat(
@@ -117,6 +162,7 @@ const TestSlice = createSlice({
 export const {
   addCandidates,
   removeFromCandidates,
+  addTestInstructions,
   addSelectedQuestionId,
   removeFromSelectedQuestionId,
   clearSelectedQuestionId,
@@ -134,6 +180,8 @@ export const {
   addTestStartTime,
   addTestEndTime,
   addTestName,
+  AddadminsData,
+  AddadminDetails,
 } = TestSlice.actions;
 
 export const getAllTestData = (state) => state.Test.AllTestData;
@@ -149,6 +197,8 @@ export const getTestMinutes = (state) => state.Test.TestDurationMinutes;
 export const getSelectedMultipleQuestions = (state) =>
   state.Test.SelectedMultipleQuestionId;
 export const getTestEndTime = (state) => state.Test.TestEndTime;
+export const getAdminsData = (state) => state.Test.adminsData;
 export const getTestName = (state) => state.Test.TestName;
-
+export const getAdminDetails = (state) => state.Test.AdminDetails;
+export const getTestInstructions = (state) => state.Test.testInstructions;
 export default TestSlice.reducer;

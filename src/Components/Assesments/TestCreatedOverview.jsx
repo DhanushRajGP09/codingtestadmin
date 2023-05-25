@@ -6,16 +6,24 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import switchoff from "../../Assets/Icons/Switch off.png";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import switchon from "../../Assets/Icons/Switch on.png";
+import parse from "html-react-parser";
 import axios from "axios";
 import {
+  AddadminsData,
   addParticularTestData,
   addTestId,
+  addTestInstructions,
   addTestName,
+  getAdminDetails,
+  getAdminsData,
   getParticularTestData,
   getSelectedQuestionData,
   getTestEndTime,
   getTestHour,
+  getTestInstructions,
   getTestMinutes,
   getTestName,
   getTestStartTime,
@@ -35,7 +43,10 @@ export default function TestCreatedOverview() {
   const dispatch = useDispatch();
 
   const getselectedquestionsdata = useSelector(getSelectedQuestionData);
-  console.log("selectedquestion", getselectedquestionsdata);
+
+  const [testdescription, setTestDescription] = useState(true);
+  const [testinstructions, setTestInstructions] = useState(true);
+  const [value, setValue] = useState("No description");
 
   const [totalscore, setTotalScore] = useState(0);
   const [questionshuffling, setQuestionShuffling] = useState(false);
@@ -70,6 +81,48 @@ export default function TestCreatedOverview() {
         setFullScreenMode(response.data.data.restrictCandidatesToFullscreen);
         setLogoutOnLeaving(response.data.data.logoutOnLeavingTestInterface);
         setRestrictCertainIp(response.data.data.restrictTestAccessForIp);
+        setValue(response.data.data.testDescription);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const getAllAdmins = () => {
+    axios
+      .get(
+        `${getbaseurl}/user/get-all-admins`,
+
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            testId: testID,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("admins", response);
+        dispatch(AddadminsData(response.data.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  const getInstructions = () => {
+    axios
+      .get(
+        `${getbaseurl}/test/test-instruction`,
+
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("gettestinstructions", response);
       })
       .catch(function (error) {
         console.log(error);
@@ -78,11 +131,13 @@ export default function TestCreatedOverview() {
 
   useEffect(() => {
     getParticularTest();
+    getAllAdmins();
+    getInstructions();
     window.scrollTo(0, 0);
   }, []);
 
   const getparticulartestdata = useSelector(getParticularTestData);
-  console.log("particulardat", getparticulartestdata);
+
   const testID = JSON.parse(localStorage.getItem("testID"));
 
   const token = JSON.parse(localStorage.getItem("token"));
@@ -104,7 +159,6 @@ export default function TestCreatedOverview() {
   const [datetimemodal, setDateTimeModal] = useState(false);
 
   const getteststarttime = useSelector(getTestStartTime);
-  console.log("getteststari", typeof getteststarttime);
 
   const date = new Date();
 
@@ -124,19 +178,13 @@ export default function TestCreatedOverview() {
   ];
 
   const monthname = months[getteststarttime?.getMonth()];
-
   const timezone = getteststarttime?.getHours() > 12 ? "PM" : "AM";
-
   const gettestendtime = useSelector(getTestEndTime);
   const endMonthName = months[gettestendtime?.getMonth()];
   const EndTimeZone = gettestendtime?.getHours() > 12 ? "PM" : "AM";
-
   const [endtimemodal, setEndTimeModal] = useState(false);
-
   const [testnameedit, setTestNameEdit] = useState(false);
-
   const gettestname = useSelector(getTestName);
-  console.log("testetsetse", gettestname);
   const [proctoringmodal, setProctoringModal] = useState(false);
   const [emailreportmodal, setEmailReportModal] = useState(false);
 
@@ -163,6 +211,38 @@ export default function TestCreatedOverview() {
         console.log(error);
       });
   };
+
+  const getloggedadmindata = JSON.parse(localStorage.getItem("admin"));
+  console.log("getloggedadm", getloggedadmindata);
+  const getadminsdata = useSelector(getAdminsData);
+  const gettestinstructions = useSelector(getTestInstructions);
+  const [instructionvalue, setInstructionValue] = useState(gettestinstructions);
+
+  const handleTestInstructions = () => {
+    axios
+      .patch(
+        `${getbaseurl}/test/test-instruction`,
+        {
+          testInstructionId: testID,
+          testInstruction: instructionvalue,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("testInstructi", response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    dispatch(addTestInstructions(instructionvalue));
+  }, [instructionvalue]);
 
   return (
     <>
@@ -758,12 +838,20 @@ export default function TestCreatedOverview() {
           <div className="testAdminsHeaderFunctions">
             <span>Point of contact</span>
             <select className="POCInput">
-              <option>Admin</option>
-              <option>a</option>
-              <option>b</option>
-              <option>c</option>
+              <option>
+                {getloggedadmindata.firstName
+                  ? getloggedadmindata.firstName
+                  : "Admin"}
+              </option>
+              {getadminsdata.map((data, index) => {
+                return <option>{data.firstName}</option>;
+              })}
             </select>
-            <button className="publishChangesButton">Add admins</button>
+            {getloggedadmindata.isSuperAdmin ? (
+              <button className="publishChangesButton">Add admins</button>
+            ) : (
+              ""
+            )}
           </div>
         </div>
         <div className="testAdminsTable">
@@ -786,15 +874,29 @@ export default function TestCreatedOverview() {
             <div className="testAdminsHeaderEmpty"></div>
           </div>
           <div className="testAdminsTableBody">
-            <span className="testAdminsTableHeaderName">Admin</span>
+            <span className="testAdminsTableHeaderName">
+              {getloggedadmindata.firstName
+                ? getloggedadmindata.firstName
+                : "Admin"}
+              <span
+                style={{
+                  fontSize: "16px",
+                  color: "white",
+                  backgroundColor: "#0071c5",
+                }}
+              >
+                POC
+              </span>
+            </span>
             <span className="testAdminsTableHeaderEmail">
-              Admin@robosoft.com
+              {getloggedadmindata.email}
             </span>
             <select className="allAccessInput">
               <option>All access</option>
-              <option>a</option>
-              <option>b</option>
-              <option>c</option>
+              <option>Only Questions and Report</option>
+              <option>Only Questions</option>
+              <option>Only Reports</option>
+              <option>Questions and Comments</option>
             </select>
             <div className="testAdminsHeaderEmpty"></div>
           </div>
@@ -805,53 +907,79 @@ export default function TestCreatedOverview() {
           style={{ marginTop: "3%" }}
         >
           <span>Test description</span>
-          <span className="viewQuestionsButton">add</span>
+          {testdescription ? (
+            <span
+              className="viewQuestionsButton"
+              onClick={() => {
+                setTestDescription(false);
+              }}
+            >
+              add
+            </span>
+          ) : (
+            <span
+              className="viewQuestionsButton"
+              onClick={() => {
+                setTestDescription(true);
+              }}
+            >
+              Done
+            </span>
+          )}
         </div>
-        <div className="testCreatedTestDescriptionDiv">No details added</div>
+        {testdescription ? (
+          <div className="testCreatedTestDescriptionDiv">No details added</div>
+        ) : (
+          <div className="richTextEditor">
+            <ReactQuill
+              theme="snow"
+              value={value}
+              onChange={setValue}
+              className="textEditor"
+            />
+          </div>
+        )}
+
         <div
           className="testCreatedRightContainerHeading"
           style={{ marginTop: "3%" }}
         >
           <span>Test instructions</span>
-          <span className="viewQuestionsButton">add</span>
+          {testinstructions ? (
+            <span
+              className="viewQuestionsButton"
+              onClick={() => {
+                setTestInstructions(false);
+              }}
+            >
+              add
+            </span>
+          ) : (
+            <span
+              className="viewQuestionsButton"
+              onClick={() => {
+                setTestInstructions(true);
+                handleTestInstructions();
+              }}
+            >
+              Done
+            </span>
+          )}
         </div>
-        <div className="testCreatedtestInstructionsDiv">
-          <p style={{ marginTop: "1%" }}>
-            1. Ensure that you are attempting the test using the correct email
-            ID.
-          </p>
-          <p style={{ marginTop: "1%" }}>
-            2. You must click submit after you answer each question
-          </p>
-          <p style={{ marginTop: "1%" }}>
-            3. If you need assistance during the test, click the question
-            mark(?) in the lower-right corner of the page to raise a ticket.
-          </p>
-
-          <p>
-            {" "}
-            4. Once the test has started, the timer cannot be paused. You have
-            to complete the test in one attempt.
-          </p>
-          <p style={{ marginTop: "1%" }}>
-            {" "}
-            5. Do not close the browser window or tab of the test interface
-            before you submit your final answers.
-          </p>
-          <p style={{ marginTop: "1%" }}>
-            6. It is recommended that you ensure that your system meets and
-            check your Internet connection before starting the test.
-          </p>
-          <p style={{ marginTop: "1%" }}>
-            7. It is recommended that you attempt the test in an incognito or
-            private window so that any extensions installed do not interfere
-            with the test environment.
-          </p>
-          <p style={{ marginTop: "1%" }}>
-            8. We recommend that you close all other windows and tabs to ensure
-            that there are no distractions.
-          </p>
-        </div>
+        {testinstructions ? (
+          <div className="testCreatedtestInstructionsDiv">
+            {parse(instructionvalue)}
+          </div>
+        ) : (
+          <div className="richTextEditor">
+            <ReactQuill
+              theme="snow"
+              value={instructionvalue}
+              onChange={setInstructionValue}
+              className="textEditor"
+            />{" "}
+          </div>
+        )}
       </div>
     </>
   );
