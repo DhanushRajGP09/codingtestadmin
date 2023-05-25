@@ -11,6 +11,7 @@ import TestCreatedOverview from "./TestCreatedOverview";
 import TestCreatedQuestions from "./TestCreatedQuestions";
 import PublishTestModal from "../Modals/PublishTestModal/PublishTestModal";
 import { Link, NavLink } from "react-router-dom";
+import options from "../../Assets/Icons/more.png";
 import TestCreatedTestTaken from "./TestCreatedTestTaken";
 import {
   addIndividualQuestion,
@@ -27,7 +28,11 @@ import axios from "axios";
 import ViewQuestionModal from "../Modals/viewQuestionModal/ViewQuestionModal";
 import { useDispatch, useSelector } from "react-redux";
 import CreateQuestionModal from "../Modals/createQuestionModal/CreateQuestionModal";
-import { getParticularTestData } from "../../features/Test/TestSlice";
+import {
+  getParticularTestData,
+  getTestName,
+} from "../../features/Test/TestSlice";
+import TestOptions from "../Modals/TestOptions/TestOptions";
 
 export default function TestCreated() {
   const navigate = useNavigate();
@@ -82,8 +87,10 @@ export default function TestCreated() {
   const getparticulartestdata = useSelector(getParticularTestData);
 
   const [modal, setModal] = useState(false);
+  const [testoptionsmodal, setTestOptionsModal] = useState(false);
 
   console.log("particularda", getparticulartestdata);
+  const gettestname = useSelector(getTestName);
 
   return (
     <>
@@ -98,6 +105,10 @@ export default function TestCreated() {
         handleQuestionClick={handleQuestionClick}
       />
       <CreateQuestionModal modal={modal} setModal={setModal} />
+      <TestOptions
+        testoptionsmodal={testoptionsmodal}
+        setTestOptionsModal={setTestOptionsModal}
+      />
       <div className="testCreatedHeader">
         <span
           className="testHeaderBackButton"
@@ -108,9 +119,7 @@ export default function TestCreated() {
           {" "}
           {"<"} Back{" "}
         </span>
-        <span className="testCreatedSectionName">
-          {getparticulartestdata?.testName} test
-        </span>
+        <span className="testCreatedSectionName">{gettestname} test</span>
         <div className="testHeaderFunctionsDiv">
           <div className="testHeaderFunctionCopy"></div>
           <div className="testHeaderFunctionCopy">Preview</div>
@@ -133,6 +142,13 @@ export default function TestCreated() {
               Publish
             </button>
           )}
+          <img
+            src={options}
+            style={{ height: "22px", width: "22px", cursor: "pointer" }}
+            onClick={() => {
+              setTestOptionsModal(!testoptionsmodal);
+            }}
+          ></img>
         </div>
       </div>
       <div className="testCreatedBody">

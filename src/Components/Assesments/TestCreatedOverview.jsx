@@ -38,6 +38,13 @@ export default function TestCreatedOverview() {
   console.log("selectedquestion", getselectedquestionsdata);
 
   const [totalscore, setTotalScore] = useState(0);
+  const [questionshuffling, setQuestionShuffling] = useState(false);
+  const [disableCopypaste, setDisableCopyPaste] = useState(false);
+  const [takesnapshots, setTakeSnapshots] = useState(false);
+
+  const [fullscreenmode, setFullScreenMode] = useState(false);
+  const [logoutonleaving, setLogoutOnLeaving] = useState(false);
+  const [restrictcertainIp, setRestrictCertainIp] = useState(false);
 
   const getParticularTest = () => {
     dispatch(addTestId(testID));
@@ -56,7 +63,13 @@ export default function TestCreatedOverview() {
       )
       .then(function (response) {
         dispatch(addParticularTestData(response.data.data));
-        dispatch(addTestName(getparticulartestdata.testName));
+        dispatch(addTestName(response.data.data.testName));
+        setQuestionShuffling(response.data.data.questionShuffling);
+        setDisableCopyPaste(response.data.data.allowCopyPaste);
+        setTakeSnapshots(response.data.data.takeCandidatesSnapshot);
+        setFullScreenMode(response.data.data.restrictCandidatesToFullscreen);
+        setLogoutOnLeaving(response.data.data.logoutOnLeavingTestInterface);
+        setRestrictCertainIp(response.data.data.restrictTestAccessForIp);
       })
       .catch(function (error) {
         console.log(error);
@@ -65,6 +78,7 @@ export default function TestCreatedOverview() {
 
   useEffect(() => {
     getParticularTest();
+    window.scrollTo(0, 0);
   }, []);
 
   const getparticulartestdata = useSelector(getParticularTestData);
@@ -90,7 +104,7 @@ export default function TestCreatedOverview() {
   const [datetimemodal, setDateTimeModal] = useState(false);
 
   const getteststarttime = useSelector(getTestStartTime);
-  console.log("getteststartti", typeof getteststarttime);
+  console.log("getteststari", typeof getteststarttime);
 
   const date = new Date();
 
@@ -122,8 +136,33 @@ export default function TestCreatedOverview() {
   const [testnameedit, setTestNameEdit] = useState(false);
 
   const gettestname = useSelector(getTestName);
+  console.log("testetsetse", gettestname);
   const [proctoringmodal, setProctoringModal] = useState(false);
   const [emailreportmodal, setEmailReportModal] = useState(false);
+
+  const handleTestEdit = () => {
+    axios
+      .patch(
+        `${getbaseurl}/test/edit-test`,
+        {
+          testId: testID,
+          testStartDate: "2023-03-09T00:00:00+05:30",
+          testEndDate: "2023-07-21T23:59:59+05:30",
+          testName: gettestname,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("editname", response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -144,6 +183,21 @@ export default function TestCreatedOverview() {
         <ProctoringSettingsModal
           proctoringmodal={proctoringmodal}
           setProctoringModal={setProctoringModal}
+          getparticulartestdata={getparticulartestdata}
+          testID={testID}
+          getParticularTest={getParticularTest}
+          questionshuffling={questionshuffling}
+          setQuestionShuffling={setQuestionShuffling}
+          disableCopypaste={disableCopypaste}
+          setDisableCopyPaste={setDisableCopyPaste}
+          takesnapshots={takesnapshots}
+          setTakeSnapshots={setTakeSnapshots}
+          fullscreenmode={fullscreenmode}
+          setFullScreenMode={setFullScreenMode}
+          logoutonleaving={logoutonleaving}
+          setLogoutOnLeaving={setLogoutOnLeaving}
+          restrictcertainIp={restrictcertainIp}
+          setRestrictCertainIp={setRestrictCertainIp}
         />
         <EmailAndReportSettings
           emailreportmodal={emailreportmodal}
@@ -279,7 +333,7 @@ export default function TestCreatedOverview() {
                     width: "100%",
                   }}
                 >
-                  {getparticulartestdata?.questionShuffling ? (
+                  {questionshuffling ? (
                     <img src={check} className="proctoringTrueIcon"></img>
                   ) : (
                     <img src={grayclose} className="proctoringTrueIcon"></img>
@@ -309,7 +363,7 @@ export default function TestCreatedOverview() {
                     width: "100%",
                   }}
                 >
-                  {getparticulartestdata?.allowCopyPaste ? (
+                  {disableCopypaste ? (
                     <img src={check} className="proctoringTrueIcon"></img>
                   ) : (
                     <img src={grayclose} className="proctoringTrueIcon"></img>
@@ -341,7 +395,7 @@ export default function TestCreatedOverview() {
                     width: "100%",
                   }}
                 >
-                  {getparticulartestdata?.takeCandidatesSnapshot ? (
+                  {takesnapshots ? (
                     <img src={check} className="proctoringTrueIcon"></img>
                   ) : (
                     <img src={grayclose} className="proctoringTrueIcon"></img>
@@ -371,7 +425,7 @@ export default function TestCreatedOverview() {
                     width: "100%",
                   }}
                 >
-                  {getparticulartestdata?.takeCandidatesSnapshot ? (
+                  {fullscreenmode ? (
                     <img src={check} className="proctoringTrueIcon"></img>
                   ) : (
                     <img src={grayclose} className="proctoringTrueIcon"></img>
@@ -402,7 +456,7 @@ export default function TestCreatedOverview() {
                     width: "100%",
                   }}
                 >
-                  {getparticulartestdata?.logoutOnLeavingTestInterface ? (
+                  {logoutonleaving ? (
                     <img src={check} className="proctoringTrueIcon"></img>
                   ) : (
                     <img src={grayclose} className="proctoringTrueIcon"></img>
@@ -432,7 +486,7 @@ export default function TestCreatedOverview() {
                     width: "100%",
                   }}
                 >
-                  {getparticulartestdata?.restrictTestAccessForIp ? (
+                  {restrictcertainIp ? (
                     <img src={check} className="proctoringTrueIcon"></img>
                   ) : (
                     <img src={grayclose} className="proctoringTrueIcon"></img>
@@ -521,7 +575,7 @@ export default function TestCreatedOverview() {
                     width: "100%",
                   }}
                 >
-                  {getparticulartestdata?.restrictTestAccessForIp ? (
+                  {getparticulartestdata?.candidateReport ? (
                     <img src={check} className="proctoringTrueIcon"></img>
                   ) : (
                     <img src={grayclose} className="proctoringTrueIcon"></img>
@@ -592,6 +646,7 @@ export default function TestCreatedOverview() {
                         style={{ color: "blue", cursor: "pointer" }}
                         onClick={() => {
                           setTestNameEdit(false);
+                          handleTestEdit();
                         }}
                       >
                         Done
@@ -713,9 +768,21 @@ export default function TestCreatedOverview() {
         </div>
         <div className="testAdminsTable">
           <div className="testAdminsTableHeader">
-            <span className="testAdminsTableHeaderName">Name</span>
-            <span className="testAdminsTableHeaderEmail">Email Id</span>
-            <span className="testAdminsTableAccess">Access controls</span>
+            <span
+              className="testAdminsTableHeaderName"
+              style={{ color: "white" }}
+            >
+              Name
+            </span>
+            <span
+              className="testAdminsTableHeaderEmail"
+              style={{ color: "white" }}
+            >
+              Email Id
+            </span>
+            <span className="testAdminsTableAccess" style={{ color: "white" }}>
+              Access controls
+            </span>
             <div className="testAdminsHeaderEmpty"></div>
           </div>
           <div className="testAdminsTableBody">

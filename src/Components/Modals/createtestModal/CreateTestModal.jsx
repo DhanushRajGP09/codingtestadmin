@@ -12,7 +12,11 @@ import FormControl from "@mui/material/FormControl";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { getBaseURL } from "../../../features/question/QuestionSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addParticularTestData,
+  addTestId,
+} from "../../../features/Test/TestSlice";
 
 export default function CreateTestModal(props) {
   const [value, setValue] = React.useState("manually");
@@ -23,6 +27,7 @@ export default function CreateTestModal(props) {
   const [testName, setTestName] = useState("Trainee software test");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const token = JSON.parse(localStorage.getItem("token"));
   console.log("increatetest");
 
@@ -40,6 +45,10 @@ export default function CreateTestModal(props) {
       )
       .then(function (response) {
         console.log("createTest", response);
+        dispatch(addTestId(response.data.data._id));
+        dispatch(addParticularTestData(response.data.data));
+        localStorage.setItem("testID", JSON.stringify(response.data.data._id));
+        navigate("/home/assesments/testcreated");
       })
       .catch(function (error) {
         console.log(error);
@@ -106,7 +115,7 @@ export default function CreateTestModal(props) {
                 style={{ marginTop: "10%" }}
                 onClick={() => {
                   props.setCreateTestModal(false);
-                  navigate("/home/assesments/testcreated");
+
                   handleCreateTest();
                 }}
               >
