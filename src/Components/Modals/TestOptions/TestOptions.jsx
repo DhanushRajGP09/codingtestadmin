@@ -37,6 +37,28 @@ export default function TestOptions(props) {
       });
   };
 
+  const handleClone = () => {
+    axios
+      .post(
+        `${getbaseurl}/test/clone-test`,
+        {
+          testId: testID,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("test cloned", response);
+        navigate("/home/assesments");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <div
       className="TestOptionsModal"
@@ -53,7 +75,14 @@ export default function TestOptions(props) {
             >
               Delete test
             </div>
-            <div className="TestOptionsButton">Clone test</div>
+            <div
+              className="TestOptionsButton"
+              onClick={() => {
+                handleClone();
+              }}
+            >
+              Clone test
+            </div>
           </div>
         </div>
       </div>

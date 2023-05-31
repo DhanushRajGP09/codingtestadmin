@@ -1,8 +1,41 @@
 import React from "react";
 import close from "../../../Assets/Icons/closemodal2.png";
 import "./PublishTestModal.css";
+import { getBaseURL } from "../../../features/question/QuestionSlice";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 export default function PublishTestModal(props) {
+  const testID = JSON.parse(localStorage.getItem("testID"));
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  const getbaseurl = useSelector(getBaseURL);
+
+  console.log("inpublish");
+
+  const handlePublish = () => {
+    axios
+      .post(
+        `${getbaseurl}/test/publish-test`,
+        {},
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            testId: testID,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("test Published", response);
+        props.setPublishTestModal(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <div
       className="createQuestionModal"
@@ -39,7 +72,8 @@ export default function PublishTestModal(props) {
                 className="publishChangesButton"
                 onClick={() => {
                   props.setPublished(true);
-                  props.setPublishTestModal(false);
+
+                  handlePublish();
                 }}
               >
                 Publish

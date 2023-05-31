@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import close from "../../../Assets/Icons/closemodal2.png";
 import "./EditTestDurationModal.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 import {
   addTestDurationHour,
   addTestDurationMinutes,
+  getTestHour,
+  getTestMinutes,
 } from "../../../features/Test/TestSlice";
+import { getBaseURL } from "../../../features/question/QuestionSlice";
 
 export default function EditTestDurationModal(props) {
   const [hour, setHour] = useState("00");
@@ -16,6 +20,35 @@ export default function EditTestDurationModal(props) {
     dispatch(addTestDurationHour(hour));
     dispatch(addTestDurationMinutes(minutes));
     props.setEditTestModal(false);
+  };
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  const getbaseurl = useSelector(getBaseURL);
+  const gettesthour = useSelector(getTestHour);
+  const gettestminutes = useSelector(getTestMinutes);
+
+  const testID = JSON.parse(localStorage.getItem("testID"));
+
+  const handleTestDuration = () => {
+    axios
+      .patch(
+        `${getbaseurl}/test/edit-test`,
+        {
+          testId: testID,
+          testDuration: `${hour}:${minutes}:00`,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("duration edited", response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (
@@ -78,6 +111,8 @@ export default function EditTestDurationModal(props) {
                 className="saveTestDurationButton"
                 onClick={() => {
                   handleSave();
+                  handleTestDuration();
+                  props.setTestDuration(`${hour}:${minutes}:00`);
                 }}
               >
                 Save

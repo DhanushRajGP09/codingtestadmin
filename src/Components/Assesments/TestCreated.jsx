@@ -36,6 +36,10 @@ import TestOptions from "../Modals/TestOptions/TestOptions";
 
 export default function TestCreated() {
   const navigate = useNavigate();
+  const testID = JSON.parse(localStorage.getItem("testID"));
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  const getbaseurl = useSelector(getBaseURL);
 
   const [visible, setVisible] = useState("true");
   const [testStatus, setTestStatus] = useState("ON");
@@ -53,10 +57,6 @@ export default function TestCreated() {
   const [published, setPublished] = useState(true);
   const [viewmodal, setViewModal] = useState(false);
   const dispatch = useDispatch();
-
-  const token = JSON.parse(localStorage.getItem("token"));
-
-  const getbaseurl = useSelector(getBaseURL);
 
   const handleQuestionClick = (id) => {
     axios
@@ -123,7 +123,7 @@ export default function TestCreated() {
         <div className="testHeaderFunctionsDiv">
           <div className="testHeaderFunctionCopy"></div>
           <div className="testHeaderFunctionCopy">Preview</div>
-          {getparticulartestdata?.testPublished ? (
+          {getparticulartestdata?.testDetails?.testPublished ? (
             <button
               className="publishChangesButton"
               onClick={() => {
@@ -153,7 +153,7 @@ export default function TestCreated() {
       </div>
       <div className="testCreatedBody">
         <div className="testCreatedLeftContainer">
-          {getparticulartestdata?.testPublished ? (
+          {getparticulartestdata?.testDetails?.testPublished ? (
             <>
               <div className="testCreatedLeftContainerDetails">
                 <span className="testDetialsText">Candidates</span>

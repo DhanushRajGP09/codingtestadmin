@@ -117,6 +117,9 @@ const TestSlice = createSlice({
     clearSelectedQuestionId: (state, action) => {
       state.SelectedQuestionId = [];
     },
+    moveSelectedQuestionId: (state, action) => {
+      state.SelectedQuestionId = action.payload;
+    },
     clearSelectedMultipleQuestionId: (state, action) => {
       state.SelectedMultipleQuestionId = [];
     },
@@ -174,6 +177,7 @@ export const {
   clearSelectedQuestionData,
   addTestDurationHour,
   addTestDurationMinutes,
+  moveSelectedQuestionId,
   addSelectedMultipleQuestionId,
   removeFromSelectedMultipleQuestionId,
   clearSelectedMultipleQuestionId,

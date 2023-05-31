@@ -21,6 +21,7 @@ import {
   getParticularTestData,
   getSelectedMultipleQuestions,
   getSelectedQuestionId,
+  moveSelectedQuestionId,
   removeFromSelectedQuestionId,
 } from "../../features/Test/TestSlice";
 import { useNavigate } from "react-router";
@@ -31,7 +32,7 @@ export default function SelectQuestions() {
   const getbaseurl = useSelector(getBaseURL);
   const getselectedquestionid = useSelector(getSelectedQuestionId);
 
-  console.log("selectedquestionidinseles", getselectedquestionid);
+  console.log("selectedquestionidinsel", getselectedquestionid);
 
   const getselectedmultiplequestion = useSelector(getSelectedMultipleQuestions);
   console.log("gegeg", getselectedmultiplequestion);
@@ -39,6 +40,7 @@ export default function SelectQuestions() {
   const navigate = useNavigate();
   const [checked, setChecked] = React.useState(false);
   const [visible, setVisible] = useState(false);
+  const [questionIds, setQuestionIds] = useState([]);
 
   const testID = JSON.parse(localStorage.getItem("testID"));
   const getParticularTest = () => {
@@ -59,6 +61,10 @@ export default function SelectQuestions() {
       .then(function (response) {
         dispatch(addParticularTestData(response.data.data));
         dispatch(addTestName(response.data.data.testName));
+        dispatch(
+          moveSelectedQuestionId(response.data.data.testDetails.questionId)
+        );
+        setQuestionIds(response.data.data.testDetails.questionId);
       })
       .catch(function (error) {
         console.log(error);
@@ -132,13 +138,13 @@ export default function SelectQuestions() {
       });
   };
 
-  const handleTestQuestionIds = () => {
+  const handleTestQuestionIds = (array) => {
     axios
       .patch(
         `${getbaseurl}/test/edit-test`,
         {
           testId: testID,
-          questionId: getselectedquestionid,
+          questionId: array,
         },
         {
           headers: {
@@ -152,6 +158,22 @@ export default function SelectQuestions() {
       .catch(function (error) {
         console.log(error);
       });
+  };
+
+  const handleQuestionIds = (id) => {
+    let addarray = getselectedquestionid;
+    let newarray = [];
+    newarray.push(id);
+    addarray = addarray.concat(newarray);
+    console.log("array addi", addarray, newarray);
+    handleTestQuestionIds(addarray);
+  };
+
+  const removeHandleQuestionIds = (id) => {
+    let array = getselectedquestionid;
+    array = array.filter((item) => item !== id);
+    console.log("this is arra", array);
+    handleTestQuestionIds(array);
   };
 
   return (
@@ -225,6 +247,9 @@ export default function SelectQuestions() {
                     onClick={() => {
                       document.getElementById(`option${index}`).src =
                         blankcheckbox;
+                      console.log("clicking");
+                      dispatch(removeFromSelectedQuestionId(data._id));
+                      removeHandleQuestionIds(data._id);
                     }}
                   ></img>
                 ) : (
@@ -242,9 +267,7 @@ export default function SelectQuestions() {
                           checkbox;
                         console.log("hihi");
                         dispatch(addSelectedQuestionId(data._id));
-
-                        handleTestQuestionIds();
-
+                        handleQuestionIds(data._id);
                         if (
                           document.getElementById(`option${index}`).src ===
                           checkbox
@@ -253,8 +276,9 @@ export default function SelectQuestions() {
                       } else {
                         setVisible("false");
                         document.getElementById(`option${index}`).src =
-                          blankcheckbox;
+                          checkbox;
                         dispatch(removeFromSelectedQuestionId(data._id));
+                        handleQuestionIds();
                       }
                     }}
                   ></img>
@@ -276,7 +300,12 @@ export default function SelectQuestions() {
                       getparticulartestdata?.testDetails?.questionId?.includes(
                         data._id
                       ) ? (
-                        <span style={{ color: "red", cursor: "pointer" }}>
+                        <span
+                          style={{ color: "red", cursor: "pointer" }}
+                          onClick={() => {
+                            handleTestQuestionIds();
+                          }}
+                        >
                           Remove from test
                         </span>
                       ) : (

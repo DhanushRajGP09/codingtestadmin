@@ -15,6 +15,7 @@ import {
   AddTestDescription,
   AddadminsData,
   addParticularTestData,
+  addSelectedQuestionId,
   addTestId,
   addTestInstructions,
   addTestName,
@@ -29,6 +30,7 @@ import {
   getTestMinutes,
   getTestName,
   getTestStartTime,
+  moveSelectedQuestionId,
 } from "../../features/Test/TestSlice";
 import { useDispatch, useSelector } from "react-redux";
 import EditTestDurationModal from "../Modals/EditTestDuration/EditTestDurationModal";
@@ -53,6 +55,8 @@ export default function TestCreatedOverview() {
 
   const [totalscore, setTotalScore] = useState(0);
   const [questionshuffling, setQuestionShuffling] = useState(false);
+  const [testduration, setTestDuration] = useState("");
+
   const [disableCopypaste, setDisableCopyPaste] = useState(false);
   const [takesnapshots, setTakeSnapshots] = useState(false);
   const [fullscreenmode, setFullScreenMode] = useState(false);
@@ -60,6 +64,9 @@ export default function TestCreatedOverview() {
   const [restrictcertainIp, setRestrictCertainIp] = useState(false);
   const [testaccess, setTestAccess] = useState(false);
   const [questiondetails, setQuestionDetails] = useState([]);
+  const [easy, setEasy] = useState(0);
+  const [medium, setMedium] = useState(0);
+  const [hard, setHard] = useState(0);
 
   const getParticularTest = () => {
     dispatch(addTestId(testID));
@@ -96,9 +103,20 @@ export default function TestCreatedOverview() {
             ? response.data.data.testDetails.testDescription
             : value
         );
+        setTestDuration(
+          response.data.data.testDetails.testDuration
+            ? response.data.data.testDetails.testDuration
+            : `${gettesthour}:${gettestminutes}:00`
+        );
+        dispatch(
+          moveSelectedQuestionId(response.data.data.testDetails.questionId)
+        );
         setTestAccess(response.data.data.testDetails.testAccess);
         setQuestionDetails(response.data.data.questionDetails);
         handleTotalScore(response.data.data.questionDetails);
+        handleEasy(response.data.data.questionDetails);
+        handleMedium(response.data.data.questionDetails);
+        handleHard(response.data.data.questionDetails);
       })
       .catch(function (error) {
         console.log(error);
@@ -179,6 +197,7 @@ export default function TestCreatedOverview() {
 
     handlepointOfContact(getloggedadmindata._id);
     handleTestInstructions();
+    handleTestDuration();
     window.scrollTo(0, 0);
   }, []);
 
@@ -199,6 +218,35 @@ export default function TestCreatedOverview() {
     setTotalScore(score);
   };
 
+  const handleEasy = (questions) => {
+    let level = 0;
+    for (let item of questions) {
+      if (item.difficultyLevel == "easy") {
+        level += 1;
+      }
+    }
+    setEasy(level);
+  };
+
+  const handleMedium = (questions) => {
+    let level = 0;
+    for (let item of questions) {
+      if (item.difficultyLevel == "medium") {
+        level += 1;
+      }
+    }
+    setMedium(level);
+  };
+
+  const handleHard = (questions) => {
+    let level = 0;
+    for (let item of questions) {
+      if (item.difficultyLevel == "hard") {
+        level += 1;
+      }
+    }
+    setHard(level);
+  };
   const gettesthour = useSelector(getTestHour);
   const gettestminutes = useSelector(getTestMinutes);
   const [edittestmodal, setEditTestModal] = useState(false);
@@ -260,7 +308,7 @@ export default function TestCreatedOverview() {
       });
   };
 
-  console.log("getloggedadmin", getloggedadmindata);
+  console.log("getloggedadmin ", getloggedadmindata);
   const getadminsdata = useSelector(getAdminsData);
   const gettestinstructions = useSelector(getTestInstructions);
   const [instructionvalue, setInstructionValue] = useState(gettestinstructions);
@@ -281,6 +329,28 @@ export default function TestCreatedOverview() {
       )
       .then(function (response) {
         console.log("instructions edited", response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handleTestDuration = () => {
+    axios
+      .patch(
+        `${getbaseurl}/test/edit-test`,
+        {
+          testId: testID,
+          testDuration: testduration,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("duration edited", response);
       })
       .catch(function (error) {
         console.log(error);
@@ -323,6 +393,7 @@ export default function TestCreatedOverview() {
         <EditTestDurationModal
           edittestmodal={edittestmodal}
           setEditTestModal={setEditTestModal}
+          setTestDuration={setTestDuration}
         />
 
         <DateTimeModal
@@ -389,9 +460,9 @@ export default function TestCreatedOverview() {
                 Programming
               </span>
               <span className="viewQuestionsPresentContainerHeaderDifficultyLevel">
-                {/* {easy > 0 ? `Easy(${})` : ""}
-                {medium > 0 ? `,Medium(${})` : ""}
-                {hard > 0 ? `,Hard(${})` : ""} */}
+                {easy > 0 ? `Easy(${easy}) ${medium > 0 ? "," : " "}` : ""}
+                {medium > 0 ? `Medium(${medium}) ${hard > 0 ? "," : " "}` : ""}
+                {hard > 0 ? `,Hard(${hard})` : ""}
               </span>
               <span className="viewQuestionsPresentContainerHeaderDifficultyLevel">
                 {questiondetails.length > 0 ? questiondetails.length : ""}
@@ -406,9 +477,9 @@ export default function TestCreatedOverview() {
                   Test duration
                 </span>
                 <div>
-                  {parseInt(gettesthour) > 0 ? (
+                  {parseInt(testduration.substr(0, 2)) > 0 ? (
                     <span style={{ fontSize: "30px" }}>
-                      {gettesthour}{" "}
+                      {testduration.substr(0, 2)}{" "}
                       <span style={{ fontSize: "23px", fontWeight: "500" }}>
                         hour{" "}
                       </span>
@@ -416,9 +487,9 @@ export default function TestCreatedOverview() {
                   ) : (
                     ""
                   )}
-                  {parseInt(gettestminutes) > 0 ? (
+                  {parseInt(testduration.substr(3, 5)) > 0 ? (
                     <span style={{ fontSize: "30px" }}>
-                      {gettestminutes}{" "}
+                      {testduration.substr(3, 5)}{" "}
                       <span style={{ fontSize: "23px", fontWeight: "500" }}>
                         minutes{" "}
                       </span>
