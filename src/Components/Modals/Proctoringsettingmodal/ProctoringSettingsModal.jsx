@@ -23,16 +23,12 @@ export default function ProctoringSettingsModal(props) {
         {
           testId: testID,
 
-          testStartDate: "2023-03-09T00:00:00+05:30",
-          testEndDate: "2023-07-21T23:59:59+05:30",
-          testAccess: true,
           questionShuffling: props.questionshuffling,
           allowCopyPaste: props.disableCopypaste,
           logoutOnLeavingTestInterface: props.logoutonleaving,
           restrictTestAccessForIp: props.restrictcertainIp,
-          instructions: "string",
+
           restrictCandidatesToFullscreen: props.fullscreenmode,
-          candidateReport: false,
         },
         {
           headers: {

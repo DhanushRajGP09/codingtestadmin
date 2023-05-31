@@ -6,7 +6,10 @@ import Checkbox from "@mui/material/Checkbox";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addParticularTestData,
   addSelectedQuestionData,
+  addTestId,
+  addTestName,
   clearSelectedQuestionData,
   getSelectedQuestionData,
   getSelectedQuestionId,
@@ -38,15 +41,45 @@ export default function TestCreatedQuestions(props) {
   const getbaseurl = useSelector(getBaseURL);
 
   const [totalscore, setTotalScore] = useState(0);
+  const [questiondetails, setQuestionDetails] = useState([]);
+
+  const testID = JSON.parse(localStorage.getItem("testID"));
+  const getParticularTest = () => {
+    dispatch(addTestId(testID));
+    axios
+      .get(
+        `${getbaseurl}/test/view-test`,
+
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            testId: testID,
+          },
+        }
+      )
+      .then(function (response) {
+        dispatch(addParticularTestData(response.data.data));
+        dispatch(addTestName(response.data.data.testDetails.testName));
+        setQuestionDetails(response.data.data.questionDetails);
+        handleTotalScore(response.data.data.questionDetails);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
-    let score = 0;
-    for (let item of getselectedquestionsdata) {
-      score += item.question.totalScoreForQuestion;
-    }
-
-    setTotalScore(score);
+    getParticularTest();
   }, []);
+  const handleTotalScore = (questions) => {
+    let score = 0;
+    for (let item of questions) {
+      score += item.totalScoreForQuestion;
+    }
+    setTotalScore(score);
+  };
 
   console.log(totalscore);
 
@@ -58,7 +91,7 @@ export default function TestCreatedQuestions(props) {
       <div className="testCreatedQuestionsContainer ">
         <div className="testCreatedQuestionsContainerHeader">
           <span className="testCreatedSelectedQuestionsText">Questions</span>
-          {getselectedquestionsdata.length > 0 ? (
+          {questiondetails.length > 0 ? (
             <>
               <div className="testCreatedQuestionsContainerHeaderTotal">
                 <span>Total score: {totalscore}</span>
@@ -70,15 +103,7 @@ export default function TestCreatedQuestions(props) {
                 <button
                   className="createANewQuestionButton"
                   onClick={() => {
-                    props.setModal(true);
-                  }}
-                >
-                  Create a new question
-                </button>
-                <button
-                  className="createANewQuestionButton"
-                  onClick={() => {
-                    navigate("/home");
+                    navigate("/home/selectQuestions");
                   }}
                 >
                   Choose from library
@@ -91,7 +116,7 @@ export default function TestCreatedQuestions(props) {
           )}
         </div>
         <div className="testCreatedQuestionsContainerBody">
-          {getselectedquestionsdata.length > 0 ? (
+          {questiondetails.length > 0 ? (
             <div className="testCreatedQuestionsBodyQuestionsDiv">
               <div className="testCreatedQuestionsBodyQuestionsDivHeader">
                 <div
@@ -104,7 +129,7 @@ export default function TestCreatedQuestions(props) {
                   <FormGroup>
                     <FormControlLabel
                       control={<Checkbox />}
-                      label={`Programming Question (${getselectedquestionsdata.length})`}
+                      label={`Programming Question (${questiondetails.length})`}
                     />
                   </FormGroup>
                   <span style={{ color: "gray", fontWeight: "400" }}>
@@ -114,7 +139,7 @@ export default function TestCreatedQuestions(props) {
                 <span style={{ marginRight: "3%" }}>+</span>
               </div>
               <div className="testCreatedQuestionsBodyQuestionsDivBody">
-                {getselectedquestionsdata.map((data, index) => {
+                {questiondetails.map((data, index) => {
                   return (
                     <div className="testCreatedQuestionsBodyQuestionContainer">
                       {" "}
@@ -124,13 +149,13 @@ export default function TestCreatedQuestions(props) {
                       <div className="testCreatedQuestionsBodyQuestionContainerDetails">
                         <span
                           onClick={() => {
-                            props.handleQuestionClick(data.question._id);
+                            props.handleQuestionClick(data._id);
                           }}
                           style={{ cursor: "pointer" }}
                         >
-                          {data.question.questionName}
+                          {data.questionName}
                         </span>
-                        <span>{parse(data.question.questionStatement)}</span>
+                        <span>{parse(data.questionStatement)}</span>
                         <div
                           style={{
                             display: "flex",
@@ -143,18 +168,16 @@ export default function TestCreatedQuestions(props) {
                           <span
                             style={{
                               color:
-                                data.question.difficultyLevel === "hard"
+                                data.difficultyLevel === "hard"
                                   ? "red"
-                                  : data.question.difficultyLevel === "medium"
+                                  : data.difficultyLevel === "medium"
                                   ? "blue"
                                   : "green",
                             }}
                           >
-                            {data.question.difficultyLevel}
+                            {data.difficultyLevel}
                           </span>
-                          <span>
-                            Score: {data.question.totalScoreForQuestion}
-                          </span>
+                          <span>Score: {data.totalScoreForQuestion}</span>
                         </div>
                       </div>
                     </div>
@@ -168,7 +191,7 @@ export default function TestCreatedQuestions(props) {
                 className="publishChangesButton"
                 style={{ marginRight: "2%" }}
                 onClick={() => {
-                  navigate("/home");
+                  navigate("/home/selectQuestions");
                 }}
               >
                 Choose from library

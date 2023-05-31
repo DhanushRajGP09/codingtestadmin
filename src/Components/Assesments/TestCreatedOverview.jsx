@@ -12,6 +12,7 @@ import switchon from "../../Assets/Icons/Switch on.png";
 import parse from "html-react-parser";
 import axios from "axios";
 import {
+  AddTestDescription,
   AddadminsData,
   addParticularTestData,
   addTestId,
@@ -21,6 +22,7 @@ import {
   getAdminsData,
   getParticularTestData,
   getSelectedQuestionData,
+  getTestDescription,
   getTestEndTime,
   getTestHour,
   getTestInstructions,
@@ -43,19 +45,21 @@ export default function TestCreatedOverview() {
   const dispatch = useDispatch();
 
   const getselectedquestionsdata = useSelector(getSelectedQuestionData);
+  const gettestdescription = useSelector(getTestDescription);
 
   const [testdescription, setTestDescription] = useState(true);
   const [testinstructions, setTestInstructions] = useState(true);
-  const [value, setValue] = useState("No description");
+  const [value, setValue] = useState(gettestdescription);
 
   const [totalscore, setTotalScore] = useState(0);
   const [questionshuffling, setQuestionShuffling] = useState(false);
   const [disableCopypaste, setDisableCopyPaste] = useState(false);
   const [takesnapshots, setTakeSnapshots] = useState(false);
-
   const [fullscreenmode, setFullScreenMode] = useState(false);
   const [logoutonleaving, setLogoutOnLeaving] = useState(false);
   const [restrictcertainIp, setRestrictCertainIp] = useState(false);
+  const [testaccess, setTestAccess] = useState(false);
+  const [questiondetails, setQuestionDetails] = useState([]);
 
   const getParticularTest = () => {
     dispatch(addTestId(testID));
@@ -74,14 +78,27 @@ export default function TestCreatedOverview() {
       )
       .then(function (response) {
         dispatch(addParticularTestData(response.data.data));
-        dispatch(addTestName(response.data.data.testName));
-        setQuestionShuffling(response.data.data.questionShuffling);
-        setDisableCopyPaste(response.data.data.allowCopyPaste);
-        setTakeSnapshots(response.data.data.takeCandidatesSnapshot);
-        setFullScreenMode(response.data.data.restrictCandidatesToFullscreen);
-        setLogoutOnLeaving(response.data.data.logoutOnLeavingTestInterface);
-        setRestrictCertainIp(response.data.data.restrictTestAccessForIp);
-        setValue(response.data.data.testDescription);
+        dispatch(addTestName(response.data.data.testDetails.testName));
+        setQuestionShuffling(response.data.data.testDetails.questionShuffling);
+        setDisableCopyPaste(response.data.data.testDetails.allowCopyPaste);
+        setTakeSnapshots(response.data.data.testDetails.takeCandidatesSnapshot);
+        setFullScreenMode(
+          response.data.data.testDetails.restrictCandidatesToFullscreen
+        );
+        setLogoutOnLeaving(
+          response.data.data.testDetails.logoutOnLeavingTestInterface
+        );
+        setRestrictCertainIp(
+          response.data.data.testDetails.restrictTestAccessForIp
+        );
+        setValue(
+          response.data.data.testDetails.testDescription
+            ? response.data.data.testDetails.testDescription
+            : value
+        );
+        setTestAccess(response.data.data.testDetails.testAccess);
+        setQuestionDetails(response.data.data.questionDetails);
+        handleTotalScore(response.data.data.questionDetails);
       })
       .catch(function (error) {
         console.log(error);
@@ -122,7 +139,34 @@ export default function TestCreatedOverview() {
         }
       )
       .then(function (response) {
-        console.log("gettestinstructions", response);
+        console.log("gettestinstruction", response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const getloggedadmindata = JSON.parse(localStorage.getItem("admin"));
+
+  const [poc, setPOC] = useState(getloggedadmindata._id);
+
+  const handlepointOfContact = async (id) => {
+    console.log("adminpointid", id);
+    axios
+      .post(
+        `${getbaseurl}/test/add-point-of-contact`,
+        {
+          testId: testID,
+          adminId: id,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("pointofcontact........................", response);
       })
       .catch(function (error) {
         console.log(error);
@@ -132,11 +176,14 @@ export default function TestCreatedOverview() {
   useEffect(() => {
     getParticularTest();
     getAllAdmins();
-    getInstructions();
+
+    handlepointOfContact(getloggedadmindata._id);
+    handleTestInstructions();
     window.scrollTo(0, 0);
   }, []);
 
   const getparticulartestdata = useSelector(getParticularTestData);
+  console.log("getparticulard", getparticulartestdata);
 
   const testID = JSON.parse(localStorage.getItem("testID"));
 
@@ -144,13 +191,13 @@ export default function TestCreatedOverview() {
 
   const getbaseurl = useSelector(getBaseURL);
 
-  useEffect(() => {
+  const handleTotalScore = (questions) => {
     let score = 0;
-    for (let item of getselectedquestionsdata) {
-      score += item.question.totalScoreForQuestion;
+    for (let item of questions) {
+      score += item.totalScoreForQuestion;
     }
     setTotalScore(score);
-  }, []);
+  };
 
   const gettesthour = useSelector(getTestHour);
   const gettestminutes = useSelector(getTestMinutes);
@@ -188,7 +235,7 @@ export default function TestCreatedOverview() {
   const [proctoringmodal, setProctoringModal] = useState(false);
   const [emailreportmodal, setEmailReportModal] = useState(false);
 
-  const handleTestEdit = () => {
+  const handleTestEdit = (access) => {
     axios
       .patch(
         `${getbaseurl}/test/edit-test`,
@@ -197,6 +244,7 @@ export default function TestCreatedOverview() {
           testStartDate: "2023-03-09T00:00:00+05:30",
           testEndDate: "2023-07-21T23:59:59+05:30",
           testName: gettestname,
+          testAccess: access,
         },
         {
           headers: {
@@ -212,8 +260,7 @@ export default function TestCreatedOverview() {
       });
   };
 
-  const getloggedadmindata = JSON.parse(localStorage.getItem("admin"));
-  console.log("getloggedadm", getloggedadmindata);
+  console.log("getloggedadmin", getloggedadmindata);
   const getadminsdata = useSelector(getAdminsData);
   const gettestinstructions = useSelector(getTestInstructions);
   const [instructionvalue, setInstructionValue] = useState(gettestinstructions);
@@ -221,10 +268,10 @@ export default function TestCreatedOverview() {
   const handleTestInstructions = () => {
     axios
       .patch(
-        `${getbaseurl}/test/test-instruction`,
+        `${getbaseurl}/test/edit-test`,
         {
-          testInstructionId: testID,
-          testInstruction: instructionvalue,
+          testId: testID,
+          instructions: instructionvalue,
         },
         {
           headers: {
@@ -233,7 +280,29 @@ export default function TestCreatedOverview() {
         }
       )
       .then(function (response) {
-        console.log("testInstructi", response);
+        console.log("instructions edited", response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handleTestDescription = () => {
+    axios
+      .patch(
+        `${getbaseurl}/test/edit-test`,
+        {
+          testId: testID,
+          testDescription: value,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("description edited", response);
       })
       .catch(function (error) {
         console.log(error);
@@ -243,6 +312,10 @@ export default function TestCreatedOverview() {
   useEffect(() => {
     dispatch(addTestInstructions(instructionvalue));
   }, [instructionvalue]);
+
+  useEffect(() => {
+    dispatch(AddTestDescription(value));
+  }, [value]);
 
   return (
     <>
@@ -294,7 +367,7 @@ export default function TestCreatedOverview() {
             View questions
           </span>
         </div>
-        {getselectedquestionsdata.length > 0 ? (
+        {questiondetails.length > 0 ? (
           <div className="viewQuestionsPresentContainer">
             <div className="viewQuestionsPresentContainerHeader">
               <span className="viewQuestionsPresentContainerHeaderQuestionType">
@@ -321,7 +394,7 @@ export default function TestCreatedOverview() {
                 {hard > 0 ? `,Hard(${})` : ""} */}
               </span>
               <span className="viewQuestionsPresentContainerHeaderDifficultyLevel">
-                {getselectedquestionsdata.length}
+                {questiondetails.length > 0 ? questiondetails.length : ""}
               </span>
               <span className="viewQuestionsPresentContainerHeaderDifficultyLevel">
                 {totalscore}
@@ -373,7 +446,7 @@ export default function TestCreatedOverview() {
               className="publishChangesButton"
               style={{ marginTop: "2%" }}
               onClick={() => {
-                navigate("/home");
+                navigate("/home/selectQuestions");
               }}
             >
               Add questions
@@ -750,7 +823,7 @@ export default function TestCreatedOverview() {
               <div className="testNameDiv">
                 <span>Test access</span>
                 <div className="testAccessDiv">
-                  {getparticulartestdata.testAccess ? (
+                  {testaccess ? (
                     <img
                       src={switchon}
                       style={{ cursor: "pointer" }}
@@ -760,8 +833,9 @@ export default function TestCreatedOverview() {
                           document.getElementById(`option`).src === switchon
                         ) {
                           document.getElementById(`option`).src = switchoff;
-                          setVisible("false");
+                          setTestAccess(false);
                           setTestStatus("OFF");
+                          handleTestEdit(false);
                           if (
                             document.getElementById(`option`).src === switchoff
                           ) {
@@ -771,6 +845,8 @@ export default function TestCreatedOverview() {
                           setVisible("true");
                           document.getElementById(`option`).src = switchon;
                           setTestStatus("ON");
+                          setTestAccess(true);
+                          handleTestEdit(true);
                         }
                       }}
                     ></img>
@@ -784,21 +860,24 @@ export default function TestCreatedOverview() {
                           document.getElementById(`option`).src === switchoff
                         ) {
                           document.getElementById(`option`).src = switchon;
-                          setVisible("true");
                           setTestStatus("ON");
+                          setTestAccess(true);
+                          handleTestEdit(true);
+
                           if (
                             document.getElementById(`option`).src === switchon
                           ) {
                           }
                         } else {
-                          setVisible("false");
                           document.getElementById(`option`).src = switchoff;
                           setTestStatus("OFF");
+                          setTestAccess(false);
+                          handleTestEdit(false);
                         }
                       }}
                     ></img>
                   )}
-                  <span>{getparticulartestdata.testAccess ? "ON" : "OFF"}</span>
+                  <span>{testaccess ? "ON" : "OFF"}</span>
                 </div>
               </div>
               <div className="testNameDiv">
@@ -837,14 +916,19 @@ export default function TestCreatedOverview() {
           <span>Test admins</span>
           <div className="testAdminsHeaderFunctions">
             <span>Point of contact</span>
-            <select className="POCInput">
-              <option>
+            <select
+              className="POCInput"
+              onChange={(e) => {
+                handlepointOfContact(e.target.value);
+              }}
+            >
+              <option value={getloggedadmindata._id}>
                 {getloggedadmindata.firstName
                   ? getloggedadmindata.firstName
                   : "Admin"}
               </option>
               {getadminsdata.map((data, index) => {
-                return <option>{data.firstName}</option>;
+                return <option value={data._id}>{data.firstName}</option>;
               })}
             </select>
             {getloggedadmindata.isSuperAdmin ? (
@@ -878,15 +962,20 @@ export default function TestCreatedOverview() {
               {getloggedadmindata.firstName
                 ? getloggedadmindata.firstName
                 : "Admin"}
-              <span
-                style={{
-                  fontSize: "16px",
-                  color: "white",
-                  backgroundColor: "#0071c5",
-                }}
-              >
-                POC
-              </span>
+              {getloggedadmindata._id ===
+              getparticulartestdata.pointOfContact ? (
+                <span
+                  style={{
+                    fontSize: "16px",
+                    color: "white",
+                    backgroundColor: "#0071c5",
+                  }}
+                >
+                  POC
+                </span>
+              ) : (
+                ""
+              )}
             </span>
             <span className="testAdminsTableHeaderEmail">
               {getloggedadmindata.email}
@@ -921,6 +1010,7 @@ export default function TestCreatedOverview() {
               className="viewQuestionsButton"
               onClick={() => {
                 setTestDescription(true);
+                handleTestDescription();
               }}
             >
               Done
@@ -928,7 +1018,7 @@ export default function TestCreatedOverview() {
           )}
         </div>
         {testdescription ? (
-          <div className="testCreatedTestDescriptionDiv">No details added</div>
+          <div className="testCreatedTestDescriptionDiv">{parse(value)}</div>
         ) : (
           <div className="richTextEditor">
             <ReactQuill

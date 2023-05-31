@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router";
 import Library from "../../Components/Library/Library";
 import Assesments from "../../Components/Assesments/Assesments";
 import CandidatesUpload from "../../Components/Assesments/Candidatedetails/CandidatesUpload";
+import SelectQuestions from "../../Components/Library/SelectQuestions";
 
 export default function HomePage() {
   return (
@@ -17,6 +18,7 @@ export default function HomePage() {
           path="/Invitecandidates/*"
           element={<CandidatesUpload />}
         ></Route>
+        <Route path="/selectQuestions/*" element={<SelectQuestions />}></Route>
       </Routes>
     </div>
   );

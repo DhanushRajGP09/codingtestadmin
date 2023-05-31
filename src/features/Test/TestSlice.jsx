@@ -17,6 +17,7 @@ const TestSlice = createSlice({
     TestEndTime: new Date(),
     adminsData: [],
     AdminDetails: {},
+    testDescription: `<p> No description </p>`,
     testInstructions: `<p style={{ marginTop: "1%" }}>
               1. Ensure that you are attempting the test using the correct email
               ID.
@@ -68,6 +69,9 @@ const TestSlice = createSlice({
     },
     AddadminsData: (state, { payload }) => {
       state.adminsData = payload;
+    },
+    AddTestDescription: (state, { payload }) => {
+      state.testDescription = payload;
     },
     AddadminDetails: (state, { payload }) => {
       state.AdminDetails = payload;
@@ -182,6 +186,8 @@ export const {
   addTestName,
   AddadminsData,
   AddadminDetails,
+
+  AddTestDescription,
 } = TestSlice.actions;
 
 export const getAllTestData = (state) => state.Test.AllTestData;
@@ -201,4 +207,5 @@ export const getAdminsData = (state) => state.Test.adminsData;
 export const getTestName = (state) => state.Test.TestName;
 export const getAdminDetails = (state) => state.Test.AdminDetails;
 export const getTestInstructions = (state) => state.Test.testInstructions;
+export const getTestDescription = (state) => state.Test.testDescription;
 export default TestSlice.reducer;

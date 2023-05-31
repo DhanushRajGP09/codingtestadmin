@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Library.css";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import search from "../../Assets/Icons/search (1).png";
-import CreateQuestionModal from "../Modals/createQuestionModal/CreateQuestionModal";
-import { useSelector } from "react-redux";
-
-import blankcheckbox from "../../Assets/Icons/blank-check-box.png";
-import checkbox from "../../Assets/Icons/check (1).png";
-import parse from "html-react-parser";
+import "./SelectQuestions.css";
 import {
   addIndividualQuestion,
   addLibraryQuestions,
@@ -17,53 +7,70 @@ import {
   getLibraryQuestions,
   getQuestionID,
 } from "../../features/question/QuestionSlice";
-import ViewQuestionModal from "../Modals/viewQuestionModal/ViewQuestionModal";
-import { useNavigate } from "react-router";
-
+import { useDispatch, useSelector } from "react-redux";
+import parse from "html-react-parser";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+
+import blankcheckbox from "../../Assets/Icons/blank-check-box.png";
+import checkbox from "../../Assets/Icons/check (1).png";
 import {
-  addSelectedMultipleQuestionId,
-  addSelectedQuestionData,
+  addParticularTestData,
   addSelectedQuestionId,
-  clearSelectedQuestionData,
-  concateSelectedQuestionID,
+  addTestId,
+  addTestName,
+  getParticularTestData,
   getSelectedMultipleQuestions,
   getSelectedQuestionId,
-  removeFromSelectedMultipleQuestionId,
   removeFromSelectedQuestionId,
 } from "../../features/Test/TestSlice";
+import { useNavigate } from "react-router";
 
-export default function Library() {
-  const [modal, setModal] = useState(false);
-
+export default function SelectQuestions() {
   const getlibraryquestions = useSelector(getLibraryQuestions);
-  console.log("libQuestion", getlibraryquestions);
-
-  const [viewmodal, setViewModal] = useState(false);
-  const navigate = useNavigate();
-
-  const getquestionid = useSelector(getQuestionID);
-  console.log("questionI", getquestionid);
-
+  console.log("libQuesti", getlibraryquestions);
+  const getbaseurl = useSelector(getBaseURL);
   const getselectedquestionid = useSelector(getSelectedQuestionId);
-  console.log("selectedquesti", getselectedquestionid);
 
+  console.log("selectedquestionidinseles", getselectedquestionid);
+
+  const getselectedmultiplequestion = useSelector(getSelectedMultipleQuestions);
+  console.log("gegeg", getselectedmultiplequestion);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [checked, setChecked] = React.useState(false);
   const [visible, setVisible] = useState(false);
 
-  const handleChange = (index) => {
-    if (document.getElementById(`question${index}`).checked === false) {
-      document.getElementById(`question${index}`).checked = true;
-    } else {
-      document.getElementById(`question${index}`).checked = false;
-    }
+  const testID = JSON.parse(localStorage.getItem("testID"));
+  const getParticularTest = () => {
+    dispatch(addTestId(testID));
+    axios
+      .get(
+        `${getbaseurl}/test/view-test`,
+
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            testId: testID,
+          },
+        }
+      )
+      .then(function (response) {
+        dispatch(addParticularTestData(response.data.data));
+        dispatch(addTestName(response.data.data.testName));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
-  const token = JSON.parse(localStorage.getItem("token"));
+  useEffect(() => {
+    getParticularTest();
+  }, []);
 
-  const dispatch = useDispatch();
-  const getbaseurl = useSelector(getBaseURL);
+  const getparticulartestdata = useSelector(getParticularTestData);
+  console.log("getparticulardatainselectdat", getparticulartestdata);
 
   const getAllTestQuestions = () => {
     axios
@@ -93,55 +100,7 @@ export default function Library() {
     getAllTestQuestions();
   }, []);
 
-  console.log("in library");
-
-  const handleQuestionClick = (id) => {
-    axios
-      .get(
-        `${getbaseurl}/question/get-perticular-question`,
-
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-          params: {
-            itemsPerPage: 1,
-            page: 1,
-            questionId: id,
-          },
-        }
-      )
-      .then(function (response) {
-        console.log("IndividualQuestionData", response);
-        dispatch(addIndividualQuestion(response.data.data));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  const handleDeleteQuestion = (id) => {
-    axios
-      .delete(
-        `${getbaseurl}/question/language`,
-
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-          params: {
-            questionId: id,
-          },
-        }
-      )
-      .then(function (response) {
-        console.log("deleted", response);
-        getAllTestQuestions();
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+  const token = JSON.parse(localStorage.getItem("token"));
 
   const [search, setSearch] = useState("");
   const [difficultylevel, setDifficultyLevel] = useState("");
@@ -173,89 +132,46 @@ export default function Library() {
       });
   };
 
-  const handleData = (id) => {
+  const handleTestQuestionIds = () => {
     axios
-      .get(
-        `${getbaseurl}/question/get-perticular-question`,
-
+      .patch(
+        `${getbaseurl}/test/edit-test`,
+        {
+          testId: testID,
+          questionId: getselectedquestionid,
+        },
         {
           headers: {
             Authorization: `${token}`,
           },
-          params: {
-            itemsPerPage: 1,
-            page: 1,
-            questionId: id,
-          },
         }
       )
       .then(function (response) {
-        console.log("data added", response);
-        dispatch(addSelectedQuestionData(response.data.data));
+        console.log("questions id edited", response);
       })
       .catch(function (error) {
         console.log(error);
       });
   };
 
-  const removeHandleQuestionsData = (id) => {
-    dispatch(clearSelectedQuestionData());
-    for (let item of getselectedquestionid) {
-      if (item !== id) {
-        handleData(item);
-      }
-    }
-  };
-
-  const handleMultipleSelection = () => {
-    dispatch(clearSelectedQuestionData());
-    console.log("finalselectedquestions", getselectedquestionid);
-    for (let item of getselectedmultiplequestion) {
-      dispatch(addSelectedQuestionId(item));
-    }
-    for (let item of getselectedquestionid) {
-      handleData(item);
-    }
-  };
-
-  const getselectedmultiplequestion = useSelector(getSelectedMultipleQuestions);
-  console.log("gegeg", getselectedmultiplequestion);
-
   return (
-    <div className="adminLibrary">
-      <CreateQuestionModal
-        modal={modal}
-        setModal={setModal}
-        getAllTestQuestions={getAllTestQuestions}
-      />
-      <ViewQuestionModal
-        viewmodal={viewmodal}
-        setViewModal={setViewModal}
-        getAllTestQuestions={getAllTestQuestions}
-        handleQuestionClick={handleQuestionClick}
-      />
+    <div className="selectQuestionsMain">
       <div className="libraryHeader">
-        <span className="sectionName">Library</span>
-        {/* {getselectedmultiplequestion.length > 0 ? (
-          <button
-            className="createQuestionButton"
-            onClick={() => {
-              handleMultipleSelection();
-            }}
-          >
-            Add selected {getselectedmultiplequestion.length} question to test
-          </button>
-        ) : (
-          ""
-        )} */}
+        <span className="sectionName">
+          Library > <span>{getparticulartestdata.testName} test</span>
+        </span>
+        <button className="createQuestionButton">
+          Add selected 1 question to test
+        </button>
+
         <button
-          className="createQuestionButton"
+          className="saveAsDraftButton"
           onClick={() => {
-            setModal(true);
-            localStorage.setItem("questionId", JSON.stringify(""));
+            navigate("/home/assesments/testcreated");
           }}
+          style={{ width: "150px", marginRight: "2%" }}
         >
-          Create a Question
+          Back to test
         </button>
       </div>
       <div className="libraryBody">
@@ -298,14 +214,15 @@ export default function Library() {
           {getlibraryquestions.map((data, index) => {
             return (
               <div className="libraryQuestionContainer">
-                {/* {getselectedmultiplequestion.includes(data._id) ? (
+                {getparticulartestdata?.testDetails?.questionId?.includes(
+                  data._id
+                ) ? (
                   <img
                     className="checkboxImage"
                     src={checkbox}
                     style={{ cursor: "pointer" }}
                     id={`option${index}`}
                     onClick={() => {
-                      dispatch(removeFromSelectedMultipleQuestionId(data._id));
                       document.getElementById(`option${index}`).src =
                         blankcheckbox;
                     }}
@@ -323,7 +240,10 @@ export default function Library() {
                       ) {
                         document.getElementById(`option${index}`).src =
                           checkbox;
-                        dispatch(addSelectedMultipleQuestionId(data._id));
+                        console.log("hihi");
+                        dispatch(addSelectedQuestionId(data._id));
+
+                        handleTestQuestionIds();
 
                         if (
                           document.getElementById(`option${index}`).src ===
@@ -334,13 +254,11 @@ export default function Library() {
                         setVisible("false");
                         document.getElementById(`option${index}`).src =
                           blankcheckbox;
-                        dispatch(
-                          removeFromSelectedMultipleQuestionId(data._id)
-                        );
+                        dispatch(removeFromSelectedQuestionId(data._id));
                       }
                     }}
                   ></img>
-                )} */}
+                )}
                 <div className="libraryQuestionDiv">
                   <div
                     style={{
@@ -350,39 +268,22 @@ export default function Library() {
                       width: "98%",
                     }}
                   >
-                    <span
-                      className="libraryQuestionName"
-                      onClick={() => {
-                        setViewModal(true);
-                        handleQuestionClick(data._id);
-                      }}
-                    >
+                    <span className="libraryQuestionName">
                       {data.questionName}
                     </span>
 
                     {data.questionPublished ? (
-                      // getselectedquestionid.includes(data._id) ? (
-                      //   <span
-                      //     style={{ color: "red", cursor: "pointer" }}
-                      //     onClick={() => {
-                      //       dispatch(removeFromSelectedQuestionId(data._id));
-                      //       removeHandleQuestionsData(data._id);
-                      //     }}
-                      //   >
-                      //     Remove from test
-                      //   </span>
-                      // ) : (
-                      //   <span
-                      //     style={{ color: "blue", cursor: "pointer" }}
-                      //     onClick={() => {
-                      //       dispatch(addSelectedQuestionId(data._id));
-                      //       handleData(data._id);
-                      //     }}
-                      //   >
-                      //     Add to test
-                      //   </span>
-                      // )
-                      " "
+                      getparticulartestdata?.testDetails?.questionId?.includes(
+                        data._id
+                      ) ? (
+                        <span style={{ color: "red", cursor: "pointer" }}>
+                          Remove from test
+                        </span>
+                      ) : (
+                        <span style={{ color: "blue", cursor: "pointer" }}>
+                          Add to test
+                        </span>
+                      )
                     ) : (
                       <div>
                         <span style={{ color: "red" }}>draft</span>
