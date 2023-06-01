@@ -16,6 +16,8 @@ import {
   AddadminsData,
   addParticularTestData,
   addSelectedQuestionId,
+  addTestDurationHour,
+  addTestDurationMinutes,
   addTestId,
   addTestInstructions,
   addTestName,
@@ -107,6 +109,20 @@ export default function TestCreatedOverview() {
           response.data.data.testDetails.testDuration
             ? response.data.data.testDetails.testDuration
             : `${gettesthour}:${gettestminutes}:00`
+        );
+        dispatch(
+          addTestDurationHour(
+            response.data.data.testDetails.testDuration
+              ? response.data.data.testDetails.testDuration.substr(0, 2)
+              : "01"
+          )
+        );
+        dispatch(
+          addTestDurationMinutes(
+            response.data.data.testDetails.testDuration
+              ? response.data.data.testDetails.testDuration.substr(3, 5)
+              : "50"
+          )
         );
         dispatch(
           moveSelectedQuestionId(response.data.data.testDetails.questionId)

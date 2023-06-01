@@ -13,15 +13,19 @@ import axios from "axios";
 
 import blankcheckbox from "../../Assets/Icons/blank-check-box.png";
 import checkbox from "../../Assets/Icons/check (1).png";
+import minus from "../../Assets/Icons/icons8-minus-40.png";
 import {
   addParticularTestData,
+  addSelectedMultipleQuestionId,
   addSelectedQuestionId,
   addTestId,
   addTestName,
+  clearSelectedMultipleQuestionId,
   getParticularTestData,
   getSelectedMultipleQuestions,
   getSelectedQuestionId,
   moveSelectedQuestionId,
+  removeFromSelectedMultipleQuestionId,
   removeFromSelectedQuestionId,
 } from "../../features/Test/TestSlice";
 import { useNavigate } from "react-router";
@@ -154,6 +158,7 @@ export default function SelectQuestions() {
       )
       .then(function (response) {
         console.log("questions id edited", response);
+        getParticularTest();
       })
       .catch(function (error) {
         console.log(error);
@@ -165,26 +170,45 @@ export default function SelectQuestions() {
     let newarray = [];
     newarray.push(id);
     addarray = addarray.concat(newarray);
-    console.log("array addi", addarray, newarray);
+
     handleTestQuestionIds(addarray);
   };
 
   const removeHandleQuestionIds = (id) => {
     let array = getselectedquestionid;
     array = array.filter((item) => item !== id);
-    console.log("this is arra", array);
+
     handleTestQuestionIds(array);
+  };
+
+  const handleMultipleQuestionIds = () => {
+    let addarray = getselectedquestionid;
+    let newarray = getselectedmultiplequestion;
+    addarray = addarray.concat(newarray);
+    console.log("multiple array adding");
+    handleTestQuestionIds(addarray);
+    dispatch(clearSelectedMultipleQuestionId());
   };
 
   return (
     <div className="selectQuestionsMain">
       <div className="libraryHeader">
         <span className="sectionName">
-          Library > <span>{getparticulartestdata.testName} test</span>
+          Library >{" "}
+          <span>{getparticulartestdata?.testDetails?.testName} test</span>
         </span>
-        <button className="createQuestionButton">
-          Add selected 1 question to test
-        </button>
+        {getselectedmultiplequestion.length > 0 ? (
+          <button
+            className="createQuestionButton"
+            onClick={() => {
+              handleMultipleQuestionIds();
+            }}
+          >
+            Add selected {getselectedmultiplequestion.length} question to test
+          </button>
+        ) : (
+          ""
+        )}
 
         <button
           className="saveAsDraftButton"
@@ -241,16 +265,9 @@ export default function SelectQuestions() {
                 ) ? (
                   <img
                     className="checkboxImage"
-                    src={checkbox}
+                    src={minus}
                     style={{ cursor: "pointer" }}
                     id={`option${index}`}
-                    onClick={() => {
-                      document.getElementById(`option${index}`).src =
-                        blankcheckbox;
-                      console.log("clicking");
-                      dispatch(removeFromSelectedQuestionId(data._id));
-                      removeHandleQuestionIds(data._id);
-                    }}
                   ></img>
                 ) : (
                   <img
@@ -265,20 +282,13 @@ export default function SelectQuestions() {
                       ) {
                         document.getElementById(`option${index}`).src =
                           checkbox;
-                        console.log("hihi");
-                        dispatch(addSelectedQuestionId(data._id));
-                        handleQuestionIds(data._id);
-                        if (
-                          document.getElementById(`option${index}`).src ===
-                          checkbox
-                        ) {
-                        }
+                        dispatch(addSelectedMultipleQuestionId(data._id));
                       } else {
-                        setVisible("false");
                         document.getElementById(`option${index}`).src =
-                          checkbox;
-                        dispatch(removeFromSelectedQuestionId(data._id));
-                        handleQuestionIds();
+                          blankcheckbox;
+                        dispatch(
+                          removeFromSelectedMultipleQuestionId(data._id)
+                        );
                       }
                     }}
                   ></img>
@@ -303,13 +313,40 @@ export default function SelectQuestions() {
                         <span
                           style={{ color: "red", cursor: "pointer" }}
                           onClick={() => {
-                            handleTestQuestionIds();
+                            document.getElementById(`option${index}`).src =
+                              blankcheckbox;
+                            console.log("clicking");
+                            dispatch(removeFromSelectedQuestionId(data._id));
+                            removeHandleQuestionIds(data._id);
                           }}
                         >
                           Remove from test
                         </span>
                       ) : (
-                        <span style={{ color: "blue", cursor: "pointer" }}>
+                        <span
+                          style={{ color: "blue", cursor: "pointer" }}
+                          onClick={() => {
+                            if (
+                              document.getElementById(`option${index}`).src ===
+                              blankcheckbox
+                            ) {
+                              document.getElementById(`option${index}`).src =
+                                minus;
+                              console.log("hihi");
+                              dispatch(addSelectedQuestionId(data._id));
+                              handleQuestionIds(data._id);
+                              if (
+                                document.getElementById(`option${index}`)
+                                  .src === minus
+                              ) {
+                              }
+                            } else {
+                              setVisible("false");
+                              dispatch(removeFromSelectedQuestionId(data._id));
+                              removeHandleQuestionIds(data._id);
+                            }
+                          }}
+                        >
                           Add to test
                         </span>
                       )
