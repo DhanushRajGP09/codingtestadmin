@@ -7,6 +7,10 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useDispatch } from "react-redux";
 import InviteEmailsModal from "../../Modals/AddEmailIdsModal/InviteEmailsModal";
+import uploadfile from "../../../Assets/Icons/upload (1).png";
+import uploademail from "../../../Assets/Icons/send-mail.png";
+import axios from "axios";
+import fileDownload from "js-file-download";
 
 export default function CandidatesUpload() {
   const navigate = useNavigate();
@@ -23,6 +27,18 @@ export default function CandidatesUpload() {
     console.log("hii");
   }, [value]);
 
+  const handleDownload = (url, filename) => {
+    console.log("inside");
+    axios
+      .get(url, {
+        responseType: "blob",
+      })
+      .then((res) => {
+        console.log("inside positive");
+        fileDownload(res.data, filename);
+      });
+  };
+
   return (
     <>
       <InviteEmailsModal
@@ -33,7 +49,7 @@ export default function CandidatesUpload() {
         <span
           className="testHeaderBackButton"
           onClick={() => {
-            navigate("/home/assesments/testcreated/testtaken");
+            navigate("/home/assesments/testcreated");
           }}
         >
           {" "}
@@ -47,12 +63,23 @@ export default function CandidatesUpload() {
         <h1>Candidate Details</h1>
         <div className="candidateUploadFileEmailContainer">
           <div className="candidateUploadFileDiv">
-            <div className="uploadCandidateIcon"></div>
+            <img className="uploadCandidateIcon" src={uploadfile}></img>
             <div className="candidateUploadFileDetails">
               <span>Upload file</span>
               <span style={{ fontWeight: "400" }}>
                 Use this template to add the details of candidates in bulk.
-                Download the template
+                <span
+                  style={{ color: "blue", cursor: "pointer" }}
+                  onClick={() => {
+                    handleDownload(
+                      "https://res.cloudinary.com/dilyamsbn/raw/upload/v1685690119/dummyex_oep5x8.xlsx",
+                      "sampletemplate.xlsx"
+                    );
+                  }}
+                >
+                  {" "}
+                  Download the template
+                </span>
               </span>
               <button
                 className="publishChangesButton"
@@ -63,7 +90,7 @@ export default function CandidatesUpload() {
             </div>
           </div>
           <div className="candidateUploadEmailDiv">
-            <div className="uploadCandidateIcon"></div>
+            <img className="uploadCandidateIcon" src={uploademail}></img>
             <div className="candidateUploadFileDetails">
               <span>Add by using email ID</span>
               <span style={{ fontWeight: "400" }}>

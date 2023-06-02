@@ -270,6 +270,19 @@ export default function TestCreatedOverview() {
   const [datetimemodal, setDateTimeModal] = useState(false);
 
   const getteststarttime = useSelector(getTestStartTime);
+  const startdateoftest =
+    getparticulartestdata?.testDetails?.testStartDate.substr(8, 2);
+
+  const startmonthoftest =
+    getparticulartestdata?.testDetails?.testStartDate.substr(5, 2);
+
+  const enddateoftest = getparticulartestdata?.testDetails?.testEndDate.substr(
+    8,
+    2
+  );
+
+  const endmonthoftest =
+    getparticulartestdata?.testDetails?.testStartDate.substr(5, 2);
 
   const date = new Date();
 
@@ -288,10 +301,10 @@ export default function TestCreatedOverview() {
     "Dec",
   ];
 
-  const monthname = months[getteststarttime?.getMonth()];
+  const monthname = months[parseInt(startmonthoftest)];
   const timezone = getteststarttime?.getHours() > 12 ? "PM" : "AM";
   const gettestendtime = useSelector(getTestEndTime);
-  const endMonthName = months[gettestendtime?.getMonth()];
+  const endMonthName = months[parseInt(endmonthoftest)];
   const EndTimeZone = gettestendtime?.getHours() > 12 ? "PM" : "AM";
   const [endtimemodal, setEndTimeModal] = useState(false);
   const [testnameedit, setTestNameEdit] = useState(false);
@@ -305,8 +318,7 @@ export default function TestCreatedOverview() {
         `${getbaseurl}/test/edit-test`,
         {
           testId: testID,
-          testStartDate: "2023-03-09T00:00:00+05:30",
-          testEndDate: "2023-07-21T23:59:59+05:30",
+
           testName: gettestname,
           testAccess: access,
         },
@@ -324,7 +336,7 @@ export default function TestCreatedOverview() {
       });
   };
 
-  console.log("getloggedadmin ", getloggedadmindata);
+  console.log("getloggedadm", getloggedadmindata);
   const getadminsdata = useSelector(getAdminsData);
   const gettestinstructions = useSelector(getTestInstructions);
   const [instructionvalue, setInstructionValue] = useState(gettestinstructions);
@@ -770,7 +782,8 @@ export default function TestCreatedOverview() {
                     width: "100%",
                   }}
                 >
-                  {getparticulartestdata?.restrictTestAccessForIp ? (
+                  {getparticulartestdata?.testDetails
+                    ?.restrictTestAccessForIp ? (
                     <img src={check} className="proctoringTrueIcon"></img>
                   ) : (
                     <img src={grayclose} className="proctoringTrueIcon"></img>
@@ -815,7 +828,7 @@ export default function TestCreatedOverview() {
                     width: "100%",
                   }}
                 >
-                  {getparticulartestdata?.candidateReport ? (
+                  {getparticulartestdata?.testDetails?.candidateReport ? (
                     <img src={check} className="proctoringTrueIcon"></img>
                   ) : (
                     <img src={grayclose} className="proctoringTrueIcon"></img>
@@ -970,7 +983,10 @@ export default function TestCreatedOverview() {
               <div className="testNameDiv">
                 <span>Starts on</span>
                 <div className="testNameInputDiv">
-                  <span>{`${monthname} ${getteststarttime?.getDate()}, ${getteststarttime?.getFullYear()} ${getteststarttime?.getHours()}:${getteststarttime?.getMinutes()} ${timezone} IST`}</span>
+                  <span>{`${monthname} ${startdateoftest}, ${getparticulartestdata?.testDetails?.testStartDate.substr(
+                    0,
+                    4
+                  )} ${getteststarttime?.getHours()}:${getteststarttime?.getMinutes()} ${timezone} IST`}</span>
 
                   <span
                     style={{ color: "blue", cursor: "pointer" }}
@@ -985,7 +1001,10 @@ export default function TestCreatedOverview() {
               <div className="testNameDiv">
                 <span>Ends on</span>
                 <div className="testNameInputDiv">
-                  <span>{`${endMonthName} ${gettestendtime?.getDate()}, ${gettestendtime?.getFullYear()} ${gettestendtime?.getHours()}:${gettestendtime?.getMinutes()} ${EndTimeZone} IST`}</span>
+                  <span>{`${endMonthName} ${enddateoftest}, ${getparticulartestdata?.testDetails?.testEndDate.substr(
+                    0,
+                    4
+                  )} ${gettestendtime?.getHours()}:${gettestendtime?.getMinutes()} ${EndTimeZone} IST`}</span>
                   <span
                     style={{ color: "blue", cursor: "pointer" }}
                     onClick={() => {
