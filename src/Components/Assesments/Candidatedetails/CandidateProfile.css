@@ -1,0 +1,116 @@
+.candidateProfileContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 75%;
+  height: 100%;
+  background-color: white;
+  margin-right: 3%;
+  flex-direction: column;
+}
+.candidateProfileHeader {
+  width: 100%;
+  display: flex;
+  margin-top: 2%;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+.candidateProfileImgNameContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: auto;
+  gap: 30px;
+  background-color: white;
+}
+.candidateProfileImage {
+  width: 40px;
+  height: 40px;
+}
+.candidateProfileName {
+  font-size: 20px;
+  width: auto;
+
+  font-weight: 500;
+}
+.candidateProfileStatusDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 5px;
+  width: auto;
+  height: 30px;
+  background-color: rgba(255, 160, 122, 0.324);
+}
+.candidateProfileStatus {
+  font-size: 15px;
+  font-weight: 500;
+  color: lightsalmon;
+}
+.candidateProfileHeaderFunctions {
+  background-color: lightgreen;
+  height: 100%;
+  width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.candidateProfileRankContainer {
+  height: 120px;
+  width: 100%;
+  margin-top: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.candidateProfileRankDiv {
+  width: auto;
+  height: 60px;
+  display: flex;
+  margin-left: 2%;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.candidateProfileRank {
+  font-weight: 500;
+  font-size: 13px;
+  color: gray;
+}
+.candidateProfileRankNumber {
+  font-weight: 500;
+  font-size: 35px;
+}
+.candidateProfileTotalRank {
+  font-size: 18px;
+  font-weight: 500;
+}
+.candidateProfileTestTimeContainer {
+  height: 210px;
+  width: 100%;
+  margin-top: 2%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  flex-direction: column;
+  background-color: white;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.candidateProfileTestTimeText {
+  font-size: 20px;
+  font-weight: 500;
+  margin-left: 1%;
+}
+.candidateProfileTestTimeDiv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+
+  width: 80%;
+}

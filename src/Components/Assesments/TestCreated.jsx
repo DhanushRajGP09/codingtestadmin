@@ -33,6 +33,7 @@ import {
   getTestName,
 } from "../../features/Test/TestSlice";
 import TestOptions from "../Modals/TestOptions/TestOptions";
+import CandidateProfile from "./Candidatedetails/CandidateProfile";
 
 export default function TestCreated() {
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ export default function TestCreated() {
   const [modal, setModal] = useState(false);
   const [testoptionsmodal, setTestOptionsModal] = useState(false);
 
-  console.log("particularda", getparticulartestdata);
+  console.log("particulardata", getparticulartestdata);
   const gettestname = useSelector(getTestName);
 
   return (
@@ -128,6 +129,10 @@ export default function TestCreated() {
               className="publishChangesButton"
               onClick={() => {
                 navigate("/home/Invitecandidates");
+                localStorage.setItem(
+                  "testName",
+                  JSON.stringify(getparticulartestdata?.testDetails?.testName)
+                );
               }}
             >
               Invite candidates +
@@ -241,9 +246,9 @@ export default function TestCreated() {
           </div>
         </div>
         <Routes>
-          <Route path="/" element={<TestCreatedOverview />}></Route>
+          <Route path="/*" element={<TestCreatedOverview />}></Route>
           <Route
-            path="/questions"
+            path="/questions/*"
             element={
               <TestCreatedQuestions
                 setViewModal={setViewModal}
@@ -252,24 +257,25 @@ export default function TestCreated() {
               />
             }
           ></Route>
-          <Route path="/testtaken" element={<TestCreatedTestTaken />}></Route>
+          <Route path="/testtaken/*" element={<TestCreatedTestTaken />}></Route>
           <Route
-            path="/reviewpending"
+            path="/reviewpending/*"
             element={<TestCreatedReviewPending />}
           ></Route>
+
           <Route
-            path="/shortlisted"
+            path="/shortlisted/*"
             element={<TestCreatedShortlisted />}
           ></Route>
-          <Route path="/archived" element={<TestCreatedArchived />}></Route>
-          <Route path="/invited" element={<TestCreatedInvited />}></Route>
-          <Route path="/testanalytics" element={<TestAnalytics />}></Route>
+          <Route path="/archived/*" element={<TestCreatedArchived />}></Route>
+          <Route path="/invited/*" element={<TestCreatedInvited />}></Route>
+          <Route path="/testanalytics/*" element={<TestAnalytics />}></Route>
           <Route
-            path="/questionanalytics"
+            path="/questionanalytics/*"
             element={<QuestionAnalytics />}
           ></Route>
           <Route
-            path="/candidatesfeedback"
+            path="/candidatesfeedback/*"
             element={<CandidatesFeedback />}
           ></Route>
         </Routes>

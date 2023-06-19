@@ -5,13 +5,14 @@ import switchoff from "../../../Assets/Icons/Switch off.png";
 import switchon from "../../../Assets/Icons/Switch on.png";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import InviteEmailsModal from "../../Modals/AddEmailIdsModal/InviteEmailsModal";
 import uploadfile from "../../../Assets/Icons/upload (1).png";
 import uploademail from "../../../Assets/Icons/send-mail.png";
 import axios from "axios";
 import fileDownload from "js-file-download";
-
+import { getBaseURL } from "../../../features/question/QuestionSlice";
+import FormData from "form-data";
 export default function CandidatesUpload() {
   const navigate = useNavigate();
 
@@ -20,11 +21,19 @@ export default function CandidatesUpload() {
   const fromvalue = "Robosoft Technologies";
   const [showEmailDetails, setShowEmailDetails] = useState(false);
   const [inviteemailsmodal, setInviteEmailsModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState({});
+  const [isFilePicked, setIsFilePicked] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
+  const testID = JSON.parse(localStorage.getItem("testID"));
+  const testName = JSON.parse(localStorage.getItem("testName"));
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  const getbaseurl = useSelector(getBaseURL);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("hii");
+    console.log("hi");
   }, [value]);
 
   const handleDownload = (url, filename) => {
@@ -37,6 +46,48 @@ export default function CandidatesUpload() {
         console.log("inside positive");
         fileDownload(res.data, filename);
       });
+  };
+  const changeHandler = (event) => {
+    console.log("ee", event.target.files[0]);
+    setSelectedFile(event.target.files[0]);
+    setIsSelected(true);
+  };
+
+  console.log("in candidate");
+
+  const handleSubmission = async (e) => {
+    const myData = new FormData();
+    console.log("formdata", myData);
+    myData.append("File", selectedFile);
+
+    const response = await fetch(`${getbaseurl}/user/assign-test`, {
+      method: "POST",
+      body: JSON.stringify({
+        file: selectedFile,
+        testId: testID,
+      }),
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+    const jsonData = await response.json();
+    console.log(jsonData);
+    // axios
+    //   .post(
+    //     `${getbaseurl}/user/assign-test`,
+    //     { file: myData, testId: testID },
+    //     {
+    //       headers: {
+    //         Authorization: `${token}`,
+    //       },
+    //     }
+    //   )
+    //   .then(function (response) {
+    //     console.log("..fileuploaded", response);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
 
   return (
@@ -56,7 +107,7 @@ export default function CandidatesUpload() {
           {"<"}
         </span>
         <span className="testCreatedSectionName" style={{ marginLeft: "3%" }}>
-          Trainee software engineer test : Invite Candidates
+          {testName} test : Invite Candidates
         </span>
       </div>
       <div className="candidatesUploadBody">
@@ -81,12 +132,27 @@ export default function CandidatesUpload() {
                   Download the template
                 </span>
               </span>
-              <button
-                className="publishChangesButton"
-                style={{ marginRight: "2%" }}
-              >
-                Upload
-              </button>
+              <div>
+                <input
+                  type="file"
+                  name="file"
+                  onChange={changeHandler}
+                  style={{
+                    height: "40px",
+                    fontSize: "20px",
+                  }}
+                />
+              </div>
+              <div>
+                {" "}
+                <button
+                  className="publishChangesButton"
+                  style={{ marginRight: "2%", height: "50px" }}
+                  onClick={handleSubmission}
+                >
+                  Upload
+                </button>
+              </div>
             </div>
           </div>
           <div className="candidateUploadEmailDiv">

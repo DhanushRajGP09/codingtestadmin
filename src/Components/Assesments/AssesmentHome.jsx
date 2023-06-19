@@ -35,9 +35,10 @@ export default function AssesmentHome() {
 
   const dispatch = useDispatch();
   const getbaseurl = useSelector(getBaseURL);
+  const [testname, setTestName] = useState("");
 
   const getalltestdata = useSelector(getAllTestData);
-  console.log("getalltestda", getalltestdata);
+  console.log("getalltestdata", getalltestdata);
 
   const getAllTest = () => {
     axios
@@ -91,6 +92,79 @@ export default function AssesmentHome() {
         console.log(error);
       });
   };
+
+  const handleSearchTest = (name) => {
+    axios
+      .post(
+        `${getbaseurl}/test/search-test`,
+        {
+          testName: name,
+          itemsPerPage: 100,
+          page: 1,
+          sortBy: [
+            {
+              key: "testName",
+              direction: "desc",
+            },
+          ],
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            testName: name,
+            itemsPerPage: 100,
+            page: 1,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("searchtest", response);
+        dispatch(addAllTestData(response.data.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handlePublish = (id) => {
+    axios
+      .post(
+        `${getbaseurl}/test/publish-test`,
+        {},
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+          params: {
+            testId: id,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("test Published", response);
+        getAllTest();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
   return (
     <>
@@ -176,8 +250,26 @@ export default function AssesmentHome() {
               <input
                 className="testSearch"
                 placeholder="Search by test names or tags"
+                onChange={(e) => {
+                  setTestName(e.target.value);
+                  if (e.target.value === "") {
+                    getAllTest();
+                  } else {
+                    handleSearchTest(e.target.value);
+                  }
+                }}
               ></input>
-              <div className="testSearchIcon" alt="search">
+              <div
+                className="testSearchIcon"
+                alt="search"
+                onClick={() => {
+                  if (testname === "") {
+                    getAllTest();
+                  } else {
+                    handleSearchTest(testname);
+                  }
+                }}
+              >
                 Search
               </div>
             </div>
@@ -214,19 +306,66 @@ export default function AssesmentHome() {
                         Invite only{" "}
                       </div>
                       <div className="testContainerBodyTestTime">
-                        1 hrs 30 mins
+                        {data?.testDuration
+                          ? `${data?.testDuration?.substr(0, 2)} hrs
+                        ${data?.testDuration?.substr(3, 2)} mins`
+                          : "no duration"}
                       </div>
                       <div className="testContainerBodyTestDate">
-                        Mar 02, 2023 12:46 PM IST -
+                        {data?.testStartDate
+                          ? `${
+                              months[
+                                parseInt(data?.testStartDate?.substr(5, 2))
+                              ]
+                            }
+                        ${
+                          data.testStartDate &&
+                          parseInt(data?.testStartDate?.substr(8, 2))
+                        },
+                        ${
+                          data.testStartDate &&
+                          parseInt(data?.testStartDate?.substr(0, 4))
+                        }
+                        ${data.testStartDate && "12:46 PM IST -"}`
+                          : "No start date -"}
                       </div>
                       <div className="testContainerBodyTestEndTime">
-                        No end date specified
+                        {data?.testEndDate
+                          ? `${
+                              months[parseInt(data?.testEndDate?.substr(5, 2))]
+                            }
+                        ${
+                          data.testEndDate &&
+                          parseInt(data?.testEndDate?.substr(8, 2))
+                        },
+                        ${
+                          data.testEndDate &&
+                          parseInt(data?.testEndDate?.substr(0, 4))
+                        }
+                        ${data.testEndDate && "12:46 PM IST "}`
+                          : "No End date"}
                       </div>
                     </div>
                     <div className="testContainerFooter">
-                      <span>
-                        31 candidates have been invited and have taken the test
-                      </span>
+                      {data?.testPublished ? (
+                        <span
+                          style={{
+                            width: "530px",
+                          }}
+                        >
+                          31 candidates have been invited and have taken the
+                          test
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            width: "530px",
+                          }}
+                        >
+                          Publish the test to invite candidates
+                        </span>
+                      )}
+
                       <span className="viewCandidateReportButton">
                         View candidate report
                       </span>
@@ -234,9 +373,34 @@ export default function AssesmentHome() {
                         <span className="viewCandidateReportButton">
                           Preview test
                         </span>
-                        <span className="viewCandidateReportButton">
-                          Invite candidates
-                        </span>
+                        {data?.testPublished ? (
+                          <span
+                            className="viewCandidateReportButton"
+                            onClick={() => {
+                              navigate("/home/Invitecandidates");
+                              localStorage.setItem(
+                                "testID",
+                                JSON.stringify(data?._id)
+                              );
+                              localStorage.setItem(
+                                "testName",
+                                JSON.stringify(data?.testName)
+                              );
+                            }}
+                          >
+                            Invite candidates
+                          </span>
+                        ) : (
+                          <span
+                            className="viewCandidateReportButton"
+                            onClick={() => {
+                              handlePublish(data?._id);
+                            }}
+                          >
+                            Publish test
+                          </span>
+                        )}
+
                         <span className="viewCandidateReportButton">
                           Archive
                         </span>

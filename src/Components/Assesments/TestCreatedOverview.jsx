@@ -281,8 +281,10 @@ export default function TestCreatedOverview() {
     2
   );
 
-  const endmonthoftest =
-    getparticulartestdata?.testDetails?.testStartDate.substr(5, 2);
+  const endmonthoftest = getparticulartestdata?.testDetails?.testEndDate.substr(
+    5,
+    2
+  );
 
   const date = new Date();
 

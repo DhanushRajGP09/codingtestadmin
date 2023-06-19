@@ -1,0 +1,172 @@
+.reviewPendingRightContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 75%;
+  height: 100%;
+  background-color: white;
+  margin-right: 3%;
+  flex-direction: column;
+}
+.TestTakenRightContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 75%;
+  height: 100%;
+  background-color: white;
+  margin-right: 3%;
+  flex-direction: column;
+}
+.reviewPendingRightContainerRoutes {
+  color: gray;
+  margin-top: 2%;
+}
+.reviewPendingCandidatesTable {
+  width: 100%;
+  height: auto;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+.reviewPendingCandidatesTableHeader,
+.reviewPendingCandidatesTableBodyHeader {
+  height: 80px;
+  border: 1px solid lightgray;
+  border-bottom: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reviewPendingCandidatesHeaderText,
+.reviewPendingCandidatesTableHeaderTools {
+  height: 60px;
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 1%;
+  width: 200px;
+}
+.reviewPendingCandidatesTableHeaderTools {
+  height: 60px;
+  width: 500px;
+  margin-left: 0%;
+
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.reviewPendingCandidatesTableBodyHeader {
+  background-color: white;
+  border: 1px solid lightgray;
+  border-bottom: none;
+}
+.reviewPendingCandidatesTableBodyHeaderCheckbox {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+}
+.reviewPendingCandidatesTableBodyHeaderNumber {
+  height: 30px;
+  width: 30px;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.reviewPendingCandidatesTableBodyHeaderEmailDiv,
+.reviewPendingCandidatesTableBodyHeaderCandidateInfo {
+  height: auto;
+  width: 300px;
+
+  flex-direction: column;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.reviewPendingCandidatesTableBodyHeaderEmail {
+  color: rgb(56, 103, 230);
+  cursor: pointer;
+}
+.reviewPendingCandidatesTableBodyHeaderCandidateInfo {
+  color: rgb(200, 197, 197);
+  height: 100%;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: white;
+  border-right: 1px solid lightgray;
+}
+.reviewPendingCandidatesTableBodyHeaderCandidateFinishedat,
+.reviewPendingCandidatesTableBodyHeaderCandidateInterviewDetails,
+.reviewPendingCandidatesTableBodyHeaderCandidateDuration {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: rgb(200, 197, 197);
+  width: 150px;
+
+  border-right: 1px solid lightgray;
+}
+.reviewPendingCandidatesTableBodyHeaderCandidateInterviewDetails {
+  width: 200px;
+}
+.reviewPendingCandidatesTableBodyHeaderCandidateDuration {
+  width: 230px;
+}
+.reviewPendingFooter {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  background-color: white;
+  border-top: 1px solid lightgrey;
+  border-left: 1px solid lightgrey;
+}
+.archiveShortlistButtonDiv {
+  display: flex;
+  align-items: center;
+
+  width: 40%;
+  height: 40px;
+}
+.reviewPendingFooterArchiveButton,
+.reviewPendingFooterShortlistButton {
+  height: 30px;
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 5px;
+  padding-left: 2%;
+  padding-right: 2%;
+  color: #0071c5;
+  border: 1px solid #0071c5;
+  cursor: pointer;
+}
+.reviewPendingFooterShortlistButton {
+  color: white;
+  background-color: #0071c5;
+  margin-left: 3%;
+}
+.candidatesSelectedInReview {
+  font-size: 18px;
+  font-weight: 500;
+  margin-left: 2%;
+}

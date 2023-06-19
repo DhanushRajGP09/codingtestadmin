@@ -36,7 +36,7 @@ export default function Login() {
       })
       .catch(function (error) {
         console.log(error);
-        alert("invalid user credentials");
+        alert("invalid admin credentials");
       });
   };
 

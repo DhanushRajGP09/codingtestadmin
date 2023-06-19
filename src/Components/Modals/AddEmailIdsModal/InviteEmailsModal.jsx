@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import "./InviteEmailModal.css";
 import close from "../../../Assets/Icons/closemodal2.png";
 
 export default function InviteEmailsModal(props) {
+  const [value, setValue] = useState("");
+
+  console.log("candidate value", value);
   return (
     <div
       className="createQuestionModal"
@@ -32,7 +35,13 @@ export default function InviteEmailsModal(props) {
                 details must be seperated by a new line.
               </span>
             </span>
-            <textarea className="candidatesDetailsTextArea"></textarea>
+            <textarea
+              className="candidatesDetailsTextArea"
+              value={value}
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
+            ></textarea>
             <div className="saveCandidatesButtonDiv">
               <button className="saveCandidateButton">Save and proceed</button>
               <button
