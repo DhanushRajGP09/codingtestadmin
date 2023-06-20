@@ -45,11 +45,30 @@
   height: 30px;
   background-color: rgba(255, 160, 122, 0.324);
 }
+
+.candidateProfileStatusShortlistedDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 5px;
+  width: auto;
+  height: 30px;
+  background-color: rgba(40, 255, 79, 0.227);
+}
+
 .candidateProfileStatus {
   font-size: 15px;
   font-weight: 500;
   color: lightsalmon;
 }
+
+.candidateProfileStatusShortlisted {
+  font-size: 15px;
+  font-weight: 500;
+  color: lightgreen;
+}
+
 .candidateProfileHeaderFunctions {
   background-color: lightgreen;
   height: 100%;
@@ -113,4 +132,154 @@
   height: 60px;
 
   width: 80%;
+}
+.candidateProfileKeyObservationContainer,
+.candidateProfileAboutContainer,
+.candidateProfileSubmissionReportContainer {
+  height: 400px;
+  width: 100%;
+  margin-top: 2%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  flex-direction: column;
+  background-color: white;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.candidateProfileAboutContainer {
+  height: 300px;
+}
+.candidateProfileSubmissionReportContainer {
+  height: auto;
+  margin-bottom: 2%;
+}
+
+.candidateProfileKeyObservationDiv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 200px;
+
+  width: 85%;
+}
+.TabsSwitchedDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  border: 1px solid lightgray;
+  height: 150px;
+  background-color: white;
+  width: 350px;
+}
+.TabsSwitchedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 2%;
+  background-color: rgba(236, 236, 236, 0.936);
+  height: 50px;
+  width: 98%;
+  font-size: 18px;
+  font-weight: 500;
+}
+.codeQualtiyScore {
+  background-color: white;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  width: 50px;
+  justify-content: center;
+  border-radius: 25px;
+  border: 1px solid lightgray;
+}
+.TabsSwitchBody {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-left: 2%;
+  background-color: white;
+  height: 100px;
+  width: 98%;
+  font-size: 13px;
+  color: gray;
+  font-weight: 500;
+}
+.candidateProfileAboutHeader {
+  display: flex;
+  align-items: center;
+  width: 98%;
+  justify-content: space-between;
+}
+.candidateProfileAboutBody {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 70%;
+  height: 230px;
+  padding-left: 1%;
+}
+.candidateProfileAboutPic {
+  height: 100px;
+  width: 100px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.candidateProfileAboutImage {
+  background-color: gray;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+}
+
+.candidateProfileAboutDetailsDiv {
+  height: auto;
+  width: 85%;
+  gap: 15px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.candidateProfileAboutDetails {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  flex-direction: column;
+  width: 45%;
+  height: 60px;
+
+  background-color: white;
+}
+.candidateProfileSubmissionReportTable {
+  width: 97%;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+
+  margin-left: 1%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+.candidateProfileSubmissionReportTableHeader,
+.candidateProfileSubmissionReportTableBody {
+  height: 60px;
+  width: 100%;
+  background-color: rgba(211, 211, 211, 0.391);
+  border: 1px solid lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.candidateProfileSubmissionReportTableBody {
+  background-color: white;
+  border-top: none;
+}
+.candidateProfileSubmissionQuestions {
+  width: 55%;
 }
