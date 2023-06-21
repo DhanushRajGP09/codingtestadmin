@@ -44,7 +44,7 @@ export default function Languages() {
   const getselectedlanguages = useSelector(getSelectedLanguages);
   const getdefaultcodes = useSelector(getDefaultCode);
 
-  console.log("selectedlanguage", getselectedlanguages);
+  console.log("selectedlanguages", getselectedlanguages);
   console.log("getdefaultcodes", getdefaultcodes);
 
   const [code, setCode] = useState("");

@@ -267,19 +267,74 @@
   margin-bottom: 1%;
 }
 .candidateProfileSubmissionReportTableHeader,
-.candidateProfileSubmissionReportTableBody {
+.candidateProfileSubmissionReportTableQuestion {
   height: 60px;
   width: 100%;
   background-color: rgba(211, 211, 211, 0.391);
-  border: 1px solid lightgray;
+
   display: flex;
+
   align-items: center;
   justify-content: space-between;
 }
+
+.candidateProfileSubmissionReportTableHeader {
+  border: 1px solid lightgray;
+}
+
 .candidateProfileSubmissionReportTableBody {
-  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  border: 1px solid lightgray;
   border-top: none;
 }
+
+.candidateProfileSubmissionReportTableQuestion {
+  border-top: none;
+  background-color: white;
+}
+
 .candidateProfileSubmissionQuestions {
   width: 55%;
+}
+.candidateProfileSubmissionReportQuestionDetails {
+  display: none;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 85%;
+  height: auto;
+  background-color: white;
+}
+.candidateProfileSubmissionReportQuestionTable {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: auto;
+  gap: 30px;
+  height: 60px;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+.candidateProfileSubmissionReportQuestionTableScore,
+.candidateProfileSubmissionReportQuestionTableResult,
+.candidateProfileSubmissionReportQuestionTableSubmitted {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 100px;
+  height: 60px;
+  background-color: white;
+  font-weight: 500;
+}
+.candidateProfileSubmissionReportQuestionTableResult {
+  width: auto;
+}
+.candidateProfileSubmissionReportQuestionTableSubmitted {
+  width: 200px;
 }

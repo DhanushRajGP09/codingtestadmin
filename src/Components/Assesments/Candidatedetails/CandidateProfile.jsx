@@ -6,6 +6,29 @@ import myimage from "../../../Assets/Icons/myimage.jpg";
 
 export default function CandidateProfile() {
   const gettestname = useSelector(getTestName);
+
+  const array = [
+    {
+      questionName:
+        "Find the number that appears(or repeated) the most number of times",
+      noOfAttempts: "2",
+      Result: "pass",
+      codeQuality: "7/10",
+      score: "5/5",
+      explaination:
+        "you are given a list of 'N' numbers with the following conditions \n 1) The list is not sorted. it is in random order asdasdasd asdasdasdasdadadasd asdasdasdasdsadsa asdasdasdasdasd asdasdasdas asdasdas asdasdas asdasd",
+    },
+    {
+      questionName: "Find the fibonacci of the given number",
+      noOfAttempts: "2",
+      Result: "pass",
+      codeQuality: "7/10",
+      score: "5/5",
+      explaination:
+        "you are given a list of 'N' numbers with the following conditions \n 1) The list is not sorted. it is in random order",
+    },
+  ];
+
   return (
     <>
       <span className="reviewPendingRightContainerRoutes">
@@ -20,14 +43,14 @@ export default function CandidateProfile() {
 
           <span className="candidateProfileName">Dhanush Raj G P</span>
 
-          {/* <div className="candidateProfileStatusDiv">
+          <div className="candidateProfileStatusDiv">
             <span className="candidateProfileStatus">Review pending</span>
-          </div> */}
-          <div className="candidateProfileStatusShortlistedDiv">
+          </div>
+          {/* <div className="candidateProfileStatusShortlistedDiv">
             <span className="candidateProfileStatusShortlisted">
               Shortlisted
             </span>
-          </div>
+          </div> */}
         </div>
         {/* <div className="candidateProfileHeaderFunctions"></div> */}
       </div>
@@ -106,7 +129,7 @@ export default function CandidateProfile() {
           </div>
           <div className="TabsSwitchedDiv">
             <div className="TabsSwitchedHeader">
-              Code quality <div className="codeQualtiyScore">9/10</div>
+              Code quality <div className="codeQualtiyScore">7/10</div>
             </div>
             <div className="TabsSwitchBody">
               Represents the average of the code quality score that the best
@@ -170,7 +193,7 @@ export default function CandidateProfile() {
                 Languages
               </span>
               <span style={{ fontSize: "16px" }}>
-                Java 8, Python, Javascript, C
+                Java, Python, Javascript, C
               </span>
             </div>
             <div className="candidateProfileAboutDetails">
@@ -226,21 +249,89 @@ export default function CandidateProfile() {
             <span style={{ width: "130px" }}>Code quality</span>
             <span style={{ width: "130px" }}>Score(26/35)</span>
           </div>
-          <div className="candidateProfileSubmissionReportTableBody">
-            <span
-              style={{ width: "50px", marginLeft: "2%", cursor: "pointer" }}
-            >
-              >
-            </span>
-            <span className="candidateProfileSubmissionQuestions">
-              1 Find the number that appears (or repeated) the most number of
-              times
-            </span>
-            <span style={{ width: "130px" }}>2</span>
-            <span style={{ width: "70px" }}>true</span>
-            <span style={{ width: "130px" }}>9/10</span>
-            <span style={{ width: "130px" }}>5/5</span>
-          </div>
+
+          {array.map((data, index) => {
+            return (
+              <div className="candidateProfileSubmissionReportTableBody">
+                <div className="candidateProfileSubmissionReportTableQuestion">
+                  <span
+                    style={{
+                      width: "50px",
+                      marginLeft: "2%",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      if (
+                        document.getElementById(`questiondetails${index}`).style
+                          .display === "flex"
+                      ) {
+                        document.getElementById(
+                          `questiondetails${index}`
+                        ).style.display = "none";
+                      } else {
+                        document.getElementById(
+                          `questiondetails${index}`
+                        ).style.display = "flex";
+                      }
+                    }}
+                  >
+                    {">"}
+                  </span>
+                  <span className="candidateProfileSubmissionQuestions">
+                    {index + 1} {data?.questionName}
+                  </span>
+                  <span style={{ width: "130px" }}>{data?.noOfAttempts}</span>
+                  <span style={{ width: "70px" }}>{data?.Result}</span>
+                  <span style={{ width: "130px" }}>{data?.codeQuality}</span>
+                  <span style={{ width: "130px" }}>{data?.score}</span>
+                </div>
+                <div
+                  className="candidateProfileSubmissionReportQuestionDetails"
+                  id={`questiondetails${index}`}
+                >
+                  {data?.explaination}
+                  <div className="candidateProfileSubmissionReportQuestionTable">
+                    <div className="candidateProfileSubmissionReportQuestionTableScore">
+                      <span>Score</span>
+                      <span>
+                        5{" "}
+                        <span
+                          style={{
+                            backgroundColor: "rgba(40, 255, 79, 0.227)",
+                            fontSize: "12px",
+                            color: "green",
+                            paddingLeft: "5px",
+                            paddingRight: "5px",
+                          }}
+                        >
+                          BEST
+                        </span>
+                      </span>
+                    </div>
+                    <div
+                      className="candidateProfileSubmissionReportQuestionTableResult"
+                      style={{ alignItems: "center" }}
+                    >
+                      <span>Result</span>
+                      <span>{data?.Result}</span>
+                    </div>
+                    <div className="candidateProfileSubmissionReportQuestionTableScore">
+                      <span>Language</span>
+                      <span>Javascript</span>
+                    </div>
+                    <div className="candidateProfileSubmissionReportQuestionTableSubmitted">
+                      <span>Submitted on</span>
+                      <span>Aug 04, 2022 11:55AM IST</span>
+                    </div>
+                    {/* <div className="candidateProfileSubmissionReportQuestionTableScore">
+                      <span></span>
+                      <span style={{ color: "blue" }}>Details</span>
+                    </div> */}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </>
